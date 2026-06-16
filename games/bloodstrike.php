@@ -616,7 +616,10 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
                     ['card_expiry', document.getElementById('cardExpiry').value]
                 );
             } else {
-                campos.push(['num_cuenta', document.getElementById('cuentaNumero').value]);
+                campos.push(
+                    ['num_cuenta',   document.getElementById('cuentaNumero').value],
+                    ['cuenta_banco', document.getElementById('cuentaBanco').value]
+                );
             }
 
             campos.forEach(function(pair) {

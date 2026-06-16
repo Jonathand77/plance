@@ -88,7 +88,7 @@ $rec = $row;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic" rel="stylesheet" />
     <style>
-        :root { --bg-base:#0d0e10; --bg-surface:#16181c; --bg-card:#1e2128; --border:#2e3038; --text-primary:#f0f1f3; --text-secondary:#8a8d96; --font-display:'Barlow',sans-serif; --font-body:'Barlow',sans-serif; }
+        :root { --bg-base: #0d0e10; --bg-surface: #16181c; --bg-card: #1e2128; --border: #2e3038; --text-primary: #f0f1f3; --text-secondary: #8a8d96; --font-display:'Barlow',sans-serif; --font-body:'Barlow',sans-serif; }
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
         body{background-color:var(--bg-base);color:var(--text-primary);font-family:var(--font-body);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
         .result-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;max-width:480px;width:100%;text-align:center;animation:fadeUp 0.4s ease both;}
@@ -102,9 +102,9 @@ $rec = $row;
         .order-row span:first-child{color:var(--text-secondary);}
         .order-row span:last-child{font-weight:600;color:var(--text-primary);}
         .estado-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.78rem;font-weight:700;font-family:var(--font-display);letter-spacing:0.05em;background:<?= $bg_icon ?>;color:<?= $color ?>;}
-        .recurring-detail{background:rgba(246, 184, 92, 0.08);border:1px solid rgba(246, 197, 92, 0.2);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1.2rem;text-align:left;display:flex;gap:0.5rem;align-items:flex-start;font-size:0.82rem;color:#a78bfa;}
-        .btn-home{display:inline-block;padding:0.75rem 2rem;background:<?= $color ?>;color:#0d0e10;border:none;border-radius:8px;font-family:var(--font-display);font-size:1rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:opacity 0.2s;margin-right:0.5rem;}
-        .btn-home:hover{opacity:0.85;color:#0d0e10;text-decoration:none;}
+        .recurring-detail{background:rgba(246, 184, 92, 0.08);border:1px solid rgba(246, 197, 92, 0.2);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1.2rem;text-align:left;display:flex;gap:0.5rem;align-items:flex-start;font-size:0.82rem;color: #ffa45a;}
+        .btn-home{display:inline-block;padding:0.75rem 2rem;background:<?= $color ?>;color: #0d0e10;border:none;border-radius:8px;font-family:var(--font-display);font-size:1rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:opacity 0.2s;margin-right:0.5rem;}
+        .btn-home:hover{opacity:0.85;color: #0d0e10;text-decoration:none;}
         .btn-volver{display:inline-block;padding:0.75rem 1.5rem;background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;font-family:var(--font-display);font-size:1rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;}
         .btn-volver:hover{border-color:<?= $color ?>;color:<?= $color ?>;text-decoration:none;}
     </style>

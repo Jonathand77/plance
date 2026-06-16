@@ -43,36 +43,116 @@ $num_doc    = mysqli_real_escape_string($conexion, $num_doc);
 $nombre     = mysqli_real_escape_string($conexion, $nombre);
 
 // ══════════════════════════════════════════
-// SIMULACIÓN API Gateway (Demo)
-// En producción real aquí iría la llamada
-// al API Gateway con credenciales PCI-DSS
+// API Gateway Real — PlacetoPay
+// Endpoint: api-test.placetopay.com
 // ══════════════════════════════════════════
-$campos_ok = !empty($nombre) && !empty($correo) && !empty($num_doc) && !empty($telefono);
+$login     = "2d9eaf1e662518756a3d78806543af5b";
+$secretKey = "3YC5brb5eAR4xBGQ";
+$endpoint  = "https://api-test.placetopay.com/rest/gateway/process";
 
+// Auth
+$seed     = date('c');
+$nonce    = bin2hex(random_bytes(16));
+$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$nonceB64 = base64_encode($nonce);
+
+$reference = 'GW-BS-' . strtoupper(bin2hex(random_bytes(4)));
+
+// Datos de tarjeta (solo si metodo es tarjeta)
+$card_number = preg_replace('/\s/', '', $_POST['card_number'] ?? '');
+$card_expiry = trim($_POST['card_expiry'] ?? '12/26');
+$card_cvv    = trim($_POST['card_cvv']    ?? '');
+
+// Armar instrument según método
+$instrument = [];
 if ($metodo === 'tarjeta') {
-    $card_number = preg_replace('/\s/', '', $_POST['card_number'] ?? '');
-    $campos_ok   = $campos_ok && strlen($card_number) >= 15 && !empty($_POST['card_cvv']);
+    $instrument = [
+        "card" => [
+            "number"     => $card_number,
+            "expiration" => $card_expiry,
+            "cvv"        => $card_cvv
+        ]
+    ];
 } else {
-    $campos_ok = $campos_ok && !empty($_POST['num_cuenta']);
+    $num_cuenta = trim($_POST['num_cuenta'] ?? '');
+    $instrument = [
+        "bank" => [
+            "code"    => trim($_POST['cuenta_banco'] ?? 'BANCOLOMBIA'),
+            "account" => $num_cuenta
+        ]
+    ];
 }
 
-// ── Usar estado elegido en estados-gateway.php ──
+// Body del request
+$body = [
+    "auth" => [
+        "login"   => $login,
+        "tranKey" => $tranKey,
+        "nonce"   => $nonceB64,
+        "seed"    => $seed
+    ],
+    "payer" => [
+        "name"         => $nombre,
+        "surname"      => "",
+        "email"        => $correo,
+        "documentType" => $tipo_doc,
+        "document"     => $num_doc,
+        "mobile"       => $telefono
+    ],
+    "payment" => [
+        "reference"   => $reference,
+        "description" => $producto,
+        "amount"      => [
+            "currency" => "COP",
+            "total"    => (float)$precio
+        ]
+    ],
+    "instrument" => $instrument,
+    
+    "ipAddress"  => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+    "userAgent"  => $_SERVER['HTTP_USER_AGENT'] ?? 'PlanceDemoAgent/1.0'
+];
+
+// Llamada cURL
+$ch = curl_init($endpoint);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST,           true);
+curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($body));
+curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_TIMEOUT,        30);
+
+$response  = curl_exec($ch);
+$curlError = curl_error($ch);
+curl_close($ch);
+
+// Interpretar respuesta
+$result     = json_decode($response, true);
+$gw_reason  = $result['status']['reason']  ?? '';
+$gw_message = $result['status']['message'] ?? 'Sin respuesta del servidor';
+
+// ── Estado elegido por el usuario en estados-gateway.php ──
+// Tiene prioridad sobre la respuesta del API (es demo)
 $estado_elegido = trim($_POST['estado_elegido'] ?? '');
-$razon_elegida  = trim($_POST['razon_elegida']  ?? '');
+$razon_elegida  = trim($_POST['razon_elegida']  ?? $gw_reason);
 
-if ($campos_ok && in_array($estado_elegido, ['aprobada', 'pendiente', 'rechazada'])) {
+if (in_array($estado_elegido, ['aprobada', 'pendiente', 'rechazada'])) {
     $nuevo_estado = $estado_elegido;
+    $status = match($nuevo_estado) {
+        'aprobada'  => 'APPROVED',
+        'pendiente' => 'PENDING',
+        default     => 'REJECTED'
+    };
 } else {
-    $nuevo_estado = $campos_ok ? 'aprobada' : 'rechazada';
+    $gw_status    = $result['status']['status'] ?? 'FAILED';
+    $nuevo_estado = match($gw_status) {
+        'APPROVED' => 'aprobada',
+        'PENDING'  => 'pendiente',
+        default    => 'rechazada'
+    };
+    $status = $gw_status;
 }
-
-$status = match($nuevo_estado) {
-    'aprobada'  => 'APPROVED',
-    'pendiente' => 'PENDING',
-    default     => 'REJECTED'
-};
-
-$reference = 'GW-DEMO-' . strtoupper(bin2hex(random_bytes(4)));
 
 // Guardar en BD
 $estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
@@ -95,11 +175,9 @@ $_SESSION['gw_result'] = [
     'precio'    => $precio,
     'correo'    => $correo,
     'nombre'    => $nombre,
-    'message'   => match($nuevo_estado) {
-        'aprobada'  => 'Transacción aprobada exitosamente. (' . $razon_elegida . ')',
-        'pendiente' => 'Transacción en proceso. (' . $razon_elegida . ')',
-        default     => 'Transacción rechazada. (' . $razon_elegida . ')'
-    },
+    'message'   => $gw_message,
+    'razon'     => $gw_reason,
+    'gw_status' => $gw_status,
     'reference' => $reference,
     'metodo'    => $metodo
 ];

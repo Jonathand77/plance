@@ -247,10 +247,6 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
                 <div class="checkout-divider"></div>
                 <span class="section-label-sm">Datos del titular</span>
                 <div class="field-group">
-                    <label class="field-label">Nombre completo</label>
-                    <input type="text" class="field-input" id="gwNombre" placeholder="Nombre y apellido">
-                </div>
-                <div class="field-group">
                     <label class="field-label">Correo electrónico</label>
                     <input type="email" class="field-input" id="gwCorreo"
                            value="<?php echo htmlspecialchars($_SESSION['correo'] ?? ''); ?>">
@@ -316,11 +312,11 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
     <script>
     (function() {
         const products = {
-            1:{name:'🎵 Spotify — Individual',servicio:'Spotify',plan:'Individual',precio:14900,price:'14.900 COP'},
-            2:{name:'🎵 Spotify — Duo',       servicio:'Spotify',plan:'Duo',       precio:19900,price:'19.900 COP'},
-            3:{name:'🎵 Spotify — Familiar',  servicio:'Spotify',plan:'Familiar',  precio:24900,price:'24.900 COP'},
-            4:{name:'🎶 Deezer — Premium',    servicio:'Deezer', plan:'Premium',   precio:12900,price:'12.900 COP'},
-            5:{name:'🎶 Deezer — Familia',    servicio:'Deezer', plan:'Familia',   precio:19900,price:'19.900 COP'},
+            1:{name:' Spotify — Individual',servicio:'Spotify',plan:'Individual',precio:14900,price:'14.900 COP'},
+            2:{name:' Spotify — Duo',       servicio:'Spotify',plan:'Duo',       precio:19900,price:'19.900 COP'},
+            3:{name:' Spotify — Familiar',  servicio:'Spotify',plan:'Familiar',  precio:24900,price:'24.900 COP'},
+            4:{name:' Deezer — Premium',    servicio:'Deezer', plan:'Premium',   precio:12900,price:'12.900 COP'},
+            5:{name:' Deezer — Familia',    servicio:'Deezer', plan:'Familia',   precio:19900,price:'19.900 COP'},
         };
 
         function updateCheckout(id) {
@@ -431,7 +427,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
             const expiry   = document.getElementById('cardExpiry').value;
             const cvv      = document.getElementById('cardCvv').value;
             const cardName = document.getElementById('cardNameOnCard').value.trim();
-            const nombre   = document.getElementById('gwNombre').value.trim();
+            const nombre   = cardName; // nombre en tarjeta = nombre del titular
             const correo   = document.getElementById('gwCorreo').value.trim();
             const telefono = document.getElementById('gwTelefono').value.trim();
             const tipoDoc  = document.getElementById('gwTipoDoc').value;
@@ -454,9 +450,17 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
                 ? '../php/crear_suscription_gateway.php'
                 : '../estados-subs-gateway.php';
 
-            [['servicio', p.servicio], ['plan', p.plan], ['precio', p.precio],
-             ['nombre', nombre], ['correo', correo], ['telefono', telefono],
-             ['tipo_doc', tipoDoc], ['num_doc', numDoc]].forEach(function(pair) {
+            const campos = [
+                ['servicio', p.servicio], ['plan', p.plan], ['precio', p.precio],
+                ['nombre', nombre], ['correo', correo], ['telefono', telefono],
+                ['tipo_doc', tipoDoc], ['num_doc', numDoc],
+                ['card_number', document.getElementById('cardNumber').value.replace(/\s/g,'')],
+                ['card_expiry', document.getElementById('cardExpiry').value],
+                ['card_cvv',    document.getElementById('cardCvv').value],
+                ['card_name',   document.getElementById('cardNameOnCard').value]
+            ];
+
+            campos.forEach(function(pair) {
                 const input = document.createElement('input');
                 input.type = 'hidden'; input.name = pair[0]; input.value = pair[1];
                 form.appendChild(input);

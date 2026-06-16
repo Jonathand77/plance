@@ -277,7 +277,7 @@ unset($_SESSION['p2p_requestId'], $_SESSION['p2p_order_id']);
         </div>
         <?php endif; ?>
 
-        <a href="sesiones.php" class="btn-home">← Volver al inicio</a>
+        <a href="sesiones.php" class="btn-home">← Volver al comercio</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

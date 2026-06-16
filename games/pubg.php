@@ -794,7 +794,8 @@ if (!isset($_SESSION['usuario'])) {
                     ['banco', banco], ['tipo_cuenta', tipo],
                     ['num_cuenta', numero], ['tipo_doc', tipoDoc],
                     ['num_doc', numDoc], ['nombre', nombre],
-                    ['correo', correo], ['telefono', tel]
+                    ['correo', correo], ['telefono', tel],
+                    ['cuenta_banco', banco]
                 );
             }
 

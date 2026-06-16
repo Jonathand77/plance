@@ -413,13 +413,13 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
     <script>
     (function() {
         const products = {
-            1:{name:'📺 Netflix — Estándar con anuncios',servicio:'Netflix',plan:'Estándar con anuncios',precio:14900,price:'14.900 COP'},
-            2:{name:'📺 Netflix — Estándar',servicio:'Netflix',plan:'Estándar',precio:26900,price:'26.900 COP'},
-            3:{name:'📺 Netflix — Premium',servicio:'Netflix',plan:'Premium',precio:36900,price:'36.900 COP'},
-            4:{name:'🎬 Paramount+ — Essential',servicio:'Paramount+',plan:'Essential',precio:12900,price:'12.900 COP'},
-            5:{name:'🎬 Paramount+ — Showtime',servicio:'Paramount+',plan:'Showtime',precio:22900,price:'22.900 COP'},
-            6:{name:'⚽ DAZN — Estándar',servicio:'DAZN',plan:'Estándar',precio:19900,price:'19.900 COP'},
-            7:{name:'⚽ DAZN — Premium',servicio:'DAZN',plan:'Premium',precio:34900,price:'34.900 COP'},
+            1:{name:' Netflix — Estándar con anuncios',servicio:'Netflix',plan:'Estándar con anuncios',precio:14900,price:'14.900 COP'},
+            2:{name:' Netflix — Estándar',servicio:'Netflix',plan:'Estándar',precio:26900,price:'26.900 COP'},
+            3:{name:' Netflix — Premium',servicio:'Netflix',plan:'Premium',precio:36900,price:'36.900 COP'},
+            4:{name:' Paramount+ — Essential',servicio:'Paramount+',plan:'Essential',precio:12900,price:'12.900 COP'},
+            5:{name:' Paramount+ — Showtime',servicio:'Paramount+',plan:'Showtime',precio:22900,price:'22.900 COP'},
+            6:{name:' DAZN — Estándar',servicio:'DAZN',plan:'Estándar',precio:19900,price:'19.900 COP'},
+            7:{name:' DAZN — Premium',servicio:'DAZN',plan:'Premium',precio:34900,price:'34.900 COP'},
         };
 
         function updateCheckout(id) {
@@ -569,10 +569,28 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
                 ? '../php/crear_suscripciones_gateway.php'
                 : '../estados-subs-gateway.php';
 
-            [['servicio', p.servicio], ['plan', p.plan], ['precio', p.precio],
-             ['nombre', nombre], ['correo', correo], ['telefono', telefono],
-             ['tipo_doc', tipoDoc], ['num_doc', numDoc], ['metodo', method],
-             ['guardar_tarjeta', document.getElementById('guardarTarjeta').checked ? '1' : '0']].forEach(function(pair) {
+            const campos = [
+                ['servicio', p.servicio], ['plan', p.plan], ['precio', p.precio],
+                ['nombre', nombre], ['correo', correo], ['telefono', telefono],
+                ['tipo_doc', tipoDoc], ['num_doc', numDoc], ['metodo', method],
+                ['guardar_tarjeta', document.getElementById('guardarTarjeta').checked ? '1' : '0']
+            ];
+
+            if (method === 'tarjeta') {
+                campos.push(
+                    ['card_number', document.getElementById('cardNumber').value.replace(/\s/g,'')],
+                    ['card_expiry', document.getElementById('cardExpiry').value],
+                    ['card_cvv',    document.getElementById('cardCvv').value],
+                    ['card_name',   document.getElementById('cardName').value]
+                );
+            } else {
+                campos.push(
+                    ['cuenta_banco',    document.getElementById('pseBanco').value],
+                    ['tipo_persona',    document.getElementById('pseTipoPersona').value]
+                );
+            }
+
+            campos.forEach(function(pair) {
                 const input = document.createElement('input');
                 input.type = 'hidden'; input.name = pair[0]; input.value = pair[1];
                 form.appendChild(input);

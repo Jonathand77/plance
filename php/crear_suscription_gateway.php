@@ -40,35 +40,103 @@ $tipo_doc = mysqli_real_escape_string($conexion, $tipo_doc);
 $num_doc  = mysqli_real_escape_string($conexion, $num_doc);
 
 // ══════════════════════════════════════════
-// SIMULACIÓN API Gateway — Suscripción pura
-// En producción real aquí iría la llamada
-// al API Gateway con credenciales PCI-DSS
+// API Gateway Real — Suscripción pura
+// Endpoint: api-test.placetopay.com
 // ══════════════════════════════════════════
-$campos_ok    = !empty($nombre) && !empty($correo) && !empty($num_doc) && !empty($telefono);
+$login     = "2d9eaf1e662518756a3d78806543af5b";
+$secretKey = "3YC5brb5eAR4xBGQ";
+$endpoint  = "https://api-test.placetopay.com/rest/gateway/process";
 
-// ── Estado elegido en estados-subs-gateway.php ──
+$seed     = date('c');
+$nonce    = bin2hex(random_bytes(16));
+$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$nonceB64 = base64_encode($nonce);
+
+$reference   = 'GWMUS-' . strtoupper(bin2hex(random_bytes(4)));
+$card_number = preg_replace('/\s/', '', $_POST['card_number'] ?? '');
+$card_expiry = trim($_POST['card_expiry'] ?? '12/26');
+$card_cvv    = trim($_POST['card_cvv']    ?? '');
+
+$body = [
+    "auth" => [
+        "login"   => $login,
+        "tranKey" => $tranKey,
+        "nonce"   => $nonceB64,
+        "seed"    => $seed
+    ],
+    "payer" => [
+        "name"         => $nombre,
+        "surname"      => "",
+        "email"        => $correo,
+        "documentType" => $tipo_doc,
+        "document"     => $num_doc,
+        "mobile"       => $telefono
+    ],
+    "payment" => [
+        "reference"   => $reference,
+        "description" => $servicio . ' — ' . $plan,
+        "amount"      => [
+            "currency" => "COP",
+            "total"    => (float)$precio
+        ],
+        "subscribe"   => true
+    ],
+    "instrument" => [
+        "card" => [
+            "number"     => $card_number,
+            "expiration" => $card_expiry,
+            "cvv"        => $card_cvv
+        ]
+    ],
+    "ipAddress" => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+    "userAgent" => $_SERVER['HTTP_USER_AGENT'] ?? 'PlanceDemoAgent/1.0'
+];
+
+$ch = curl_init($endpoint);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST,           true);
+curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($body));
+curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_TIMEOUT,        30);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+$result     = json_decode($response, true);
+$gw_reason  = $result['status']['reason']  ?? '';
+$gw_message = $result['status']['message'] ?? 'Sin respuesta del servidor';
+$gw_token   = $result['subscription']['token']['token'] ?? '';
+
+// ── Estado elegido por el usuario en estados-subs-gateway.php ──
 $estado_elegido = trim($_POST['estado_elegido'] ?? '');
-$razon_elegida  = trim($_POST['razon_elegida']  ?? '');
+$razon_elegida  = trim($_POST['razon_elegida']  ?? $gw_reason);
 
-if ($campos_ok && in_array($estado_elegido, ['aprobada-token', 'aprobada-sin', 'pendiente', 'rechazada'])) {
-    $estado_final = $estado_elegido;
+if (in_array($estado_elegido, ['aprobada-token', 'aprobada-sin', 'pendiente', 'rechazada'])) {
+    $nuevo_estado = match($estado_elegido) {
+        'aprobada-token', 'aprobada-sin' => 'aprobada',
+        'pendiente' => 'pendiente',
+        default     => 'rechazada'
+    };
+    $status    = match($nuevo_estado) {
+        'aprobada'  => 'APPROVED',
+        'pendiente' => 'PENDING',
+        default     => 'REJECTED'
+    };
+    $con_token = ($estado_elegido === 'aprobada-token');
+    $token     = $con_token ? (!empty($gw_token) ? $gw_token : 'TOK-' . strtoupper(bin2hex(random_bytes(8)))) : '';
 } else {
-    $estado_final = $campos_ok ? 'aprobada-token' : 'rechazada';
+    $gw_status = $result['status']['status'] ?? 'FAILED';
+    $nuevo_estado = match($gw_status) {
+        'APPROVED' => 'aprobada',
+        'PENDING'  => 'pendiente',
+        default    => 'rechazada'
+    };
+    $status    = $gw_status;
+    $con_token = !empty($gw_token);
+    $token     = $con_token ? $gw_token : '';
 }
-
-switch ($estado_final) {
-    case 'aprobada-token':
-        $status = 'APPROVED'; $nuevo_estado = 'aprobada'; $con_token = true;  break;
-    case 'aprobada-sin':
-        $status = 'APPROVED'; $nuevo_estado = 'aprobada'; $con_token = false; break;
-    case 'pendiente':
-        $status = 'PENDING';  $nuevo_estado = 'pendiente'; $con_token = false; break;
-    default:
-        $status = 'REJECTED'; $nuevo_estado = 'rechazada'; $con_token = false; break;
-}
-
-$reference = 'GWMUS-' . strtoupper(bin2hex(random_bytes(4)));
-$token     = $con_token ? 'TOK-' . strtoupper(bin2hex(random_bytes(8))) : '';
 
 $estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
 $ref_safe    = mysqli_real_escape_string($conexion, $reference);
@@ -93,11 +161,7 @@ $_SESSION['gw_mus_result'] = [
     'correo'    => $correo,
     'reference' => $reference,
     'token'     => $token,
-    'message'   => match($nuevo_estado) {
-        'aprobada'  => !empty($token) ? 'Suscripción registrada y tarjeta tokenizada. (' . $razon_elegida . ')' : 'Suscripción registrada sin tokenizar la tarjeta. (' . $razon_elegida . ')',
-        'pendiente' => 'Suscripción en proceso de verificación. (' . $razon_elegida . ')',
-        default     => 'Suscripción rechazada. (' . $razon_elegida . ')'
-    },
+    'message'   => $gw_message,
 ];
 
 unset($_SESSION['gw_subs_pending']);
