@@ -1,4 +1,4 @@
-<?php
+﻿<?php
     session_start();
 
 
@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
   
     
-   <!-- <link rel="stylesheet" href="assets/css/estilov=<?php echo filemtime(__DIR__ . '/assets/css/estilo'); ?>"> -->
+    <!-- CSS principal cargado por Bootstrap/CDN en esta vista -->
 </head>
 
   <!-- Logica NAV -->
@@ -47,7 +47,7 @@ $nav_initials  = '';
 if (isset($_SESSION['user_id'])) {
     // Reutilizar conexión si ya existe, si no crear una
     if (!isset($conexion)) {
-        $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+        require_once __DIR__ . '/php/conexion_be.php';
     }
     if ($conexion) {
         $nav_uid = intval($_SESSION['user_id']);
@@ -167,7 +167,7 @@ if (isset($_SESSION['user_id'])) {
         transition: color 0.2s;
     }
     .speed-dial-item:hover .speed-dial-label {
-        color: #f0b429;
+        color: #FF6C0C;
     }
     
     main {
@@ -190,7 +190,7 @@ if (isset($_SESSION['user_id'])) {
         height: 32px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #f0b429;
+        border: 2px solid #FF6C0C;
         transition: border-color 0.2s, transform 0.2s;
     }
 
@@ -207,7 +207,7 @@ if (isset($_SESSION['user_id'])) {
         height: 32px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #f0b429;
+        border: 2px solid #FF6C0C;
         transition: border-color 0.2s, transform 0.2s;
     }
     .nav-avatar-img:hover { border-color: #fff; transform: scale(1.08); }
@@ -216,14 +216,14 @@ if (isset($_SESSION['user_id'])) {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #f0b429, #c99010);
+        background: linear-gradient(135deg, #FF6C0C, #c99010);
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
         font-size: 0.8rem;
         color: #0d0e10;
-        border: 2px solid #f0b429;
+        border: 2px solid #FF6C0C;
         transition: border-color 0.2s, transform 0.2s;
         flex-shrink: 0;
     }
@@ -245,7 +245,7 @@ if (isset($_SESSION['user_id'])) {
 
     .dropbtn {
         background: hsla(120, 2%, 10%, 0.84);
-        color: #f0b429;
+        color: #FF6C0C;
         border: 1.5px solid rgba(240, 180, 41, 0.3);
         border-radius: 8px;
         padding: 6px 14px;
@@ -258,7 +258,7 @@ if (isset($_SESSION['user_id'])) {
         gap: 0.3rem;
     }
     .dropbtn:hover {
-        border-color: #f0b429;
+        border-color: #FF6C0C;
         background: rgba(240, 180, 41, 0.1);
     }
 
@@ -294,7 +294,7 @@ if (isset($_SESSION['user_id'])) {
     }
     .dropdown-content a:hover {
         background: rgba(240, 180, 41, 0.1);
-        color: #f0b429;
+        color: #FF6C0C;
         text-decoration: none;
     }
 
@@ -326,7 +326,7 @@ if (isset($_SESSION['user_id'])) {
         backdrop-filter: blur(8px);
         box-shadow: 0 8px 30px rgba(0,0,0,0.35);
     }
-    .browser-search-icon{ color: #f0b429; display:flex; }
+    .browser-search-icon{ color: #FF6C0C; display:flex; }
     .browser-search-input{
         width: 100%;
         border: none;
@@ -358,7 +358,7 @@ if (isset($_SESSION['user_id'])) {
         border-top: 1px solid rgba(255,255,255,0.06);
     }
     .quick-suggestions a:first-child{ border-top: none; }
-    .quick-suggestions a:hover{ background: rgba(240,180,41,0.10); color: #f0b429; }
+    .quick-suggestions a:hover{ background: rgba(240,180,41,0.10); color: #FF6C0C; }
 
 
 
@@ -439,26 +439,26 @@ if (isset($_SESSION['user_id'])) {
 
             <a href="sesiones.php" class="speed-dial-item" title="Sesiones">
                 <div class="speed-dial-icon">
-                    <i class="bi bi-cart-plus-fill" style="color: #f0b429;"></i>
+                    <i class="bi bi-cart-plus-fill" style="color: #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Sesiones</span>
             </a>
 
             <a href="historial/historial.php" class="speed-dial-item" title="Historial">
                 <div class="speed-dial-icon">
-                    <i class="bi bi-file-text-fill" style="color:  #f0b429;"></i>
+                    <i class="bi bi-file-text-fill" style="color:  #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Historial</span>
             </a>
 
             <a href="guias/guia.php" class="speed-dial-item" title="Guia">
                 <div class="speed-dial-icon">
-                    <i class="bi bi-book-half" style="color:  #f0b429;"></i>
+                    <i class="bi bi-book-half" style="color:  #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Guia</span>
             </a>
 
-            <a href="config/ajustes.php" class="speed-dial-item" title="Configuración">
+            <a href="settings/ajustes.php" class="speed-dial-item" title="Configuración">
                 <div class="speed-dial-icon">
                     <i class="bi bi-gear-fill" style="color: #aaa;"></i>
                 </div>
@@ -491,7 +491,7 @@ if (isset($_SESSION['user_id'])) {
                 list.forEach(it => {
                     const a = document.createElement('a');
                     a.href = it.href;
-                    a.innerHTML = `<i class="${it.icon}" style="color:#f0b429;"></i> <span>${it.label}</span>`;
+                    a.innerHTML = `<i class="${it.icon}" style="color:#FF6C0C;"></i> <span>${it.label}</span>`;
                     box.appendChild(a);
                 });
                 box.style.display = 'block';

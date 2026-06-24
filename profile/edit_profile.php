@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -42,7 +42,7 @@ unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
         --bg-surface:     #16181c;
         --bg-card:        #1e2128;
         --border:         #2e3038;
-        --accent:         #f0b429;
+        --accent:         #FF6C0C;
         --accent-dark:    #c99010;
         --text-primary:   #f0f1f3;
         --text-secondary: #8a8d96;

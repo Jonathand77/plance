@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg:#0a0a0a; --surface:#111111; --card:#141414; --border:#222222;
-            --accent:#f0b429; --accent-soft:rgba(240,180,41,0.1);
+            --accent:#FF6C0C; --accent-soft:rgba(240,180,41,0.1);
             --text:#f0f1f3; --muted:#8a8d96;
             --font-d:'Barlow',sans-serif; --font-b:'Barlow',sans-serif;
         }
@@ -145,14 +145,14 @@
     <p class="section-title">Seguridad en cada paso</p>
     <div class="seg-grid">
         <div class="seg-card">
-            <div class="seg-icon">🔐</div>
+            <div class="seg-icon">🔒</div>
             <div>
                 <div class="seg-title">3D Secure (3DS)</div>
                 <div class="seg-desc">Las tiendas con API Gateway incluyen autenticación 3DS opcional u obligatoria — una capa de verificación de identidad que protege al usuario del fraude.</div>
             </div>
         </div>
         <div class="seg-card">
-            <div class="seg-icon">🪙</div>
+            <div class="seg-icon">🛡️</div>
             <div>
                 <div class="seg-title">Tokenización de tarjetas</div>
                 <div class="seg-desc">Plance nunca guarda el número real de tu tarjeta. Solo almacena un token seguro generado por PlacetoPay para futuros cobros automáticos.</div>
@@ -183,13 +183,13 @@
             <span class="card-tag">6 juegos</span>
         </div>
         <div class="card">
-            <div class="card-icon">📺</div>
+            <div class="card-icon">💻</div>
             <h3>Plataformas digitales</h3>
             <p>Streaming, redes sociales, IA's, música y otras plataformas — cada una con su propio tipo de pago: único, suscripción, recurrente o puro.</p>
             <span class="card-tag">5 categorías</span>
         </div>
         <div class="card">
-            <div class="card-icon">⚡</div>
+            <div class="card-icon">🔗</div>
             <h3>API Gateway</h3>
             <p>Streaming, música y juegos procesados directamente por backend, con formulario de tarjeta o cuenta bancaria y autenticación 3DS integrada.</p>
             <span class="card-tag">Demo avanzada</span>

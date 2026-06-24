@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -90,9 +90,9 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
         border-radius: 20px; font-size: 0.72rem; font-weight: 700;
         text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .tipo-orden       { background: rgba(240,180,41,0.15); color: #f0b429; }
-    .tipo-suscripcion { background: rgba(168,85,247,0.15); color: #a855f7; }
-    .tipo-recurrencia { background: rgba(77,159,255,0.15); color: #4d9fff; }
+    .tipo-orden       { background: rgba(240,180,41,0.15); color: #FF6C0C; }
+    .tipo-suscripcion { background: rgba(168,85,247,0.15); color: #0062A8; }
+    .tipo-recurrencia { background: rgba(77,159,255,0.15); color: #0062A8; }
 
     .badge-aprobada { background: rgba(62,207,142,0.2); color: #3ecf8e; }
     .estado-pill {

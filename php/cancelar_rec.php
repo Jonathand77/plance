@@ -1,14 +1,17 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
 }
-require_once __DIR__ . '/../vendor/autoload.php';
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 

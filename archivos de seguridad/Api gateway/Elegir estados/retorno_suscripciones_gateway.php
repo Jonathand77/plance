@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -38,9 +38,9 @@ if ($status === 'APPROVED') {
 } elseif ($status === 'PENDING') {
     $icono = '⏳'; $titulo = 'Pago pendiente';
     $mensaje = 'Tu pago está siendo procesado.';
-    $color = '#f0b429'; $bg_icon = 'rgba(240,180,41,0.15)';
+    $color = '#FF6C0C'; $bg_icon = 'rgba(240,180,41,0.15)';
 } else {
-    $icono = '❌'; $titulo = 'Pago rechazado';
+    $icono = '✖'; $titulo = 'Pago rechazado';
     $mensaje = !empty($message) ? $message : 'No se pudo procesar. Verifica los datos e intenta de nuevo.';
     $color = '#e05252'; $bg_icon = 'rgba(224,82,82,0.15)';
 }

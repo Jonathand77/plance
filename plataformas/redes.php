@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -26,7 +26,7 @@ if (!isset($_SESSION['usuario'])) {
         --bg-card-hover:  #252830;
         --bg-selected:    #0a1628;
         --border:         #2e3038;
-        --accent:         #4d9fff;
+        --accent:         #0062A8;
         --accent-glow:    rgba(77,159,255,0.25);
         --accent-dark:    #2176d9;
         --text-primary:   #f0f1f3;
@@ -136,7 +136,7 @@ if (!isset($_SESSION['usuario'])) {
         box-shadow: 0 0 0 1px var(--accent), 0 4px 24px var(--accent-glow);
     }
     .product-card.selected::after {
-        content: '✔';
+        content: '✔️';
         position: absolute; top: 0.5rem; right: 0.55rem;
         width: 18px; height: 18px;
         background: var(--accent); border-radius: 50%;
@@ -252,7 +252,7 @@ if (!isset($_SESSION['usuario'])) {
     .vendor-info { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
     .vendor-avatar {
         width: 40px; height: 40px; border-radius: 50%;
-        background: linear-gradient(135deg, #4d9fff, #2176d9);
+        background: linear-gradient(135deg, #0062A8, #2176d9);
         display: flex; align-items: center; justify-content: center;
         font-family: var(--font-display); font-weight: 800;
         font-size: 0.85rem; color: #0d0e10; flex-shrink: 0;
@@ -288,8 +288,8 @@ if (!isset($_SESSION['usuario'])) {
     <!-- GAME BANNER -->
     <div class="game-banner">
         <div class="game-banner__tag">
-            <i class="fa-solid fa-globe" style="color: #4d9fff;"></i> Membresías y Verificados
-            <span class="recurring-badge"><i class="bi bi-calendar-check-fill" style="color: #4d9fff;"></i> Pago Recurrente</span>
+            <i class="fa-solid fa-globe" style="color: #0062A8;"></i> Membresías y Verificados
+            <span class="recurring-badge"><i class="bi bi-calendar-check-fill" style="color: #0062A8;"></i> Pago Recurrente</span>
         </div>
     </div>
 
@@ -307,16 +307,16 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <div class="products-grid">
                     <div class="product-card popular-card" data-id="1" data-servicio="YouTube Premium" data-plan="Individual" data-precio="19900">
-                        <div class="badge-popular">★ Popular</div>
+                        <div class="badge-popular">â˜… Popular</div>
                         <div class="product-card__platform">YouTube</div>
                         <div class="product-card__pts">Individual</div>
-                        <div class="product-card__label">Sin anuncios · YT Music · 1 cuenta</div>
+                        <div class="product-card__label">Sin anuncios Â· YT Music Â· 1 cuenta</div>
                         <div class="product-card__price">19.900 COP <span class="recurrente-tag">/ mes</span></div>
                     </div>
                     <div class="product-card" data-id="2" data-servicio="YouTube Premium" data-plan="Familiar" data-precio="29900">
                         <div class="product-card__platform">YouTube</div>
                         <div class="product-card__pts">Familiar</div>
-                        <div class="product-card__label">Sin anuncios · YT Music · 5 cuentas</div>
+                        <div class="product-card__label">Sin anuncios Â· YT Music Â· 5 cuentas</div>
                         <div class="product-card__price">29.900 COP <span class="recurrente-tag">/ mes</span></div>
                     </div>
                 </div>
@@ -361,20 +361,20 @@ if (!isset($_SESSION['usuario'])) {
                     <div class="product-card" data-id="6" data-servicio="Meta Verified" data-plan="Instagram" data-precio="24900">
                         <div class="product-card__platform">Meta · Instagram</div>
                         <div class="product-card__pts">Instagram</div>
-                        <div class="product-card__label">✓ Verificado · Soporte prioritario</div>
+                        <div class="product-card__label">✔️ Verificado · Soporte prioritario</div>
                         <div class="product-card__price">24.900 COP <span class="recurrente-tag">/ mes</span></div>
                     </div>
                     <div class="product-card" data-id="7" data-servicio="Meta Verified" data-plan="Facebook" data-precio="24900">
                         <div class="product-card__platform">Meta · Facebook</div>
                         <div class="product-card__pts">Facebook</div>
-                        <div class="product-card__label">✓ Verificado · Soporte prioritario</div>
+                        <div class="product-card__label">✔️ Verificado · Soporte prioritario</div>
                         <div class="product-card__price">24.900 COP <span class="recurrente-tag">/ mes</span></div>
                     </div>
                     <div class="product-card popular-card" data-id="8" data-servicio="Meta Verified" data-plan="Instagram + Facebook" data-precio="39900">
                         <div class="badge-popular">★ Popular</div>
                         <div class="product-card__platform">Meta · Combo</div>
                         <div class="product-card__pts">IG + FB</div>
-                        <div class="product-card__label">✓ Ambas plataformas</div>
+                        <div class="product-card__label">✔️ Ambas plataformas</div>
                         <div class="product-card__price">39.900 COP <span class="recurrente-tag">/ mes</span></div>
                     </div>
                 </div>
@@ -385,7 +385,7 @@ if (!isset($_SESSION['usuario'])) {
         <!-- RIGHT: Checkout -->
         <aside class="checkout-panel" id="checkoutPanel">
             <div class="checkout-summary">
-                <div class="checkout-product-name" id="checkoutName">▶️ YouTube Premium — Individual</div>
+                <div class="checkout-product-name" id="checkoutName">📺 YouTube Premium — Individual</div>
 
                 <div class="checkout-row">
                     <span class="checkout-label">Periodicidad</span>
@@ -416,18 +416,18 @@ if (!isset($_SESSION['usuario'])) {
                 </button>
 
                 <div class="trust-badges">
-                    <div class="trust-item">🛡️ <span>Garantía de reembolso · P2P</span></div>
+                    <div class="trust-item">💰 <span>Garantía de reembolso · P2P</span></div>
                     <div class="trust-item">🔄 <span>Cobro recurrente automático mensual</span></div>
-                    <div class="trust-item">💬 <span>Asistencia en directo 24/7</span></div>
+                    <div class="trust-item">📞 <span>Asistencia en directo 24/7</span></div>
                 </div>
             </div>
 
             <div class="delivery-instructions">
                 <p class="section-label">Instrucciones</p>
                 <div class="instruction-text" id="instructionText">
-                    YouTube Premium® | Plan Individual 🎬<br>
+                    YouTube Premium® | Plan Individual 📺<br>
                     <span>🌐</span> Acceso inmediato tras el primer pago<br>
-                    <span>🔄</span> Renovación automática cada mes
+                    <span>⚠️</span> Renovación automática cada mes
                 </div>
                 <button class="btn-instructions">Ver todas las instrucciones ▾</button>
             </div>
@@ -437,7 +437,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="vendor-info">
                     <div class="vendor-avatar">JM</div>
                     <div>
-                        <div class="vendor-name">Jair ✅</div>
+                        <div class="vendor-name">Jair ✔️</div>
                         <div class="vendor-rating">👍 2026 · <a href="#">Evertec Placetopay SAS</a></div>
                     </div>
                 </div>
@@ -451,14 +451,14 @@ if (!isset($_SESSION['usuario'])) {
     <script>
     (function() {
         const products = {
-            1: { name: '▶️ YouTube Premium — Individual', servicio: 'YouTube Premium', plan: 'Individual',          price: '19.900 COP', precio: 19900 },
-            2: { name: '▶️ YouTube Premium — Familiar',  servicio: 'YouTube Premium', plan: 'Familiar',            price: '29.900 COP', precio: 29900 },
-            3: { name: '𝕏 Twitter Verificado — Basic',   servicio: 'Twitter Verificado', plan: 'Basic',            price: '14.900 COP', precio: 14900 },
-            4: { name: '𝕏 Twitter Verificado — Premium', servicio: 'Twitter Verificado', plan: 'Premium',          price: '32.900 COP', precio: 32900 },
-            5: { name: '𝕏 Twitter Verificado — Premium+',servicio: 'Twitter Verificado', plan: 'Premium+',         price: '49.900 COP', precio: 49900 },
-            6: { name: '✓ Meta Verified — Instagram',    servicio: 'Meta Verified',      plan: 'Instagram',        price: '24.900 COP', precio: 24900 },
-            7: { name: '✓ Meta Verified — Facebook',     servicio: 'Meta Verified',      plan: 'Facebook',         price: '24.900 COP', precio: 24900 },
-            8: { name: '✓ Meta Verified — IG + FB',      servicio: 'Meta Verified',      plan: 'Instagram + Facebook', price: '39.900 COP', precio: 39900 },
+            1: { name: '📺 YouTube Premium — Individual', servicio: 'YouTube Premium', plan: 'Individual',          price: '19.900 COP', precio: 19900 },
+            2: { name: '📺 YouTube Premium — Familiar',  servicio: 'YouTube Premium', plan: 'Familiar',            price: '29.900 COP', precio: 29900 },
+            3: { name: '🐦 Twitter Verificado — Basic',   servicio: 'Twitter Verificado', plan: 'Basic',            price: '14.900 COP', precio: 14900 },
+            4: { name: '🐦 Twitter Verificado — Premium', servicio: 'Twitter Verificado', plan: 'Premium',          price: '32.900 COP', precio: 32900 },
+            5: { name: '🐦 Twitter Verificado — Premium+',servicio: 'Twitter Verificado', plan: 'Premium+',         price: '49.900 COP', precio: 49900 },
+            6: { name: '✔️ Meta Verified — Instagram',    servicio: 'Meta Verified',      plan: 'Instagram',        price: '24.900 COP', precio: 24900 },
+            7: { name: '✔️ Meta Verified — Facebook',     servicio: 'Meta Verified',      plan: 'Facebook',         price: '24.900 COP', precio: 24900 },
+            8: { name: '✔️ Meta Verified — IG + FB',      servicio: 'Meta Verified',      plan: 'Instagram + Facebook', price: '39.900 COP', precio: 39900 },
         };
 
         function updateCheckout(id) {
@@ -469,7 +469,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('instructionText').innerHTML =
                 p.servicio + '\u00ae | ' + p.plan + '<br>' +
                 '<span>\uD83C\uDF10</span> Acceso inmediato tras el primer pago<br>' +
-                '<span>\uD83D\uDD04</span> Renovaci\u00f3n autom\u00e1tica cada mes';
+                '<span>\uD83D\uDD04</span> Renovación automática cada mes';
         }
 
         function initCards() {

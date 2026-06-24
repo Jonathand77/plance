@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -35,7 +35,7 @@ $es_pago_sub = ($tipo === 'suscripciones'); // streaming = pago+sub, music = pur
     <style>
         :root {
             --bg-base:#0d0e10; --bg-surface:#16181c; --bg-card:#1e2128;
-            --border:#2e3038; --accent:#f0b429; --accent-soft:rgba(240,180,41,0.1);
+            --border:#2e3038; --accent:#FF6C0C; --accent-soft:rgba(240,180,41,0.1);
             --text-primary:#f0f1f3; --text-secondary:#8a8d96;
             --font-display:'Barlow Condensed',sans-serif; --font-body:'Barlow',sans-serif;
         }
@@ -74,9 +74,9 @@ $es_pago_sub = ($tipo === 'suscripciones'); // streaming = pago+sub, music = pur
         .estado-btn.aprobada-sin:hover, .estado-btn.aprobada-sin.selected { border-color:#22c55e; background:rgba(34,197,94,0.08); }
         .estado-btn.aprobada-sin .check { color:#22c55e; }
 
-        .estado-btn.pendiente { color:#f0b429; }
-        .estado-btn.pendiente:hover, .estado-btn.pendiente.selected { border-color:#f0b429; background:rgba(240,180,41,0.08); }
-        .estado-btn.pendiente .check { color:#f0b429; }
+        .estado-btn.pendiente { color:#FF6C0C; }
+        .estado-btn.pendiente:hover, .estado-btn.pendiente.selected { border-color:#FF6C0C; background:rgba(240,180,41,0.08); }
+        .estado-btn.pendiente .check { color:#FF6C0C; }
 
         .estado-btn.rechazada { color:#e05252; }
         .estado-btn.rechazada:hover, .estado-btn.rechazada.selected { border-color:#e05252; background:rgba(224,82,82,0.08); }
@@ -102,7 +102,7 @@ $es_pago_sub = ($tipo === 'suscripciones'); // streaming = pago+sub, music = pur
     <div class="main-card">
 
         <div class="demo-banner">
-            <strong>⚡ Simulación API Gateway — Suscripción</strong>
+            <strong>⚠️ Simulación API Gateway — Suscripción</strong>
             Elige el estado que deseas simular para esta transacción
         </div>
 
@@ -114,8 +114,8 @@ $es_pago_sub = ($tipo === 'suscripciones'); // streaming = pago+sub, music = pur
 
         <div class="product-info">
             <span class="product-info-name">
-                <?= $es_pago_sub ? '📺' : '🎵' ?>
-                <?= htmlspecialchars($servicio) ?> — <?= htmlspecialchars($plan) ?>
+                <?= $es_pago_sub ? 'ðŸ“º' : 'ðŸŽµ' ?>
+                <?= htmlspecialchars($servicio) ?> â€” <?= htmlspecialchars($plan) ?>
             </span>
             <span class="product-info-price">$<?= number_format((float)$precio, 0, ',', '.') ?> COP</span>
         </div>
@@ -124,13 +124,13 @@ $es_pago_sub = ($tipo === 'suscripciones'); // streaming = pago+sub, music = pur
         <div class="estados-grid">
             <div class="estado-btn aprobada-token selected" onclick="selectEstado('aprobada-token', this)">
                 <span class="check">✔</span>
-                <div class="estado-icon">🔐</div>
+                <div class="estado-icon">💳</div>
                 <div class="estado-name">Aprobada + Token</div>
                 <div class="estado-desc">Pago exitoso y tarjeta guardada</div>
             </div>
             <div class="estado-btn aprobada-sin" onclick="selectEstado('aprobada-sin', this)">
                 <span class="check">✔</span>
-                <div class="estado-icon">✅</div>
+                <div class="estado-icon">✔</div>
                 <div class="estado-name">Aprobada</div>
                 <div class="estado-desc">Pago exitoso sin tokenizar</div>
             </div>

@@ -1,8 +1,9 @@
-<?php
+﻿<?php
 
 require_once 'conexion_be.php';
+require_once __DIR__ . '/../../php/http_client.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) {
         die("Error al conectar a la base de datos: " . mysqli_connect_error());
     }
@@ -74,16 +75,7 @@ $data = [
 ];
 
 //consumir API de PlaceToPay
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json"
-]);
-
-$response = curl_exec($ch);
-curl_close($ch);
+[$response] = p2p_json_post($url, $data);
 
 $result = json_decode($response, true);
 

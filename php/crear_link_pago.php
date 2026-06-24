@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -12,8 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once 'conexion_be.php';
+require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -75,18 +76,7 @@ $data = [
     "receiverEmails" => [$correo]
 ];
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST,           true);
-curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
-$response  = curl_exec($ch);
-$curlError = curl_error($ch);
-$httpCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
+[$response, $curlError] = p2p_json_post($url, $data);
 
 $result   = json_decode($response, true);
 $link_url = $result['url']  ?? $result['link'] ?? $result['data']['url'] ?? '';

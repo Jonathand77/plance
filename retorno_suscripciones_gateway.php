@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -32,15 +32,15 @@ if ($status === 'APPROVED') {
         $icono = '🔐'; $titulo = '¡Suscripción completa!';
         $mensaje = '¡Tu pago fue procesado y tu tarjeta quedó guardada para futuros cobros automáticos!';
     } else {
-        $icono = '✅'; $titulo = '¡Pago exitoso!';
+        $icono = '✔'; $titulo = '¡Pago exitoso!';
         $mensaje = 'Tu pago fue procesado y la suscripción fue activada correctamente.';
     }
 } elseif ($status === 'PENDING') {
     $icono = '⏳'; $titulo = 'Pago pendiente';
     $mensaje = 'Tu pago está siendo procesado.';
-    $color = '#f0b429'; $bg_icon = 'rgba(240,180,41,0.15)';
+    $color = '#FF6C0C'; $bg_icon = 'rgba(240,180,41,0.15)';
 } else {
-    $icono = '❌'; $titulo = 'Pago rechazado';
+    $icono = 'âŒ'; $titulo = 'Pago rechazado';
     $mensaje = !empty($message) ? $message : 'No se pudo procesar. Verifica los datos e intenta de nuevo.';
     $color = '#e05252'; $bg_icon = 'rgba(224,82,82,0.15)';
 }
@@ -86,8 +86,7 @@ if ($status === 'APPROVED') {
         <?php if ($status === 'APPROVED' && !empty($token)): ?>
         <div style="background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.2);border-radius:8px;padding:0.7rem 1rem;margin-bottom:1.2rem;font-size:0.8rem;color:#86efac;display:flex;gap:0.5rem;align-items:flex-start;text-align:left;">
             <i class="bi bi-shield-lock-fill"></i>
-            <span>🔐 <strong>Tarjeta tokenizada</strong> — Tu medio de pago quedó registrado de forma segura para futuros cobros automáticos.</span>
-        </div>
+            <span>🔐 <strong>Tarjeta tokenizada</strong> — Tu medio de pago quedó registrado de forma segura para futuros cobros automáticos.</span>        </div>
         <?php endif; ?>
 
         <div class="gw-badge">
@@ -105,7 +104,7 @@ if ($status === 'APPROVED') {
             <?php if (!empty($reference)): ?>
             <div class="order-row"><span>Referencia</span><span style="font-size:0.78rem;color:var(--text-secondary);"><?= htmlspecialchars($reference) ?></span></div>
             <?php endif; ?>
-            <div class="order-row"><span>Tarjeta</span><span style="color:<?= !empty($token) ? '#3ecf8e' : '#8a8d96' ?>;"><?= !empty($token) ? '✅ Guardada' : '— No guardada' ?></span></div>
+            <div class="order-row"><span>Tarjeta</span><span style="color:<?= !empty($token) ? '#3ecf8e' : '#8a8d96' ?>;"><?= !empty($token) ? 'âœ… Guardada' : 'â€” No guardada' ?></span></div>
             <div class="order-row"><span>Estado</span><span><span class="estado-badge"><?= strtoupper($nuevo_estado) ?></span></span></div>
         </div>
 

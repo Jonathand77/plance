@@ -1,7 +1,10 @@
 <?php
 session_start();
 require_once __DIR__ . '/conexion_be.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
 // Sanitizar
 $correo     = mysqli_real_escape_string($conexion, $_POST['correo']);
 $contraseña = $_POST['contraseña'];

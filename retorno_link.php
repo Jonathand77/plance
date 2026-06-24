@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -126,7 +126,7 @@ if ($exito) {
             <div class="order-row"><span>Correo</span><span><?= htmlspecialchars($correo) ?></span></div>
             <div class="order-row"><span>Referencia</span><span style="font-size:0.78rem;color:var(--text-secondary);"><?= htmlspecialchars($referencia) ?></span></div>
             <?php if ($expiracion): ?>
-            <div class="order-row"><span>Expira</span><span style="color:#f0b429;"><?= htmlspecialchars($expiracion) ?></span></div>
+            <div class="order-row"><span>Expira</span><span style="color:#FF6C0C;"><?= htmlspecialchars($expiracion) ?></span></div>
             <?php endif; ?>
             <div class="order-row">
                 <span>Estado</span>

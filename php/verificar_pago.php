@@ -1,6 +1,10 @@
-<?php
+﻿<?php
 session_start();
-require_once __DIR__ . '/../vendor/autoload.php';
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
+require_once __DIR__ . '/http_client.php';
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
@@ -8,7 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -46,18 +50,9 @@ $auth = [
     ]
 ];
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST,  'POST');
-curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($auth));
-curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+[$response] = p2p_json_post($url, $auth);
 
-$response = curl_exec($ch);
-curl_close($ch);
-
-$result = json_decode($response, true);
+$result = json_decode($response ?: '{}', true);
 
 // ══════════════════════════════════════════
 // Determinar nuevo estado

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -33,8 +33,8 @@ if (!isset($_SESSION['usuario'])) {
     --bg-card-hover:  #252830;
     --bg-selected:    #08122a;
     --border:         #2e3038;
-    --border-active:  #4d9fff;
-    --accent:         #4d9fff;
+    --border-active:  #0062A8;
+    --accent:         #0062A8;
     --accent-glow:    rgba(77, 159, 255, 0.25);
     --accent-dark:    #2176d9;
     --text-primary:   #f0f1f3;
@@ -375,7 +375,7 @@ if (!isset($_SESSION['usuario'])) {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4d9fff, #2176d9);
+    background: linear-gradient(135deg, #0062A8, #2176d9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -414,19 +414,19 @@ if (!isset($_SESSION['usuario'])) {
       require_once '../php/navbar.php';
     ?>
 
-  <!-- ═══ GAME BANNER ═══ -->
+  <!-- ── GAME BANNER ── -->
   <div class="game-banner">
     <div class="game-banner__tag">
       <img src="https://www.konami.com/efootball/s/img/main_page_1.png?v=930" class="card-img-top" alt="" class="game-icon">
       eFootball Mobile — Monedas
     </div>
     <div class="banner-player-id">
-      <label for="jugadorIdInput">⚽ ID de jugador</label>
+      <label for="jugadorIdInput">⚠️ ID de jugador</label>
       <input type="text" id="jugadorIdInput" placeholder="Ej: AAAA-123-456-789" autocomplete="off" />
     </div>
   </div>
 
-  <!-- ═══ MAIN LAYOUT ═══ -->
+  <!-- ── MAIN LAYOUT ── -->
   <main class="shop-layout">
 
     <!-- LEFT: Products Panel -->
@@ -539,7 +539,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="instruction-text" id="instructionText">
           KONAMI® | 300 Monedas 🎮<br>
           <span class="flag">🌐</span> Region: Global<br>
-          <span class="flag warn">⛔</span> IMPORTANT NOTE BEFORE PURCHASE
+          <span class="flag warn">⚠️</span> IMPORTANT NOTE BEFORE PURCHASE
         </div>
         <button class="btn-instructions">Ver todas las instrucciones ▾</button>
       </div>
@@ -549,7 +549,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="vendor-info">
           <div class="vendor-avatar">JM</div>
           <div>
-            <div class="vendor-name">Jair ✅</div>
+            <div class="vendor-name">Jair ✔</div>
             <div class="vendor-rating">👍 2026 · <a href="#">Evertec Placetopay SAS</a></div>
           </div>
         </div>

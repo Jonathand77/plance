@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -111,7 +111,7 @@ $total_pagos= number_format($total_pagos, 0, ',', '.');
         align-items: center;
         justify-content: center;
         font-size: 1.4rem;
-        background-color: #f0b429;
+        background-color: #FF6C0C;
     }
     .card-name {
         font-size: 1rem;

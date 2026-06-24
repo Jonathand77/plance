@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -56,7 +56,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        color: #4d9fff;
+        color: #0062A8;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -67,7 +67,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
     }
     .table thead th {
         background: rgba(0, 0, 0, 0.79);
-        color: #4d9fff;
+        color: #0062A8;
         border-color: rgba(255,255,255,0.1);
         font-size: 0.8rem;
         text-transform: uppercase;
@@ -81,7 +81,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
     .table tbody td { border-color: rgba(255,255,255,0.07); font-size: 0.88rem; vertical-align: middle; background: #1312129a; color: white;   }
 
     .badge-aprobada  { background: rgba(62,207,142,0.2);  color: #3ecf8e; }
-    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #f0b429; }
+    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #FF6C0C; }
     .badge-rechazada { background: rgba(224,82,82,0.2);   color: #e05252; }
     .badge-cancelada { background: rgba(138,141,150,0.2); color: #8a8d96; }
 
@@ -100,7 +100,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
         align-items: center;
         gap: 0.3rem;
         background: rgba(77,159,255,0.12);
-        color: #4d9fff;
+        color: #0062A8;
         font-size: 0.72rem;
         font-weight: 700;
         padding: 0.15rem 0.5rem;
@@ -116,7 +116,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
     .btn-verificar {
         background: rgba(77,159,255,0.15);
         border: 1px solid rgba(77,159,255,0.4);
-        color: #4d9fff;
+        color: #0062A8;
         border-radius: 6px;
         padding: 0.2rem 0.6rem;
         font-size: 0.75rem;
@@ -129,7 +129,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
         transition: all 0.2s;
         white-space: nowrap;
     }
-    .btn-verificar:hover { background: rgba(77,159,255,0.3); color: #4d9fff; text-decoration: none; }
+    .btn-verificar:hover { background: rgba(77,159,255,0.3); color: #0062A8; text-decoration: none; }
     .alert-verify {
         background: rgba(62,207,142,0.12); color: #3ecf8e;
         border: 1px solid rgba(62,207,142,0.3);
@@ -171,7 +171,7 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
 
     <div class="tabla-container">
         <div class="tabla-titulo">
-            <i class="bi bi-calendar-check-fill" style="color: #4d9fff;"></i>Historial de Membresías Recurrentes
+            <i class="bi bi-calendar-check-fill" style="color: #0062A8;"></i>Historial de Membresías Recurrentes
         </div>
 
         <?php
@@ -209,14 +209,14 @@ $resultado     = mysqli_query($conexion, "SELECT * FROM recurrencias WHERE usuar
                         <td><span style="color:#8a8d96;">#<?= htmlspecialchars($row['id']) ?></span></td>
                         <td><?= htmlspecialchars($row['servicio']) ?></td>
                         <td><?= htmlspecialchars($row['plan']) ?></td>
-                        <td><code style="color:#4d9fff;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
-                        <td style="color:#4d9fff; font-weight:700;">
+                        <td><code style="color:#0062A8;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
+                        <td style="color:#0062A8; font-weight:700;">
                             $<?= number_format($row['precio'], 0, ',', '.') ?> COP
                         </td>
                         <td style="color:#f0f1f3;">
                             <?= !empty($row['next_payment']) ? htmlspecialchars($row['next_payment']) : '—' ?>
                         </td>
-                        <td style="color:#f0b429;">
+                        <td style="color:#FF6C0C;">
                             <?= !empty($row['fecha_fin']) ? htmlspecialchars($row['fecha_fin']) : '—' ?>
                         </td>
                         <td>

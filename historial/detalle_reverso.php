@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -208,7 +208,7 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                 </div>
                 <div class="info-row">
                     <span>Tipo</span>
-                    <span><?= $tipo === 'orden' ? '🎮 Pago Básico' : ($tipo === 'suscripcion' ? '📺 Suscripción' : '<i class="bi bi-calendar-check-fill" style="color: #4d9fff;"></i>Recurrencia') ?></span>
+                    <span><?= $tipo === 'orden' ? '🎮 Pago Básico' : ($tipo === 'suscripcion' ? '📺 Suscripción' : '<i class="bi bi-calendar-check-fill" style="color: #0062A8;"></i>Recurrencia') ?></span>
                 </div>
                 <div class="info-row">
                     <span>Producto / Servicio</span>
@@ -303,7 +303,7 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                 <p>Atentamente,<br><strong style="color:#f0f1f3;"><?= htmlspecialchars($_SESSION['usuario']) ?></strong></p>
             </div>
             <div style="display:flex; gap:0.8rem; margin-top:1.2rem;">
-                <button onclick="window.print()" style="flex:1; padding:0.65rem; background:#f0b429; color:#0d0e10; border:none; border-radius:8px; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.95rem; text-transform:uppercase; cursor:pointer;">
+                <button onclick="window.print()" style="flex:1; padding:0.65rem; background:#FF6C0C; color:#0d0e10; border:none; border-radius:8px; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.95rem; text-transform:uppercase; cursor:pointer;">
                     🖨️ Imprimir
                 </button>
                 <button onclick="document.getElementById('modalCarta').style.display='none'" style="flex:1; padding:0.65rem; background:transparent; color:#8a8d96; border:1px solid #2e3038; border-radius:8px; font-family:'Barlow',sans-serif; font-weight:700; font-size:0.95rem; text-transform:uppercase; cursor:pointer;">

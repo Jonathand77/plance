@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * navbar.php — Navbar reutilizable
  * 
@@ -16,7 +16,7 @@
 
 // Valores por defecto
 $nav_back_url  = $nav_back_url  ?? 'home.php';
-$nav_back_text = $nav_back_text ?? 'volver';
+$nav_back_text = $nav_back_text ?? 'Volver';
 $nav_base      = $nav_base      ?? '../';
 
 // Traer foto de perfil del usuario en sesión
@@ -26,7 +26,7 @@ $nav_initials  = '';
 if (isset($_SESSION['user_id'])) {
     // Reutilizar conexión si ya existe, si no crear una
     if (!isset($conexion)) {
-        $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+        require_once __DIR__ . '/conexion_be.php';
     }
     if ($conexion) {
         $nav_uid = intval($_SESSION['user_id']);
@@ -64,7 +64,7 @@ if (isset($_SESSION['user_id'])) {
         height: 32px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #f0b429;
+        border: 2px solid #FF6C0C;
         transition: border-color 0.2s, transform 0.2s;
     }
     .nav-avatar-img:hover { border-color: #fff; transform: scale(1.08); }
@@ -73,14 +73,14 @@ if (isset($_SESSION['user_id'])) {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #f0b429, #c99010);
+        background: linear-gradient(135deg, #FF6C0C, #c99010);
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
         font-size: 0.8rem;
         color: #0d0e10;
-        border: 2px solid #f0b429;
+        border: 2px solid #FF6C0C;
         transition: border-color 0.2s, transform 0.2s;
         flex-shrink: 0;
     }
@@ -102,7 +102,7 @@ if (isset($_SESSION['user_id'])) {
 
     .dropbtn {
         background: hsla(120, 2%, 10%, 0.84);
-        color: #f0b429;
+        color: #FF6C0C;
         border: 1.5px solid rgba(240, 180, 41, 0.3);
         border-radius: 8px;
         padding: 6px 14px;
@@ -115,7 +115,7 @@ if (isset($_SESSION['user_id'])) {
         gap: 0.3rem;
     }
     .dropbtn:hover {
-        border-color: #f0b429;
+        border-color: #FF6C0C;
         background: rgba(240, 180, 41, 0.1);
     }
 
@@ -150,7 +150,7 @@ if (isset($_SESSION['user_id'])) {
     }
     .dropdown-content a:hover {
         background: rgba(240, 180, 41, 0.1);
-        color: #f0b429;
+        color: #FF6C0C;
         text-decoration: none;
     }
 
@@ -181,7 +181,7 @@ if (isset($_SESSION['user_id'])) {
  
   
     <!-- BOTON DE RETROSESO -->
-    <a href="<?= htmlspecialchars($nav_back_url) ?>" class="btn" style="color: black; color: #f0b429;">
+    <a href="<?= htmlspecialchars($nav_back_url) ?>" class="btn" style="color: black; color: #FF6C0C;">
         <i class="fa-solid fa-circle-arrow-left fs-6"></i> <?= htmlspecialchars($nav_back_text) ?>
     </a>  <!---->
     <div class="ms-auto d-flex align-items-center gap-2">

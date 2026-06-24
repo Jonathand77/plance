@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -27,13 +27,13 @@ $reference   = $gw['reference'] ?? '';
 
 // Definir visual según estado
 if ($status === 'APPROVED') {
-    $icono   = '✅'; $titulo  = '¡Pago aprobado!';
+    $icono   = '✔'; $titulo  = '¡Pago aprobado!';
     $mensaje = 'Tu compra fue procesada exitosamente. ¡Disfruta tus UC Points!';
     $color   = '#3ecf8e'; $bg_icon = 'rgba(62,207,142,0.15)';
 } elseif ($status === 'PENDING') {
     $icono   = '⏳'; $titulo  = 'Pago pendiente';
     $mensaje = 'Tu pago está siendo procesado. Te notificaremos pronto.';
-    $color   = '#f0b429'; $bg_icon = 'rgba(240,180,41,0.15)';
+    $color   = '#FF6C0C'; $bg_icon = 'rgba(240,180,41,0.15)';
 } else {
     $icono   = '❌'; $titulo  = 'Pago rechazado';
     $mensaje = !empty($message) ? $message : 'Tu pago no pudo ser procesado. Verifica los datos e intenta de nuevo.';

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -36,8 +36,8 @@ if (!isset($_SESSION['usuario'])) {
     --bg-card-hover:  #252830;
     --bg-selected:    #2a2208;
     --border:         #2e3038;
-    --border-active:  #f0b429;
-    --accent:         #f0b429;
+    --border-active:  #FF6C0C;
+    --accent:         #FF6C0C;
     --accent-glow:    rgba(240, 180, 41, 0.25);
     --accent-dark:    #c99010;
     --text-primary:   #f0f1f3;
@@ -165,7 +165,7 @@ if (!isset($_SESSION['usuario'])) {
     }
 
     .product-card.selected::after {
-    content: '✔';
+    content: 'âœ”';
     position: absolute;
     top: 0.5rem;
     right: 0.55rem;
@@ -437,7 +437,7 @@ if (!isset($_SESSION['usuario'])) {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f0b429, #c99010);
+    background: linear-gradient(135deg, #FF6C0C, #c99010);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -540,7 +540,7 @@ if (!isset($_SESSION['usuario'])) {
     </div>
   </div>
 
-  <!-- ═══ MAIN LAYOUT ═══ -->
+  <!-- ── MAIN LAYOUT ── -->
   <main class="shop-layout">
 
     <!-- IZQ: Productos Panel -->
@@ -688,7 +688,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="instruction-text" id="instructionText">
           Activision® | 500 Points (Xbox Digital Key) 🎮<br>
           <span class="flag">🌐</span> Region: Global<br>
-          <span class="flag warn">⛔</span> IMPORTANT NOTE BEFORE PURCHASE
+          <span class="flag warn">⚠️</span> IMPORTANT NOTE BEFORE PURCHASE
         </div>
         <button class="btn-instructions">Ver todas las instrucciones ▾</button>
       </div>
@@ -698,7 +698,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="vendor-info">
           <div class="vendor-avatar">JM</div>
           <div>
-            <div class="vendor-name">Jair ✅</div>
+            <div class="vendor-name">Jair ✔</div>
             <div class="vendor-rating">👍 2026 · <a href="#">Evertec Placetopay SAS</a></div>
           </div>
         </div>
@@ -820,8 +820,6 @@ if (!isset($_SESSION['usuario'])) {
   </script>
 </body>
 </html>
-
-
 
 </body>
     <script src="anim.js"></script>

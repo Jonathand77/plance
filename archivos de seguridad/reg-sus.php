@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -77,7 +77,7 @@ switch ($modo) {
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        color: #a855f7;
+        color: #0062A8;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -102,7 +102,7 @@ switch ($modo) {
     .table tbody td { border-color: rgba(255,255,255,0.07); font-size: 0.88rem; vertical-align: middle; background: #1312129a; color: white; }
 
     .badge-aprobada  { background: rgba(62,207,142,0.2);  color: #3ecf8e; }
-    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #f0b429; }
+    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #FF6C0C; }
     .badge-rechazada { background: rgba(224,82,82,0.2);   color: #e05252; }
     .badge-cancelada { background: rgba(138,141,150,0.2); color: #8a8d96; }
 
@@ -135,15 +135,15 @@ switch ($modo) {
         color: #8a8d96; background: rgba(255,255,255,0.02);
     }
     .modo-tab:hover { text-decoration: none; color: #f0f1f3; }
-    .modo-tab.active-purple { border-color: #a855f7; background: rgba(168,85,247,0.1); color: #a855f7; }
-    .modo-tab.active-blue   { border-color: #4d9fff; background: rgba(77,159,255,0.1); color: #4d9fff; }
+    .modo-tab.active-purple { border-color: #0062A8; background: rgba(168,85,247,0.1); color: #0062A8; }
+    .modo-tab.active-blue   { border-color: #0062A8; background: rgba(77,159,255,0.1); color: #0062A8; }
     .modo-tab.active-green  { border-color: #3ecf8e; background: rgba(62,207,142,0.1); color: #3ecf8e; }
     .modo-tab.active-orange { border-color: #f59e0b; background: rgba(245,158,11,0.1); color: #f59e0b; }
     .tabs-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0.6rem 0; }
     .btn-verificar {
         background: rgba(168,85,247,0.15);
         border: 1px solid rgba(168,85,247,0.4);
-        color: #a855f7;
+        color: #0062A8;
         border-radius: 6px;
         padding: 0.2rem 0.6rem;
         font-size: 0.75rem;
@@ -156,7 +156,7 @@ switch ($modo) {
         transition: all 0.2s;
         white-space: nowrap;
     }
-    .btn-verificar:hover { background: rgba(168,85,247,0.3); color: #a855f7; text-decoration: none; }
+    .btn-verificar:hover { background: rgba(168,85,247,0.3); color: #0062A8; text-decoration: none; }
     .alert-verify {
         background: rgba(62,207,142,0.12); color: #3ecf8e;
         border: 1px solid rgba(62,207,142,0.3);
@@ -224,8 +224,8 @@ switch ($modo) {
                         <?php if ($modo === 'wc-sub'): ?>
                         <td><?= htmlspecialchars($row['plataforma']) ?></td>
                         <td><?= htmlspecialchars($row['plan']) ?></td>
-                        <td><code style="color:#a855f7;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
-                        <td style="color:#a855f7;font-weight:700;">$<?= number_format($row['precio'],0,',','.') ?> COP</td>
+                        <td><code style="color:#0062A8;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
+                        <td style="color:#0062A8;font-weight:700;">$<?= number_format($row['precio'],0,',','.') ?> COP</td>
                         <td style="color:<?= !empty($row['token']) ? '#3ecf8e' : '#555860' ?>; font-size:0.78rem;"><?= !empty($row['token']) ? '✅ Guardado' : '—' ?></td>
                         <td><span class="estado-pill badge-<?= strtolower($row['estado']) ?>"><?= strtoupper($row['estado']) ?></span></td>
                         <td style="color:#8a8d96;font-size:0.8rem;"><?= htmlspecialchars($row['created_at']) ?></td>
@@ -238,11 +238,11 @@ switch ($modo) {
                         <?php elseif ($modo === 'wc-rec'): ?>
                         <td><?= htmlspecialchars($row['servicio']) ?></td>
                         <td><?= htmlspecialchars($row['plan']) ?></td>
-                        <td><code style="color:#4d9fff;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
-                        <td style="color:#4d9fff;font-weight:700;">$<?= number_format($row['precio'],0,',','.') ?> COP</td>
-                        <td><span style="background:rgba(77,159,255,0.12);color:#4d9fff;font-size:0.72rem;padding:0.1rem 0.4rem;border-radius:3px;"><?= $row['periodicidad'] === 'Y' ? 'Anual' : 'Mensual' ?></span></td>
+                        <td><code style="color:#0062A8;"><?= htmlspecialchars($row['usuario_id']) ?></code></td>
+                        <td style="color:#0062A8;font-weight:700;">$<?= number_format($row['precio'],0,',','.') ?> COP</td>
+                        <td><span style="background:rgba(77,159,255,0.12);color:#0062A8;font-size:0.72rem;padding:0.1rem 0.4rem;border-radius:3px;"><?= $row['periodicidad'] === 'Y' ? 'Anual' : 'Mensual' ?></span></td>
                         <td style="color:#f0f1f3;"><?= !empty($row['next_payment']) ? htmlspecialchars($row['next_payment']) : '—' ?></td>
-                        <td style="color:#f0b429;"><?= !empty($row['fecha_fin']) ? htmlspecialchars($row['fecha_fin']) : '—' ?></td>
+                        <td style="color:#FF6C0C;"><?= !empty($row['fecha_fin']) ? htmlspecialchars($row['fecha_fin']) : '—' ?></td>
                         <td><span class="estado-pill badge-<?= strtolower($row['estado']) ?>"><?= strtoupper($row['estado']) ?></span></td>
                         <td style="color:#8a8d96;font-size:0.8rem;"><?= htmlspecialchars($row['created_at']) ?></td>
 

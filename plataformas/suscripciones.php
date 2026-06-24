@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="assets/css/estilo.css?v=<?php echo filemtime(__DIR__ . '/assets/css/estils.css'); ?>">
+    <link rel="stylesheet" href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
 </head>
 
 

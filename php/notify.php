@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 
 file_put_contents('notify_debug.log', date('Y-m-d H:i:s') . " - Received notify:\n" . file_get_contents('php://input') . "\n\n", FILE_APPEND);

@@ -1,5 +1,6 @@
-<?php
+﻿<?php
 session_start();
+require_once __DIR__ . '/php/http_client.php';
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
@@ -11,7 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 // ══════════════════════════════════════════
 require_once 'php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) {
         die("Error de conexión: " . mysqli_connect_error());
     }
@@ -58,18 +59,9 @@ $auth = [
     ]
 ];
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST,  'POST');
-curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($auth));
-curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+[$response] = p2p_json_post($url, $auth);
 
-$response = curl_exec($ch);
-curl_close($ch);
-
-$result = json_decode($response, true);
+$result = json_decode($response ?: '{}', true);
 
 // ══════════════════════════════════════════
 // Determinar estado del pago
@@ -93,7 +85,7 @@ if ($status_p2p === 'APPROVED') {
     $icono        = '⏳';
     $titulo       = 'Pago pendiente';
     $mensaje      = 'Tu pago está siendo procesado. Te notificaremos pronto.';
-    $color        = '#f0b429';
+    $color        = '#FF6C0C';
     $bg_icon      = 'rgba(240, 180, 41, 0.15)';
 } else {
     $nuevo_estado = 'cancelada';
@@ -323,7 +315,7 @@ $subs = $row;
         }
         .tip-box-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
         .tip-box-text { font-size: 0.82rem; color: #c99010; line-height: 1.5; }
-        .tip-box-text strong { color: #f0b429; }
+        .tip-box-text strong { color: #FF6C0C; }
 
         .btn-tokenizar {
             display: inline-flex;
@@ -333,8 +325,8 @@ $subs = $row;
             justify-content: center;
             padding: 0.75rem 1.2rem;
             background: rgba(240,180,41,0.12);
-            border: 1.5px solid #f0b429;
-            color: #f0b429;
+            border: 1.5px solid #FF6C0C;
+            color: #FF6C0C;
             border-radius: 8px;
             font-family: var(--font-display);
             font-size: 1rem;
@@ -347,7 +339,7 @@ $subs = $row;
         }
         .btn-tokenizar:hover {
             background: rgba(240,180,41,0.25);
-            color: #f0b429;
+            color: #FF6C0C;
             text-decoration: none;
             transform: translateY(-1px);
         }

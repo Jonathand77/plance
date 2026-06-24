@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -7,8 +7,9 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 require_once 'php/conexion_be.php';
+require_once __DIR__ . '/php/http_client.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -31,15 +32,7 @@ $nonce    = bin2hex(random_bytes(16));
 $tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
 $nonceB64 = base64_encode($nonce);
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-curl_setopt($ch, CURLOPT_POSTFIELDS,    json_encode(["auth" => ["login" => $login, "tranKey" => $tranKey, "nonce" => $nonceB64, "seed" => $seed]]));
-curl_setopt($ch, CURLOPT_HTTPHEADER,    ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-$response = curl_exec($ch);
-curl_close($ch);
+[$response] = p2p_json_post($url, ["auth" => ["login" => $login, "tranKey" => $tranKey, "nonce" => $nonceB64, "seed" => $seed]]);
 
 $result     = json_decode($response, true);
 $status_p2p = $result['status']['status'] ?? 'UNKNOWN';
@@ -72,7 +65,7 @@ if ($status_p2p === 'APPROVED') {
     $nuevo_estado = 'pendiente';
     $icono = '⏳'; $titulo = 'Proceso pendiente';
     $mensaje = 'Tu solicitud está siendo procesada.';
-    $color = '#f0b429'; $bg_icon = 'rgba(240,180,41,0.15)';
+    $color = '#FF6C0C'; $bg_icon = 'rgba(240,180,41,0.15)';
 } else {
     $nuevo_estado = 'cancelada';
     $icono = '🚫'; $titulo = 'Proceso cancelado';

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg:#0a0a0a; --surface:#111111; --card:#141414; --border:#222222;
-            --accent:#f0b429; --accent-soft:rgba(240,180,41,0.1);
+            --accent:#FF6C0C; --accent-soft:rgba(240,180,41,0.1);
             --text:#f0f1f3; --muted:#8a8d96;
             --font-d:'Barlow',sans-serif; --font-b:'Barlow',sans-serif;
         }
@@ -55,7 +55,7 @@
         .estados{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;}
         .estado{display:inline-flex;align-items:center;gap:0.3rem;padding:0.2rem 0.65rem;border-radius:20px;font-size:0.75rem;font-weight:700;letter-spacing:0.04em;}
         .estado.aprobada{background:rgba(62,207,142,0.15);color:#3ecf8e;}
-        .estado.pendiente{background:rgba(240,180,41,0.15);color:#f0b429;}
+        .estado.pendiente{background:rgba(240,180,41,0.15);color:#FF6C0C;}
         .estado.rechazada{background:rgba(224,82,82,0.15);color:#e05252;}
         .estado.reversada{background:rgba(138,141,150,0.15);color:#8a8d96;}
 
@@ -131,13 +131,13 @@
     <p class="section-title">¿Qué tipo de registros existen?</p>
     <div class="cards-grid cards-grid-2">
         <div class="card">
-            <div class="card-icon">🖥️</div>
+            <div class="card-icon">🎖️</div>
             <h3>Registros Web Checkout</h3>
             <p>Incluyen pagos básicos de juegos, suscripciones de streaming, membresías recurrentes y suscripciones puras. Todos procesados a través de la pasarela visual de PlacetoPay.</p>
             <span class="card-tag">Web Checkout</span>
         </div>
         <div class="card">
-            <div class="card-icon">⚡</div>
+            <div class="card-icon">🔗</div>
             <h3>Registros API Gateway</h3>
             <p>Incluyen pagos directos procesados desde el backend — como recargas de PUBG, Blood Strike, streaming y música — sin redirigir al usuario a la página de PlacetoPay.</p>
             <span class="card-tag">API Gateway</span>

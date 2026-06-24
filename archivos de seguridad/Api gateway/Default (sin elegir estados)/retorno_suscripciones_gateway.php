@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -32,13 +32,13 @@ if ($status === 'APPROVED') {
         $icono = '🔐'; $titulo = '¡Suscripción completa!';
         $mensaje = '¡Tu pago fue procesado y tu tarjeta quedó guardada para futuros cobros automáticos!';
     } else {
-        $icono = '✅'; $titulo = '¡Pago exitoso!';
+        $icono = '✔️'; $titulo = '¡Pago exitoso!';
         $mensaje = 'Tu pago fue procesado y la suscripción fue activada correctamente.';
     }
 } elseif ($status === 'PENDING') {
     $icono = '⏳'; $titulo = 'Pago pendiente';
     $mensaje = 'Tu pago está siendo procesado.';
-    $color = '#f0b429'; $bg_icon = 'rgba(240,180,41,0.15)';
+    $color = '#FF6C0C'; $bg_icon = 'rgba(240,180,41,0.15)';
 } else {
     $icono = '❌'; $titulo = 'Pago rechazado';
     $mensaje = !empty($message) ? $message : 'No se pudo procesar. Verifica los datos e intenta de nuevo.';
@@ -105,7 +105,7 @@ if ($status === 'APPROVED') {
             <?php if (!empty($reference)): ?>
             <div class="order-row"><span>Referencia</span><span style="font-size:0.78rem;color:var(--text-secondary);"><?= htmlspecialchars($reference) ?></span></div>
             <?php endif; ?>
-            <div class="order-row"><span>Tarjeta</span><span style="color:<?= !empty($token) ? '#3ecf8e' : '#8a8d96' ?>;"><?= !empty($token) ? '✅ Guardada' : '— No guardada' ?></span></div>
+            <div class="order-row"><span>Tarjeta</span><span style="color:<?= !empty($token) ? '#3ecf8e' : '#8a8d96' ?>;"><?= !empty($token) ? '✔️ Guardada' : '— No guardada' ?></span></div>
             <div class="order-row"><span>Estado</span><span><span class="estado-badge"><?= strtoupper($nuevo_estado) ?></span></span></div>
         </div>
 

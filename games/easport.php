@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -71,7 +71,9 @@ if (!isset($_SESSION['usuario'])) {
     a:hover { text-decoration: underline; }
 
 
-    /* ── GAME BANNER ── */
+    /* ════════════════════════════════════════
+    GAME BANNER
+    ════════════════════════════════════════ */
     .game-banner {
     display: flex;
     align-items: center;
@@ -96,7 +98,9 @@ if (!isset($_SESSION['usuario'])) {
 
 
 
-    /* ── MAIN LAYOUT ── */
+    /* ════════════════════════════════════════
+    MAIN LAYOUT
+    ════════════════════════════════════════ */
     .shop-layout {
     display: grid;
     grid-template-columns: 1fr 340px;
@@ -107,7 +111,9 @@ if (!isset($_SESSION['usuario'])) {
     align-items: start;
     }
 
-    /* ── SECTION HELPERS ── */
+    /* ════════════════════════════════════════
+    SECTION HELPERS
+    ════════════════════════════════════════ */
     .section-block { margin-bottom: 1.4rem; }
     .section-label {
     font-family: var(--font-display);
@@ -121,7 +127,9 @@ if (!isset($_SESSION['usuario'])) {
 
 
 
-    /* ── PRODUCTS GRID ── */
+    /* ════════════════════════════════════════
+    PRODUCTS GRID
+    ════════════════════════════════════════ */
     .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -163,7 +171,7 @@ if (!isset($_SESSION['usuario'])) {
     }
 
     .product-card.selected::after {
-    content: '✔';
+    content: 'âœ”';
     position: absolute;
     top: 0.5rem;
     right: 0.55rem;
@@ -240,7 +248,9 @@ if (!isset($_SESSION['usuario'])) {
     border-radius: 3px;
     }
 
-    /* ── CHECKOUT PANEL ── */
+    /* ════════════════════════════════════════
+    CHECKOUT PANEL
+    ════════════════════════════════════════ */
     .checkout-panel {
     display: flex;
     flex-direction: column;
@@ -433,7 +443,9 @@ if (!isset($_SESSION['usuario'])) {
     color: var(--text-primary);
     }
 
-    /* Vendor */
+    /* ════════════════════════════════════════
+    VENDOR
+    ════════════════════════════════════════ */
     .vendor-info {
     display: flex;
     align-items: center;
@@ -445,7 +457,7 @@ if (!isset($_SESSION['usuario'])) {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f0b429, #c99010);
+    background: linear-gradient(135deg, #FF6C0C, #c99010);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -468,7 +480,9 @@ if (!isset($_SESSION['usuario'])) {
     margin-top: 0.1rem;
     }
 
-    /* ── BANNER PLAYER ID ── */
+    /* ════════════════════════════════════════
+    BANNER PLAYER ID
+    ════════════════════════════════════════ */
     .banner-player-id {
     display: flex;
     align-items: center;
@@ -498,7 +512,9 @@ if (!isset($_SESSION['usuario'])) {
     .banner-player-id input::placeholder { color: var(--text-muted); }
     .banner-player-id input:focus { border-color: var(--accent); }
 
-    /* ── ANIMATIONS ── */
+    /* ════════════════════════════════════════
+    ANIMATIONS
+    ════════════════════════════════════════ */
     @keyframes fadeSlideIn {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -507,7 +523,9 @@ if (!isset($_SESSION['usuario'])) {
     .products-panel { animation: fadeSlideIn 0.4s ease both; }
     .checkout-panel { animation: fadeSlideIn 0.4s 0.1s ease both; }
 
-    /* ── RESPONSIVE ── */
+    /* ════════════════════════════════════════
+    RESPONSIVE
+    ════════════════════════════════════════ */
     @media (max-width: 900px) {
     .shop-layout {
         grid-template-columns: 1fr;
@@ -534,19 +552,23 @@ if (!isset($_SESSION['usuario'])) {
           $nav_base      = "../";
           require_once '../php/navbar.php';
       ?>
-  <!-- ═══ GAME BANNER ═══ -->
+  <!-- ════════════════════════════════════════
+       GAME BANNER
+       ════════════════════════════════════════ -->
   <div class="game-banner">
     <div class="game-banner__tag">
       <img src="https://media.es.wired.com/photos/64dad651532fc59e0e8d53a4/16:9/w_1280,c_limit/EA%20Sports.jpg" class="card-img-top" alt="" class="game-icon">
       EA Sports FC Points
     </div>
     <div class="banner-player-id">
-      <label for="jugadorIdInput">⚽ ID de jugador</label>
+      <label for="jugadorIdInput">🆔 ID de jugador</label>
       <input type="text" id="jugadorIdInput" placeholder="Ej: 0011122224444555" autocomplete="off" />
     </div>
   </div>
 
-  <!-- ═══ MAIN LAYOUT ═══ -->
+  <!-- ════════════════════════════════════════
+       MAIN LAYOUT
+       ════════════════════════════════════════ -->
   <main class="shop-layout">
 
     <!-- LEFT: Products Panel -->
@@ -565,7 +587,7 @@ if (!isset($_SESSION['usuario'])) {
           </div>
 
           <div class="product-card popular-card" data-id="2" data-pts="500" data-price="14000" data-original="18000" data-discount="32">
-            <div class="badge-popular">★ Popular</div>
+            <div class="badge-popular">⭐ Popular</div>
             <img src="https://cdn1.codashop.com/images/826_219b1202-df20-4fe8-bfcb-d2689d381d31_EA%20SPORTS%20FC%20Mobile_category/1705583704508_40-FC-Points%20(1).png" style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">500</div>
             <div class="product-card__label">Puntos FC</div>
@@ -667,7 +689,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="instruction-text" id="instructionText">
           EA SPORTS® | 500 Points (Xbox Digital Key) 🎮<br>
           <span class="flag">🌐</span> Region: Global<br>
-          <span class="flag warn">⛔</span> IMPORTANT NOTE BEFORE PURCHASE
+          <span class="flag warn">⚠️</span> IMPORTANT NOTE BEFORE PURCHASE
         </div>
         <button class="btn-instructions">Ver todas las instrucciones ▾</button>
       </div>
@@ -677,7 +699,7 @@ if (!isset($_SESSION['usuario'])) {
         <div class="vendor-info">
           <div class="vendor-avatar">JM</div>
           <div>
-            <div class="vendor-name">Jair ✅</div>
+            <div class="vendor-name">Jair ✔</div>
             <div class="vendor-rating">👍 2026 · <a href="#">Evertec Placetopay SAS</a></div>
           </div>
         </div>

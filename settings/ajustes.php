@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) {
         die("Error de conexión: " . mysqli_connect_error());
     }
@@ -86,19 +86,18 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
 
     <style>
         :root {
-            --bg-main: #161616;
-            --bg-sidebar:  #202122;
-            --bg-card: #0e0f0f;
-            --bg-card-soft: #252b31;
+            --bg-main: #1E212C;
+            --bg-sidebar: #1E212C;
+            --bg-card: #1E212C;
+            --bg-card-soft: #4C5F71;
             --border: rgba(255,255,255,0.08);
             --text-main: #f5f7fa;
-            --text-soft: #98a2ad;
-            --text-muted: #6f7a85;
-            --yellow: rgb(255, 187, 0);
-            --blue-strong: #3f739a;
-            --orange: #ff6a00;
-            --yellow: #d39b17;
-            --success: #49c774;
+            --text-soft: #7d868c;
+            --text-muted: #7d868c;
+            --yellow: #FF6C0C;
+            --blue-strong: #0062A8;
+            --orange: #FF6C0C;
+            --success: #00CFB4;
             --shadow: 0 12px 30px rgba(0,0,0,0.22);
             --radius-lg: 16px;
             --radius-md: 12px;
@@ -300,7 +299,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f0b429, #d88e11);
+            background: linear-gradient(135deg, #FF6C0C, #d88e11);
             color: #111;
             font-size: 1.45rem;
             font-weight: 800;
@@ -506,7 +505,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
 
         .btn-save {
             border: none;
-            background: #d39b17;
+            background: #FF6C0C;
             color: #fff;
             font-weight: 800;
             border-radius: 12px;

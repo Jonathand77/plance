@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -67,7 +67,7 @@ if ($modo === 'gateway') {
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        color: #f0b429;
+        color: #FF6C0C;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -101,7 +101,7 @@ if ($modo === 'gateway') {
     .table tbody td { border-color: rgba(255,255,255,0.07); font-size: 0.88rem; vertical-align: middle; background: #1312129a; color: white;}
 
     .badge-aprobada  { background: rgba(62,207,142,0.2);  color: #3ecf8e; }
-    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #f0b429; }
+    .badge-pendiente { background: rgba(240,180,41,0.2);  color: #FF6C0C; }
     .badge-rechazada { background: rgba(224,82,82,0.2);   color: #e05252; }
     .badge-cancelada { background: rgba(138,141,150,0.2); color: #8a8d96; }
 
@@ -132,12 +132,12 @@ if ($modo === 'gateway') {
         color: #8a8d96; background: rgba(255,255,255,0.03);
     }
     .modo-tab:hover { text-decoration: none; color: #f0f1f3; }
-    .modo-tab.active-wc  { border-color: #f0b429; background: rgba(240,180,41,0.1); color: #f0b429; }
+    .modo-tab.active-wc  { border-color: #FF6C0C; background: rgba(240,180,41,0.1); color: #FF6C0C; }
     .modo-tab.active-gw  { border-color: #f59e0b; background: rgba(245,158,11,0.1); color: #f59e0b; }
     .btn-verificar {
         background: rgba(240,180,41,0.15);
         border: 1px solid rgba(240,180,41,0.4);
-        color: #f0b429;
+        color: #FF6C0C;
         border-radius: 6px;
         padding: 0.2rem 0.6rem;
         font-size: 0.75rem;
@@ -152,7 +152,7 @@ if ($modo === 'gateway') {
     }
     .btn-verificar:hover {
         background: rgba(240,180,41,0.3);
-        color: #f0b429;
+        color: #FF6C0C;
         text-decoration: none;
     }
     .alert-verify {
@@ -174,7 +174,7 @@ if ($modo === 'gateway') {
     ?>
 
     <div class="tabla-container">
-        <div class="tabla-titulo"><i class="fa-solid fa-money-bill-1-wave fs-3l" style="color: #f0b429;"></i>
+        <div class="tabla-titulo"><i class="fa-solid fa-money-bill-1-wave fs-3l" style="color: #FF6C0C;"></i>
              Historial de Pagos Básicos
         </div>
 
@@ -230,7 +230,7 @@ if ($modo === 'gateway') {
                         <td><?= htmlspecialchars($row['producto']) ?></td>
                         <td><?= htmlspecialchars($row['nombre']) ?></td>
                         <td><code style="color:#f59e0b;"><?= htmlspecialchars($row['correo']) ?></code></td>
-                        <td style="color:#f0b429; font-weight:700;">$<?= number_format($row['precio'], 0, ',', '.') ?> COP</td>
+                        <td style="color:#FF6C0C; font-weight:700;">$<?= number_format($row['precio'], 0, ',', '.') ?> COP</td>
                         <td>
                             <span class="estado-pill badge-<?= strtolower($row['estado']) ?>">
                                 <?= strtoupper($row['estado']) ?>
@@ -250,8 +250,8 @@ if ($modo === 'gateway') {
                         <?php else: ?>
                         <td><span style="color:#8a8d96;">#<?= htmlspecialchars($row['id']) ?></span></td>
                         <td><?= htmlspecialchars($row['producto']) ?></td>
-                        <td><code style="color:#a855f7;"><?= htmlspecialchars($row['jugador_id']) ?></code></td>
-                        <td style="color:#f0b429; font-weight:700;">$<?= number_format($row['precio'], 0, ',', '.') ?> COP</td>
+                        <td><code style="color:#0062A8;"><?= htmlspecialchars($row['jugador_id']) ?></code></td>
+                        <td style="color:#FF6C0C; font-weight:700;">$<?= number_format($row['precio'], 0, ',', '.') ?> COP</td>
                         <td>
                             <span class="estado-pill badge-<?= strtolower($row['estado']) ?>">
                                 <?= strtoupper($row['estado']) ?>

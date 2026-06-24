@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,18 +8,31 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
+    if (!$conexion) die("Error de conexiÃ³n: " . mysqli_connect_error());
 }
 
 // Contar registros del usuario actual
 $correo_sesion = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
 
-$total_ordenes = mysqli_fetch_assoc (mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes"))['total'];
-$total_subs    = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo_sesion'"))['total'];
-$total_recs    = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo_sesion'"))['total'];
+function safeCount(mysqli $conexion, string $sql): int {
+    try {
+        $result = mysqli_query($conexion, $sql);
+        if (!$result) {
+            return 0;
+        }
+        $row = mysqli_fetch_assoc($result);
+        return (int)($row['total'] ?? 0);
+    } catch (mysqli_sql_exception $e) {
+        return 0;
+    }
+}
 
-$total_links   = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM payment_link"))['total'];
+$total_ordenes = safeCount($conexion, "SELECT COUNT(*) as total FROM ordenes");
+$total_subs    = safeCount($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo_sesion'");
+$total_recs    = safeCount($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo_sesion'");
+
+$total_links   = safeCount($conexion, "SELECT COUNT(*) as total FROM payment_link");
 
 $total_pagos = $total_ordenes + $total_subs + $total_recs; 
 $total_pagos= number_format($total_pagos, 0, ',', '.');
@@ -113,7 +126,7 @@ $total_pagos= number_format($total_pagos, 0, ',', '.');
         align-items: center;
         justify-content: center;
         font-size: 1.4rem;
-        background-color: #f0b429;
+        background-color: #FF6C0C;
     }
     .card-name {
         font-size: 1rem;
@@ -153,10 +166,10 @@ $total_pagos= number_format($total_pagos, 0, ',', '.');
         <div class="panel-titulo"><i class="bi bi-file-text-fill"></i> Mis Historiales</div>
         <div class="panel-subtitulo">Consulta el registro de tus pagos y suscripciones</div>
         <!-- Pagos Básicos -->
-        <a href="reg-pgb.php" class="historial-card" style="--card-color: #f0b429; --card-bg: rgba(240,180,41,0.12);">
+        <a href="reg-pgb.php" class="historial-card" style="--card-color: #FF6C0C; --card-bg: rgba(240,180,41,0.12);">
             <div class="card-left">
                 <div class="card-icon">
-                    <i class="fa-solid fa-money-bill-1-wave fs-3l" style="color: #f0b429;"></i>
+                    <i class="fa-solid fa-money-bill-1-wave fs-3l" style="color: #FF6C0C;"></i>
                 </div>
                 <div>
                     <div class="card-name">Pagos Básicos</div>
@@ -170,7 +183,7 @@ $total_pagos= number_format($total_pagos, 0, ',', '.');
         </a>
 
         <!-- Suscripciones -->
-        <a href="reg-sus.php" class="historial-card" style="--card-color: #a855f7; --card-bg: rgba(168,85,247,0.12);">
+        <a href="reg-sus.php" class="historial-card" style="--card-color: #0062A8; --card-bg: rgba(168,85,247,0.12);">
             <div class="card-left">
                 <div class="card-icon">
                     <i class="fa-solid fa-credit-card" style="color: rgb(111, 0, 255);"></i>
@@ -187,10 +200,10 @@ $total_pagos= number_format($total_pagos, 0, ',', '.');
         </a>
 
         <!-- Membresías Recurrentes -->
-        <a href="reg-rec.php" class="historial-card" style="--card-color: #4d9fff; --card-bg: rgba(77,159,255,0.12);">
+        <a href="reg-rec.php" class="historial-card" style="--card-color: #0062A8; --card-bg: rgba(77,159,255,0.12);">
             <div class="card-left">
                 <div class="card-icon">
-                    <i class="bi bi-calendar-check-fill" style="color: #4d9fff;"></i>
+                    <i class="bi bi-calendar-check-fill" style="color: #0062A8;"></i>
                 </div>
                 <div>
                     <div class="card-name">Recurrentes</div>

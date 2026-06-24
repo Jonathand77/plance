@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -37,7 +37,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
             --bg-surface: #16181c;
             --bg-card:    #1e2128;
             --border:     #2e3038;
-            --accent:     #f0b429;
+            --accent:     #FF6C0C;
             --accent-soft: rgba(240,180,41,0.1);
             --text-primary:   #f0f1f3;
             --text-secondary: #8a8d96;
@@ -117,11 +117,11 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
         .estado-btn.selected { box-shadow: 0 0 0 2px currentColor; }
 
         .estado-btn.aprobada  { --c: #3ecf8e; }
-        .estado-btn.pendiente { --c: #f0b429; }
+        .estado-btn.pendiente { --c: #FF6C0C; }
         .estado-btn.rechazada { --c: #e05252; }
 
         .estado-btn.aprobada:hover,  .estado-btn.aprobada.selected  { border-color: #3ecf8e; background: rgba(62,207,142,0.08); }
-        .estado-btn.pendiente:hover, .estado-btn.pendiente.selected { border-color: #f0b429; background: rgba(240,180,41,0.08); }
+        .estado-btn.pendiente:hover, .estado-btn.pendiente.selected { border-color: #FF6C0C; background: rgba(240,180,41,0.08); }
         .estado-btn.rechazada:hover, .estado-btn.rechazada.selected { border-color: #e05252; background: rgba(224,82,82,0.08); }
 
         .estado-btn .check {
@@ -136,7 +136,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
             font-weight: 800; letter-spacing: 0.04em;
         }
         .estado-btn.aprobada  .estado-name { color: #3ecf8e; }
-        .estado-btn.pendiente .estado-name { color: #f0b429; }
+        .estado-btn.pendiente .estado-name { color: #FF6C0C; }
         .estado-btn.rechazada .estado-name { color: #e05252; }
 
         /* Razón selector */
@@ -179,7 +179,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
     <div class="main-card">
 
         <div class="demo-banner">
-            <strong>⚡ Simulación API Gateway</strong>
+            <strong>⚠️ Simulación API Gateway</strong>
             Elige el estado que deseas simular para esta transacción
         </div>
 
@@ -200,7 +200,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
         <div class="estados-grid">
             <div class="estado-btn aprobada selected" onclick="selectEstado('aprobada', this)">
                 <span class="check">✔</span>
-                <div class="estado-icon">✅</div>
+                <div class="estado-icon">★</div>
                 <div class="estado-name">Aprobada</div>
             </div>
             <div class="estado-btn pendiente" onclick="selectEstado('pendiente', this)">
@@ -210,7 +210,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
             </div>
             <div class="estado-btn rechazada" onclick="selectEstado('rechazada', this)">
                 <span class="check">✔</span>
-                <div class="estado-icon">❌</div>
+                <div class="estado-icon">✖</div>
                 <div class="estado-name">Rechazada</div>
             </div>
         </div>

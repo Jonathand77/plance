@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -12,8 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once 'conexion_be.php';
+require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -92,17 +93,7 @@ $body = [
     "userAgent" => $_SERVER['HTTP_USER_AGENT'] ?? 'PlanceDemoAgent/1.0'
 ];
 
-$ch = curl_init($endpoint);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST,           true);
-curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($body));
-curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_TIMEOUT,        30);
-
-$response = curl_exec($ch);
-curl_close($ch);
+[$response] = p2p_json_post($endpoint, $body);
 
 $result     = json_decode($response, true);
 $gw_reason  = $result['status']['reason']  ?? '';

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,7 @@
             --surface: #111111;
             --card:    #141414;
             --border:  #222222;
-            --accent:  #f0b429;
+            --accent:  #FF6C0C;
             --accent-soft: rgba(240,180,41,0.1);
             --text:    #f0f1f3;
             --muted:   #8a8d96;
@@ -75,7 +75,7 @@
             font-size: 1.05rem; line-height: 1.75;
             animation: fadeDown 0.6s 0.2s ease both;
         }
-        .sub-title { font-family: var(--font-d); font-size: 1.1rem; margin-bottom: 0.6rem; letter-spacing: 0.02em; background: var(--accent-soft); padding: 0.3rem 0.7rem; border-radius: 20px; color: #f0b429; } 
+        .sub-title { font-family: var(--font-d); font-size: 1.1rem; margin-bottom: 0.6rem; letter-spacing: 0.02em; background: var(--accent-soft); padding: 0.3rem 0.7rem; border-radius: 20px; color: #FF6C0C; } 
 
         /* GRID */
         .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
@@ -154,11 +154,11 @@
         <a href="../welcome.php">
             <img src="../assets/icons/iconoy.png" alt="Icon" style="height: 35px;"> 
         </a>
-    <a href="../welcome.php" class="btn-back">← Volver</a>
+    <a href="../welcome.php" class="btn-back">â† Volver</a>
 </nav>
 
 <section class="hero">
-    <div class="hero-tag">📋 Gestión</div>
+    <div class="hero-tag">📊 Gestión</div>
     <h1>Administra todo<br>desde <span>un solo lugar</span></h1>
     <p>Plance fue creado para que tanto comercios como usuarios puedan experimentar y entender los servicios de PlacetoPay, con una visión clara de cómo integrarlos en sus propios proyectos.</p>
 </section>

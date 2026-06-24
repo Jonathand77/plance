@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -167,7 +167,7 @@ $resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY create
                             </span>
                         </td>
                         <td style="text-align:center; color:#f0f1f3;"><?= (int)($row['pagos_usados'] ?? 0) ?></td>
-                        <td style="color:#f0b429; font-size:0.8rem;"><?= !empty($row['expiracion']) ? htmlspecialchars($row['expiracion']) : '—' ?></td>
+                        <td style="color:#FF6C0C; font-size:0.8rem;"><?= !empty($row['expiracion']) ? htmlspecialchars($row['expiracion']) : '—' ?></td>
                         <td style="color:#8a8d96; font-size:0.8rem;"><?= htmlspecialchars($row['created_at']) ?></td>
                         <td>
                             <?php if (!empty($row['link_url']) && $estado === 'activo' && !$expirado): ?>
@@ -215,3 +215,4 @@ $resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY create
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

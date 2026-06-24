@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 // Solo acepta POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -8,8 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Conexión
 require_once 'conexion_be.php';
+require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) {
         die("Error de conexión: " . mysqli_connect_error());
     }
@@ -32,8 +33,8 @@ $jugador_id = mysqli_real_escape_string($conexion, $jugador_id);
 
 // Insertar orden en BD
 $estado = "pendiente";
-$query  = "INSERT INTO ordenes (producto, precio, jugador_id, estado) 
-           VALUES ('$producto', '$precio', '$jugador_id', '$estado')";
+$query  = "INSERT INTO ordenes (request_id, producto, precio, jugador_id, estado) 
+           VALUES (0, '$producto', '$precio', '$jugador_id', '$estado')";
 
 $resultado = mysqli_query($conexion, $query);
 
@@ -86,20 +87,8 @@ $data = [
 ];
 
 // Llamada a la API de PlaceToPay
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST,           true);
-curl_setopt($ch, CURLOPT_POSTFIELDS,     json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER,     ["Content-Type: application/json"]);
-// En local omitimos verificación SSL (solo desarrollo)
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+[$response, $curlError] = p2p_json_post($url, $data);
 
-$response  = curl_exec($ch);
-$curlError = curl_error($ch);
-curl_close($ch);
-
-// Si curl falla del todo
 if (!$response) {
     die("❌ Error de conexión con PlaceToPay: " . $curlError);
 }
@@ -123,6 +112,6 @@ if (isset($result['processUrl'])) {
     echo "<pre style='background:#1e2128;color:#f0f1f3;padding:1rem;border-radius:8px;font-size:0.85rem;'>";
     print_r($result);
     echo "</pre>";
-    echo "<a href='../home.php' style='color:#f0b429;font-family:sans-serif;'>← Volver al inicio</a>";
+    echo "<a href='../home.php' style='color:#FF6C0C;font-family:sans-serif;'>← Volver al inicio</a>";
 }
 ?>

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
     session_start();
 
     if (!isset($_SESSION['usuario'])) {
@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="assets/css/estilos?v=<?php echo filemtime(__DIR__ . '/assets/css/e'); ?>">
+    <link rel="stylesheet" href="assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/assets/css/estilos.css'); ?>">
 </head>
 
 
@@ -63,20 +63,20 @@
 
     /*.dashboard-card-1:hover{
         transform: translateY(-10px);
-        box-shadow: 0 0 20px hsla(182, 75%, 49%, 0.502);
-        color:  hsla(182, 75%, 49%, 0.671);
+        box-shadow: 0 0 20px rgba(0, 207, 180, 0.55);
+        color:  #00CFB4;
         background-color: #0a0a0a73;
         
     } */
 
     /*.dashboard-card-2:hover{
         transform: translateY(-10px);
-        box-shadow: 0 0 20px hsla(209, 100%, 57%, 0.502);
+        box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);
         background-color: #0a0a0a73;
-             color: hsla(209, 100%, 57%, 0.671);
+             color: #0062A8;
 
-        /* box-shadow: 0 0 20px hsla(209, 100%, 57%, 0.502);  BOX SHADOW ORIGINAL*/
-            /* color: hsla(209, 100%, 57%, 0.671); COLOR ORIGINAL
+        /* box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);  BOX SHADOW ORIGINAL*/
+            /* color: #0062A8; COLOR ORIGINAL
     }*/
 
     .pagob {
@@ -184,7 +184,7 @@
         transition: color 0.2s;
     }
     .speed-dial-item:hover .speed-dial-label {
-        color: #f0b429;
+        color: #FF6C0C;
     }
 
     @keyframes fadeIn {
@@ -210,7 +210,7 @@
 
         <div class="container text-center" >
             <h3 class="display-4 fw-bold mb-3" >Sesiones</h3>
-            <p class="lead mb-4">Elije la sesión que vas a usar.</p>
+            <p class="lead mb-4">Elige la sesión que vas a usar.</p>
         </div>
 
         <!-- Speed Dial tipo navegador  -->
@@ -218,21 +218,21 @@
 
             <a href="games/juegos.php" class="speed-dial-item" title="Juegos Mobiles">
                 <div class="speed-dial-icon">
-                    <i class="fa-solid fa-gamepad fs-3" style="color: #f0b429;"></i>
+                    <i class="fa-solid fa-gamepad fs-3" style="color: #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Juegos Mobiles</span>
             </a>
 
             <a href="plataformas/suscripciones.php" class="speed-dial-item" title="Plataformas Digitales">
                 <div class="speed-dial-icon">
-                    <i class="bi bi-google-play" style="color:  #f0b429;"></i>
+                    <i class="bi bi-google-play" style="color:  #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Plataformas Digitales</span>
             </a>
 
             <a href="textil/textiles.php" class="speed-dial-item" title="Ropa">
                 <div class="speed-dial-icon">
-                    <i class="fa-solid fa-tshirt fs-3" style="color: #f0b429;"></i>
+                    <i class="fa-solid fa-tshirt fs-3" style="color: #FF6C0C;"></i>
                 </div>
                 <span class="speed-dial-label">Ropa</span>
             </a>

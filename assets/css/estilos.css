@@ -1,3 +1,13 @@
+﻿
+:root {
+    --color-primary: #FF6C0C;
+    --color-secondary-1: #00CFB4;
+    --color-secondary-2: #4C5F71;
+    --color-secondary-3: #0062A8;
+    --color-secondary-4: #1E212C;
+    --color-secondary-5: #7d868c;
+    --text-main: #f1f5f9;
+}
 
 *{
     margin: 0;
@@ -13,7 +23,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    color: #f1f5f9;
+    color: var(--text-main);
     font-family: 'Segoe UI', sans-serif;
 }
 body{
@@ -113,7 +123,7 @@ main{
     font-size: 30px;
     text-align: center;
     margin-bottom: 20px;
-    color: hsl(54, 100%, 50%);
+    color: var(--color-primary);
 }
 
 .contenedor__login-register form input{
@@ -134,7 +144,7 @@ main{
     margin-top: 40px;
     border: none;
     font-size: 14px;
-    background-color:orange;
+    background-color: var(--color-primary);
     font-weight: 600;
     cursor: pointer;
     color: #ffffff;
@@ -142,7 +152,7 @@ main{
 }
 .contenedor__login-register form button:hover{
     transition: all 300ms;
-    background: hwb(27 0% 0%);
+    background: var(--color-secondary-3);
     color: #fff;
 }   
 
@@ -159,10 +169,10 @@ main{
 
 
 .navbar {
-    background: rgba(27, 29, 31, 0.7);
+    background: rgba(30, 33, 44, 0.82);
     transition: all 0.3s ease;
     height: 65px;   /* Ajusta este valor */
-    width: auto;    /* Mantiene proporción */
+    width: auto;    /* Mantiene proporciÃ³n */
 }
 
 .welcome{
@@ -174,7 +184,7 @@ main{
     background-position: center;
     min-height: 100vh;
 
-    /* Animación fade */
+    /* AnimaciÃ³n fade */
     text-align: center;
     color: white;
     opacity: 0;
@@ -197,7 +207,7 @@ main{
 
 }
 .navbar-welcome.scrolled {
-    background-color: rgba(15, 23, 42, 0.95) !important;
+    background-color: rgba(30, 33, 44, 0.95) !important;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
@@ -209,12 +219,12 @@ main{
 }
 
 .navbar.scrolled {
-    background-color: rgba(15, 23, 42, 0.95) !important;
+    background-color: rgba(30, 33, 44, 0.95) !important;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .text-gradient {
-    background: linear-gradient(90deg, lab(70.97% 33.32 75.53), #535353);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary-5));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -244,26 +254,26 @@ main{
 
 .dashboard-card-1:hover{
     transform: translateY(-10px);
-    box-shadow: 0 0 20px hsla(182, 75%, 49%, 0.502);
-    color: hsla(182, 75%, 49%, 0.671);
+    box-shadow: 0 0 20px rgba(0, 207, 180, 0.55);
+    color: var(--color-secondary-1);
     background-color: #0a0a0a73;
 }
 
  .dashboard-card-2:hover{
     transform: translateY(-10px);
-    box-shadow: 0 0 20px hsla(182, 75%, 49%, 0.502);
+    box-shadow: 0 0 20px rgba(0, 207, 180, 0.55);
     background-color: #0a0a0a73;
-    color:  hsla(182, 75%, 49%, 0.671);
+    color: var(--color-secondary-1);
 
-    /* box-shadow: 0 0 20px hsla(209, 100%, 57%, 0.502);  BOX SHADOW ORIGINAL*/
-        /* color: hsla(209, 100%, 57%, 0.671); COLOR ORIGINAL*/
+    /* box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);  BOX SHADOW ORIGINAL*/
+        /* color: #0062A8; COLOR ORIGINAL*/
 }
 
 .dashboard-card-3:hover {
     transform: translateY(-10px);
-    color:  hsla(182, 75%, 49%, 0.671);
+    color: var(--color-secondary-1);
     background-color: #0a0a0a73;
-    box-shadow: 0 0 20px hsla(182, 75%, 49%, 0.502);
+    box-shadow: 0 0 20px rgba(0, 207, 180, 0.55);
 
 
     /*   BOX SHADOW ORIGINAL*/
@@ -273,9 +283,9 @@ main{
 
 .dashboard-card-4:hover {
     transform: translateY(-10px);
-    box-shadow: 0 0 20px hsla(7, 96%, 51%, 0.502);
+    box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);
     background-color: #0a0a0a73;
-        color: #b81500;
+        color: var(--color-secondary-3);
         
     /* box-shadow: 0 0 20px hsla(130, 93%, 54%, 0.502);  BOX SHADOW ORIGINAL*/
         /* color: hsla(130, 93%, 54%, 0.671);  COLOR ORIGINAL*/
@@ -284,9 +294,9 @@ main{
 
 .dashboard-card-5:hover {
     transform: translateY(-10px);
-    box-shadow: 0 0 20px hsla(7, 96%, 51%, 0.502);
+    box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);
     background-color: #0a0a0a73;
-        color: #b81500;
+        color: var(--color-secondary-3);
 
 
     /* box-shadow: 0 0 20px hsla(303, 100%, 59%, 0.502); BOX SHADOW ORIGINAL*/
@@ -296,23 +306,23 @@ main{
     
 .dashboard-card-6:hover {
     transform: translateY(-10px);
-    box-shadow: 0 0 20px hwb(14 1% 0% / 0.502);
+    box-shadow: 0 0 20px rgba(255, 108, 12, 0.55);
     background-color: #0a0a0a73;
-        color: #b81500;
+        color: var(--color-primary);
 
-    /* box-shadow: 0 0 20px hwb(14 1% 0% / 0.502); BOX SHADOW ORIGINAL*/
-        /*  color: hwb(14 1% 0% / 0.671); COLOR ORGINAL*/ 
+    /* box-shadow: 0 0 20px rgba(255, 108, 12, 0.55); BOX SHADOW ORIGINAL*/
+        /*  color: #FF6C0C; COLOR ORGINAL*/ 
         
 }
 
 
 .glow-btn {
-    box-shadow: 0 0 15px #ffae0099;
+    box-shadow: 0 0 15px rgba(255, 108, 12, 0.6);
     transition: 0.3s;
 }
 
 .glow-btn:hover {
-    box-shadow: 0 0 25px #ffc400;
+    box-shadow: 0 0 25px var(--color-primary);
 }
 .welcome-card {
     max-width: 1400px;
@@ -329,7 +339,7 @@ main{
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px); /* opcional: pequeño movimiento */
+        transform: translateY(20px); /* opcional: pequeÃ±o movimiento */
     }
     to {
         opacity: 1;

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
@@ -19,7 +19,7 @@
       --line:         #2a2a2a;
       --text:         #f0f1f3;
       --muted:        #8a8d96;
-      --accent:       #f0b429;
+      --accent:       #FF6C0C;
       --accent-soft:  rgba(240, 180, 41, 0.12);
       --accent-glow:  rgba(240, 180, 41, 0.25);
       --card:         #111111;
@@ -318,7 +318,7 @@
             Aquí te explicamos paso a paso cómo usarla, sin complicaciones. 😊
           </p>
         </div>
-        <div class="image-placeholder">📸 Captura de la pantalla principal de Plance</div>
+        <div class="image-placeholder">📱 Captura de la pantalla principal de Plance</div>
       </section>
 
       <!-- CÓMO FUNCIONA -->
@@ -452,7 +452,7 @@
 
         <div class="steps">
           <div class="step">
-            <div class="step-index"><i class="bi bi-box-seam-fill" style="color: #f0b429;"></i></div>
+            <div class="step-index"><i class="bi bi-box-seam-fill" style="color: #FF6C0C;"></i></div>
             <div>
               <h6>Pagos básicos</h6>
               <p>Aquí aparecen todas tus recargas de juegos. Puedes ver el estado de cada una: aprobada, pendiente o rechazada.</p>
@@ -480,8 +480,8 @@
         </div>
 
         <div class="split" style="margin-top:16px;">
-          <div class="image-placeholder">📸 Captura del historial de pagos</div>
-          <div class="image-placeholder">📸 Captura del botón verificar estado</div>
+          <div class="image-placeholder">📊 Captura del historial de pagos</div>
+          <div class="image-placeholder">📊 Captura del botón verificar estado</div>
         </div>
       </section>
 
@@ -545,8 +545,8 @@
         </div>
 
         <div class="split" style="margin-top:16px;">
-          <div class="image-placeholder">📸 Captura de la lista de transacciones para reverso</div>
-          <div class="image-placeholder">📸 Captura del detalle con botón de opciones</div>
+          <div class="image-placeholder">📊 Captura de la lista de transacciones para reverso</div>
+          <div class="image-placeholder">📊 Captura del detalle con botón de opciones</div>
         </div>
       </section>
 
@@ -564,8 +564,8 @@
 
         <!-- Captura general del flujo -->
         <div class="split" style="margin-top:1.2rem;">
-          <div class="image-placeholder">📸 Captura de la pantalla de sesiones / home</div>
-          <div class="image-placeholder">📸 Captura de la pasarela Web Checkout de PlacetoPay</div>
+          <div class="image-placeholder">📊 Captura de la pantalla de sesiones / home</div>
+          <div class="image-placeholder">📊 Captura de la pasarela Web Checkout de PlacetoPay</div>
         </div>
       </section>
 
@@ -616,10 +616,10 @@
         </div>
 
         <div class="split" style="margin-top:1.2rem;">
-          <div class="image-placeholder">📸 Captura de la tienda de juegos (selección de producto)</div>
-          <div class="image-placeholder">📸 Captura de la pantalla de confirmación</div>
-          <div class="image-placeholder">📸 Captura de la pantalla de confirmación</div>
-          <div class="image-placeholder">📸 Captura de la pantalla de confirmación</div>
+          <div class="image-placeholder">📊 Captura de la tienda de juegos (selección de producto)</div>
+          <div class="image-placeholder">📊 Captura de la pantalla de confirmación</div>
+          <div class="image-placeholder">📊 Captura de la pantalla de confirmación</div>
+          <div class="image-placeholder">📊 Captura de la pantalla de confirmación</div>
         </div>
       </section>
 
@@ -657,7 +657,7 @@
             <div class="step-index">4</div>
             <div>
               <h6>Confirma el pago</h6>
-              <p>Al completarse, recibirás confirmación de que tu suscripción quedó activa. Si guardaste tu tarjeta, verás el ícono 🔐 en tu historial.</p>
+              <p>Al completarse, recibirás confirmación de que tu suscripción quedó activa. Si guardaste tu tarjeta, verás el ícono 🔒 en tu historial.</p>
             </div>
           </div>
         </div>
@@ -668,8 +668,8 @@
         </div>
 
         <div class="split" style="margin-top:1.2rem;">
-          <div class="image-placeholder">📸 Captura de la tienda de streaming (selección de plan)</div>
-          <div class="image-placeholder">📸 Captura de la confirmación de suscripción activa</div>
+          <div class="image-placeholder">📱 Captura de la tienda de streaming (selección de plan)</div>
+          <div class="image-placeholder">📱 Captura de la confirmación de suscripción activa</div>
         </div>
       </section>
 
@@ -767,7 +767,7 @@
         <section class="section" id="sesiones">
         <div class="section-header">
           <div class="section-icon"><i class="icon-colors bi bi-shield-check"></i></div>
-          <h4>¿Como creo una sesion?</h4>
+          <h4>¿Cómo creo una sesión?</h4>
         </div>
         <p>Sí, completamente. Los pagos se procesan a través de <strong>PlacetoPay by Evertec</strong>, una pasarela certificada y reconocida en toda Latinoamérica.</p>
 
@@ -817,7 +817,7 @@ document.querySelectorAll('.nav a[href^="#"]').forEach(function(link) {
     });
 });
 
-// Búsqueda simple
+// BÃºsqueda simple
 document.querySelector('.search').addEventListener('input', function() {
     const q = this.value.toLowerCase();
     document.querySelectorAll('.section').forEach(function(sec) {

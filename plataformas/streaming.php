@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -32,7 +32,7 @@ if (!isset($_SESSION['usuario'])) {
     --bg-card-hover:  #252830;
     --bg-selected:    #1a0a2e;
     --border:         #2e3038;
-    --accent:         #a855f7;
+    --accent:         #0062A8;
     --accent-glow:    rgba(168, 85, 247, 0.25);
     --accent-dark:    #7c3aed;
     --text-primary:   #f0f1f3;
@@ -61,7 +61,9 @@ if (!isset($_SESSION['usuario'])) {
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ── GAME BANNER ── */
+    /* ════════════════════════════════════════
+    GAME BANNER
+    ════════════════════════════════════════ */
     .game-banner {
     display: flex;
     align-items: center;
@@ -83,7 +85,9 @@ if (!isset($_SESSION['usuario'])) {
     color: var(--text-primary);
     }
 
-    /* ── MAIN LAYOUT ── */
+    /* ════════════════════════════════════════
+    MAIN LAYOUT
+    ════════════════════════════════════════ */
     .shop-layout {
     display: grid;
     grid-template-columns: 1fr 340px;
@@ -106,7 +110,9 @@ if (!isset($_SESSION['usuario'])) {
     margin-bottom: 0.75rem;
     }
 
-    /* ── PLATAFORMA HEADER ── */
+    /* ════════════════════════════════════════
+    PLATAFORMA HEADER
+    ════════════════════════════════════════ */
     .platform-header {
     display: flex;
     align-items: center;
@@ -131,7 +137,9 @@ if (!isset($_SESSION['usuario'])) {
     color: var(--text-primary);
     }
 
-    /* ── PRODUCTS GRID ── */
+    /* ════════════════════════════════════════
+    PRODUCTS GRID
+    ════════════════════════════════════════ */
     .products-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -166,7 +174,7 @@ if (!isset($_SESSION['usuario'])) {
     }
 
     .product-card.selected::after {
-    content: '✔';
+    content: 'âœ”';
     position: absolute;
     top: 0.5rem;
     right: 0.55rem;
@@ -236,7 +244,9 @@ if (!isset($_SESSION['usuario'])) {
     margin-top: auto;
     }
 
-    /* ── CHECKOUT PANEL ── */
+    /* ════════════════════════════════════════
+    CHECKOUT PANEL
+    ════════════════════════════════════════ */
     .checkout-panel {
     display: flex;
     flex-direction: column;
@@ -342,7 +352,7 @@ if (!isset($_SESSION['usuario'])) {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #a855f7, #7c3aed);
+    background: linear-gradient(135deg, #0062A8, #7c3aed);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,7 +549,7 @@ if (!isset($_SESSION['usuario'])) {
                 </button>
 
                 <div class="trust-badges">
-                    <div class="trust-item">🛡️ <span>Garantía de reembolso · P2P</span></div>
+                    <div class="trust-item">💰 <span>Garantía de reembolso · P2P</span></div>
                     <div class="trust-item">⚡ <span>Pago rápido · Apple Pay / G Pay</span></div>
                     <div class="trust-item">💬 <span>Asistencia en directo 24/7</span></div>
                 </div>
@@ -550,9 +560,9 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="instruction-text" id="instructionText">
                     Netflix® | Plan Estándar 📺<br>
                     <span>🌐</span> Acceso inmediato tras el pago<br>
-                    <span>⛔</span> IMPORTANT NOTE BEFORE PURCHASE
+                    <span>⚠️</span> IMPORTANT NOTE BEFORE PURCHASE
                 </div>
-                <button class="btn-instructions">Ver todas las instrucciones ▾</button>
+                <button class="btn-instructions">Ver todas las instrucciones â–¾</button>
             </div>
 
             <div class="vendor-box">
@@ -593,9 +603,9 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('checkoutPrice').textContent = p.price;
 
             document.getElementById('instructionText').innerHTML =
-                p.plataforma + '\u00ae | Plan ' + p.plan + ' \uD83D\uDCFA<br>' +
-                '<span>\uD83C\uDF10</span> Acceso inmediato tras el pago<br>' +
-                '<span>\u26D4</span> IMPORTANT NOTE BEFORE PURCHASE';
+                p.plataforma + ' | Plan ' + p.plan + ' 📺<br>' +
+                '<span>🌐</span> Acceso inmediato tras el pago<br>' +
+                '<span>⚠️</span> IMPORTANT NOTE BEFORE PURCHASE';
         }
 
         function initCards() {

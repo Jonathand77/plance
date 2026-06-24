@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/assets/css/estilos.css'); ?>">
+    <link rel="stylesheet" href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
 </head>
 
 

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -129,7 +129,7 @@ if (!isset($_SESSION['usuario'])) {
         box-shadow: 0 0 0 1px var(--accent), 0 4px 24px var(--accent-glow);
     }
     .product-card.selected::after {
-        content: '✔'; position: absolute; top: 0.5rem; right: 0.55rem;
+        content: '✔️'; position: absolute; top: 0.5rem; right: 0.55rem;
         width: 18px; height: 18px; background: var(--accent);
         border-radius: 50%; color: #0d0e10; font-size: 0.65rem;
         display: flex; align-items: center; justify-content: center;
@@ -216,7 +216,7 @@ if (!isset($_SESSION['usuario'])) {
     .vendor-info { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
     .vendor-avatar {
         width: 40px; height: 40px; border-radius: 50%;
-        background: linear-gradient(135deg, #ffae00, #ff7b00);
+        background: linear-gradient(135deg, #FF6C0C, #ff7b00);
         display: flex; align-items: center; justify-content: center;
         font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: #fff; flex-shrink: 0;
     }
@@ -349,9 +349,9 @@ if (!isset($_SESSION['usuario'])) {
                     <span class="btn-arrow">→</span>
                 </button>
                 <div class="trust-badges">
-                    <div class="trust-item">🛡️ <span>Garantía de reembolso · P2P</span></div>
+                    <div class="trust-item">💰 <span>Garantía de reembolso · P2P</span></div>
                     <div class="trust-item">🔄 <span>Cobro recurrente automático</span></div>
-                    <div class="trust-item">💬 <span>Asistencia en directo 24/7</span></div>
+                    <div class="trust-item">📞 <span>Asistencia en directo 24/7</span></div>
                 </div>
             </div>
 
@@ -360,7 +360,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="instruction-text" id="instructionText">
                     Claude® | Plan Pro 🤖<br>
                     <span>🌐</span> Acceso inmediato tras el primer pago<br>
-                    <span>🔄</span> Renovación automática
+                    <span>⚠️</span> Renovación automática
                 </div>
                 <button class="btn-instructions">Ver todas las instrucciones ▾</button>
             </div>
@@ -370,7 +370,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="vendor-info">
                     <div class="vendor-avatar">JM</div>
                     <div>
-                        <div class="vendor-name">Jair ✅</div>
+                        <div class="vendor-name">Jair ✔️</div>
                         <div class="vendor-rating">👍 2026 · <a href="#">Evertec Placetopay SAS</a></div>
                     </div>
                 </div>
@@ -386,9 +386,9 @@ if (!isset($_SESSION['usuario'])) {
         const products = {
             1: { name: '🤖 Claude — Pro',     servicio: 'Claude',   plan: 'Pro',   precioM: 22900,   precioA: 229000 },
             2: { name: '🤖 Claude — Max',     servicio: 'Claude',   plan: 'Max',   precioM: 109000,  precioA: 1090000 },
-            3: { name: '💬 ChatGPT — Go',     servicio: 'ChatGPT',  plan: 'Go',    precioM: 8900,    precioA: 89000 },
-            4: { name: '💬 ChatGPT — Plus',   servicio: 'ChatGPT',  plan: 'Plus',  precioM: 22900,   precioA: 229000 },
-            5: { name: '💬 ChatGPT — Pro',    servicio: 'ChatGPT',  plan: 'Pro',   precioM: 219000,  precioA: 2190000 },
+            3: { name: '🧠 ChatGPT — Go',     servicio: 'ChatGPT',  plan: 'Go',    precioM: 8900,    precioA: 89000 },
+            4: { name: '🧠 ChatGPT — Plus',   servicio: 'ChatGPT',  plan: 'Plus',  precioM: 22900,   precioA: 229000 },
+            5: { name: '🧠 ChatGPT — Pro',    servicio: 'ChatGPT',  plan: 'Pro',   precioM: 219000,  precioA: 2190000 },
         };
 
         function fmt(n) {
@@ -411,7 +411,7 @@ if (!isset($_SESSION['usuario'])) {
             document.getElementById('instructionText').innerHTML   =
                 p.servicio + '\u00ae | Plan ' + p.plan + ' \uD83E\uDD16<br>' +
                 '<span>\uD83C\uDF10</span> Acceso inmediato tras el primer pago<br>' +
-                '<span>\uD83D\uDD04</span> Renovaci\u00f3n autom\u00e1tica ' + (period === 'mensual' ? 'mensual' : 'anual');
+                '<span>\uD83D\uDD04</span> Renovación automática ' + (period === 'mensual' ? 'mensual' : 'anual');
         }
 
         window.setPeriod = function(period) {

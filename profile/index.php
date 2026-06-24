@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
@@ -8,7 +8,7 @@ if (!isset($_SESSION['usuario'])) {
 
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
+    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
     if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -120,7 +120,7 @@ if (isset($_SESSION['user_id'])) {
         --bg-surface:     #212224;
         --bg-card:        #1d1d1d;
         --border:         #2e3038;
-        --accent:         #f0b429;
+        --accent:         #FF6C0C;
         --accent-dark:    #c99010;
         --text-primary:   #f0f1f3;
         --text-secondary: #8a8d96;
@@ -163,7 +163,7 @@ if (isset($_SESSION['user_id'])) {
 
     .dropbtn {
         background: hsla(120, 2%, 10%, 0.84);
-        color: #f0b429;
+        color: #FF6C0C;
         border: 1.5px solid rgba(240, 180, 41, 0.3);
         border-radius: 8px;
         padding: 6px 14px;
@@ -176,7 +176,7 @@ if (isset($_SESSION['user_id'])) {
         gap: 0.3rem;
     }
     .dropbtn:hover {
-        border-color: #f0b429;
+        border-color: #FF6C0C;
         background: rgba(240, 180, 41, 0.1);
     }
 
@@ -211,7 +211,7 @@ if (isset($_SESSION['user_id'])) {
     }
     .dropdown-content a:hover {
         background: rgba(240, 180, 41, 0.1);
-        color: #f0b429;
+        color: #FF6C0C;
         text-decoration: none;
     }
 
@@ -390,7 +390,7 @@ if (isset($_SESSION['user_id'])) {
     .cal-cell.level-1 { background: rgba(240,180,41,0.25); }
     .cal-cell.level-2 { background: rgba(240,180,41,0.5);  }
     .cal-cell.level-3 { background: rgba(240,180,41,0.75); }
-    .cal-cell.level-4 { background: #f0b429; }
+    .cal-cell.level-4 { background: #FF6C0C; }
     .cal-cell.empty   { background: transparent; border-color: transparent; cursor: default; }
 
     .cal-months {
@@ -426,7 +426,7 @@ if (isset($_SESSION['user_id'])) {
             <img src="../assets/icons/iconoy.png" alt="Logo" style="width: 30px;">
         </a>
         
-        <a href="../home.php" class="btn" style="color: #f0b429;"><i class="fa-solid fa-circle-arrow-left"></i> Atras</a>
+        <a href="../home.php" class="btn" style="color: #FF6C0C;"><i class="fa-solid fa-circle-arrow-left"></i> Atras</a>
         <div class="ms-auto">
             <span style="background-color: hsla(120,2%,10%,0.84); padding: 5px 10px; border-radius: 5px; font-weight: bold; color: #fff;">
                 <?= isset($_SESSION['usuario']) ? "Hola, " . htmlspecialchars($_SESSION['usuario']) : "Invitado" ?>

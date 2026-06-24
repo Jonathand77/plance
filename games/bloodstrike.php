@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
 ?>
@@ -22,7 +22,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
     :root {
         --bg-base:#0d0e10; --bg-surface:#16181c; --bg-card:#1e2128;
         --bg-card-hover:#252830; --bg-selected:#1a1400; --border:#2e3038;
-        --accent:#f0b429; --accent-glow:rgba(240,180,41,0.25); --accent-dark:#c99010;
+        --accent:#FF6C0C; --accent-glow:rgba(240,180,41,0.25); --accent-dark:#c99010;
         --text-primary:#f0f1f3; --text-secondary:#8a8d96; --text-muted:#555860;
         --font-display:'Barlow',sans-serif; --font-body:'Barlow',sans-serif;
         --radius-sm:6px; --radius-md:10px; --radius-lg:14px;
@@ -105,16 +105,16 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
     .tds-modal{background:var(--bg-surface);border:1.5px solid rgba(240,180,41,0.3);border-radius:16px;padding:2rem 1.8rem;max-width:380px;width:90%;text-align:center;animation:fadeUp 0.3s ease;}
     @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
     .tds-modal-icon{font-size:2.5rem;margin-bottom:0.8rem;}
-    .tds-modal-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:#f0b429;letter-spacing:0.04em;margin-bottom:0.3rem;}
+    .tds-modal-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:#FF6C0C;letter-spacing:0.04em;margin-bottom:0.3rem;}
     .tds-modal-sub{font-size:0.83rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.2rem;}
     .tds-inputs{display:flex;gap:0.45rem;justify-content:center;margin-bottom:0.8rem;}
     .tds-digit{width:46px;height:52px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:1.4rem;font-weight:800;text-align:center;outline:none;transition:border-color 0.2s;font-family:var(--font-display);}
-    .tds-digit:focus{border-color:#f0b429;}
+    .tds-digit:focus{border-color:#FF6C0C;}
     .tds-digit.error{border-color:#e05252;animation:shake 0.3s ease;}
     .tds-digit.success{border-color:#3ecf8e;}
     @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
     .tds-hint{font-size:0.75rem;color:var(--text-muted);margin-bottom:0.8rem;}
-    .tds-hint span{color:#f0b429;font-weight:700;}
+    .tds-hint span{color:#FF6C0C;font-weight:700;}
     .tds-status{font-size:0.82rem;font-weight:700;padding:0.45rem 0.9rem;border-radius:6px;display:none;margin-bottom:0.8rem;}
     .tds-status.ok{display:block;background:rgba(62,207,142,0.12);color:#3ecf8e;}
     .tds-status.err{display:block;background:rgba(224,82,82,0.12);color:#e05252;}
@@ -137,12 +137,12 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
 
     <div class="game-banner">
         <div class="game-banner__tag">
-            🩸 Blood Strike — Gold
+            🩸 Blood Strike — Gold            
             <span class="gw-badge">⚡ API Gateway</span>
             <span class="tds-badge"><i class="bi bi-shield-lock-fill"></i> 3DS Obligatorio</span>
         </div>
         <div class="banner-player-id">
-            <label for="jugadorIdInput">🎯 ID de jugador</label>
+            <label for="jugadorIdInput">🎮 ID de jugador</label>
             <input type="text" id="jugadorIdInput" placeholder="Ej: 512345678" autocomplete="off">
         </div>
 
@@ -257,7 +257,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
         <!-- CHECKOUT -->
         <aside class="checkout-panel">
             <div class="checkout-box">
-                <div class="checkout-product-name"><img id="checkoutImg" src="" alt="" /><span id="checkoutName">🥇 360 Gold</span></div>
+                <div class="checkout-product-name"><img id="checkoutImg" src="" alt="" /><span id="checkoutName">🎖️ 360 Gold</span></div>
                 <div class="checkout-price-row">
                     <span style="font-size:0.85rem;color:var(--text-secondary);">Total</span>
                     <span class="checkout-price" id="checkoutPrice">19.900 COP</span>
@@ -395,7 +395,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
     <!-- MODAL 3DS OBLIGATORIO -->
     <div class="tds-overlay" id="tdsOverlay">
         <div class="tds-modal">
-            <div class="tds-modal-icon">🔐</div>
+            <div class="tds-modal-icon">🔒</div>
             <div class="tds-modal-title">Verificación 3D Secure</div>
             <div class="tds-modal-sub">
                 Para completar tu pago necesitamos verificar tu identidad.<br>
@@ -513,7 +513,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
                 tdsVerified = true;
                 tdsDigits.forEach(d => d.classList.add('success'));
                 tdsStatus.className = 'tds-status ok';
-                tdsStatus.textContent = '✅ Autenticación exitosa. Procesando pago...';
+                tdsStatus.textContent = '✔ Autenticación exitosa. Procesando pago...';
                 // Enviar formulario automáticamente tras 1 segundo
                 setTimeout(function() {
                     overlay.classList.remove('show');
@@ -561,7 +561,7 @@ if (!isset($_SESSION['usuario'])) { header("Location: ../index.php"); exit(); }
             if (!jugadorId) { alert('⚠️ Por favor ingresa tu ID de jugador.'); return; }
 
             const selected = document.querySelector('.product-card.selected');
-            if (!selected) { alert('⚠️ Selecciona un producto.'); return; }
+            if (!selected) { alert('⚠️ Por favor selecciona un producto.'); return; }
 
             const method = document.getElementById('currentPayment').value;
             let nombre, correo, telefono, tipoDoc, numDoc;
