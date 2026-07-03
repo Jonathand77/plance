@@ -59,7 +59,7 @@
                         <h2>Iniciar Sesión</h2>
                         <input type="text" placeholder="correo" name="correo">
                         <div style="position: relative;">
-                        <input type="password" id="loginpassword" name="contraseña"
+                        <input type="password" id="loginpassword" name="contrasena"
                                 style="width: 100%; padding-right: 40px;" required placeholder="contraseña">
 
                             <i id="toggleIconLogin" class="bi bi-eye cursor-pointer"
@@ -83,7 +83,7 @@
                         <input type="text" placeholder="usuario" name="usuario">
                         <!--el ojito no me quiere dar la ptm-->
                         <div style="position: relative;">
-                            <input type="password" id="registerPassword" name="contraseña"
+                            <input type="password" id="registerPassword" name="contrasena"
                                 style="width: 100%; padding-right: 40px;" required placeholder="contraseña">
 
                             <i id="toggleIcon" class="bi bi-eye cursor-pointer"
