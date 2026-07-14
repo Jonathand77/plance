@@ -80,7 +80,7 @@ if (mysqli_num_rows($verificar_usuario) > 0) {
 $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
 // Insertar
-$query = "INSERT INTO users (id, nombre, correo, usuario, contrasena, profile_image, location, bio)
+$query = "INSERT INTO users (id, nombre, correo, usuario, contraseña, profile_image, location, bio)
 VALUES ('$id', '$nombre', '$correo', '$usuario', '$contrasena_hash', 'assets/img/default.png', 'No especificada', '')";
 
 $ejecutar = mysqli_query($conexion, $query);

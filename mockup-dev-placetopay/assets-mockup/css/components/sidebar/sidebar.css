@@ -1,0 +1,333 @@
+.panel-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.2rem;
+  overflow-y: auto;
+}
+
+.panel-title {
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+/* Secciones colapsables */
+.section {
+  margin-bottom: 0.2rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 0.6rem;
+}
+
+.section-head .panel-title {
+  margin-bottom: 0;
+}
+.section-head .chev {
+  color: var(--muted);
+  font-size: 0.7rem;
+  transition: transform 0.25s;
+}
+
+.section.collapsed .section-head .chev {
+  transform: rotate(-90deg);
+}
+
+.section-body {
+  overflow: hidden;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.2s ease;
+}
+.section.collapsed .section-body {
+  max-height: 0 !important;
+  opacity: 0;
+}
+
+#secOperacion .section-body {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+#secOperacion .section-body::-webkit-scrollbar {
+  width: 8px;
+}
+#secOperacion .section-body::-webkit-scrollbar-thumb {
+  background: rgba(138, 141, 150, 0.4);
+  border-radius: 999px;
+}
+#secOperacion .section-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.field-group {
+  margin-bottom: 0.6rem;
+}
+
+.field-label {
+  font-size: 0.71rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.req {
+  color: var(--red);
+  font-size: 0.62rem;
+}
+
+.auto-tag {
+  color: var(--accent);
+  font-size: 0.62rem;
+  font-weight: 700;
+  background: var(--accent-s);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+.field-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  padding: 0.42rem 0.7rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field-input:focus {
+  border-color: var(--accent);
+}
+.field-input::placeholder {
+  color: #444;
+}
+
+.field-input.auto {
+  background: rgba(240, 180, 41, 0.04);
+  border-color: rgba(240, 180, 41, 0.15);
+  color: var(--accent);
+}
+
+.field-select {
+  width: 100%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  font-family: var(--body-f);
+  font-size: 0.78rem;
+  padding: 0.42rem 0.7rem;
+  outline: none;
+  appearance: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%238a8d96'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  padding-right: 1.8rem;
+}
+.field-select:focus {
+  border-color: var(--accent);
+}
+.field-select option {
+  background: #141414;
+}
+
+.field-hint {
+  font-size: 0.66rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.option-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.checkbox-option:hover {
+  border-color: var(--accent);
+}
+
+.checkbox-option input {
+  margin-top: 0.15rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+.checkbox-option span {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.checkbox-option.checked {
+  border-color: var(--accent);
+  background: rgba(240, 180, 41, 0.06);
+}
+
+/* URL */
+.url-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.method-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  font-family: var(--mono);
+  background: var(--green-s);
+  color: var(--green);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.url-text {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--muted);
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.9rem 0;
+}
+
+/* Tarjetas */
+.test-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 0.45rem 0.75rem;
+  margin-bottom: 0.3rem;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.test-card:hover {
+  border-color: rgba(240, 180, 41, 0.4);
+  transform: translateX(2px);
+}
+.test-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-s);
+}
+.tc-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+.tc-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.13rem 0.4rem;
+  border-radius: 4px;
+}
+.tc-badge.ap {
+  background: var(--green-s);
+  color: var(--green);
+}
+.tc-badge.pe {
+  background: var(--accent-s);
+  color: var(--accent);
+}
+.tc-badge.re {
+  background: var(--red-s);
+  color: var(--red);
+}
+
+/* Botones */
+.btn-send {
+  width: 100%;
+  padding: 0.72rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: #0a0a0a;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.btn-send:hover {
+  background: #c99010;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px var(--accent-s);
+}
+.btn-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-clear {
+  width: 100%;
+  padding: 0.42rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  font-family: var(--body-f);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.4rem;
+}
+.btn-clear:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Tipo pago condicional */
+.tipo-pago-group {
+  display: none;
+}
+.tipo-pago-group.show {
+  display: block;
+}

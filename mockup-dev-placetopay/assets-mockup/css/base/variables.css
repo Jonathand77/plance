@@ -1,0 +1,25 @@
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --card: #4c5f71;
+  --border: #4c5f71;
+
+  --accent: #ff6c0c;
+  --accent-s: rgba(240, 180, 41, 0.1);
+
+  --green: #00cfb4;
+  --green-s: rgba(62, 207, 142, 0.1);
+
+  --red: #e05252;
+  --red-s: rgba(224, 82, 82, 0.1);
+
+  --blue: #0062a8;
+  --blue-s: rgba(59, 130, 246, 0.1);
+
+  --text: #f0f1f3;
+  --muted: #8a8d96;
+
+  --mono: "JetBrains Mono", monospace;
+  --display: "Barlow Condensed", sans-serif;
+  --body-f: "Barlow", sans-serif;
+}

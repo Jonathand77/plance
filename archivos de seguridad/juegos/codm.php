@@ -1,21 +1,16 @@
 <?php
-    //necesito que el usuario no pueda acceder a la página de juegos sin iniciar sesión, y luego redirigir al usuario a la página de inicio de sesión
+session_start();
 
-    //no se si es posible (de hehco no me lo enseñaron en el sena) pero necesito que la sesión del usuario se mantenga activa mientras el usuario navega por la página de juegos, para que así el usuario no tenga que iniciar sesión cada vez que quiera acceder a la página de juegos
-    session_start();
-
-    if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,10 +24,20 @@
     <link rel="stylesheet" href="assets/css/">
 </head>
 <style>
-    body{
+    :root {
+        --bg-base: #0f1319;
+        --surface: #1E212C;
+        --border: #4C5F71;
+        --primary: #FF6C0C;
+        --secondary: #00CFB4;
+        --info: #0062A8;
+        --text-secondary: #7D868C;
+    }
+
+    body {
 
         /* background-image: url(../assets/images/bg12.jpg); */
-        background: linear-gradient( rgb(40, 43, 53) 0%, hsl(0, 0%, 13%));
+        background: linear-gradient(#0f1319 0%, #1E212C 100%);
         color: white;
 
         background-repeat: no-repeat;
@@ -43,27 +48,27 @@
 
 
     .navbar {
-        background-color: #1f1e1ea9 !important;
+        background-color: #1E212Ca9 !important;
         backdrop-filter: blur(8px);
-        color:  #ffffff;
+        color: #ffffff;
 
 
     }
 
     .card {
-        background: linear-gradient( hsla(56, 100%, 50%, 0.80) 0%, hsla(59, 100%, 49%, 0.99));
-        color: #000000;
-        border: none;
+        background: #1E212C;
+        color: #f0f1f3;
+        border: 1px solid var(--border);
         border-radius: 15px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         align-items: center
-
     }
+
     .back:hover {
-        background: #000000f5;
-        color: black;
+        background: var(--primary);
+        color: #0d0e10;
         transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(255, 94, 0, 0.5);
+        box-shadow: 0 5px 10px rgba(255, 108, 12, 0.35);
 
     }
 </style>
@@ -74,12 +79,14 @@
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg px-2">
-        <a class="navbar-brand fw-bold text-gradient" href="welcome.php" style="color: orange;"> 
-            <img src="https://companieslogo.com/img/orig/EVTC_BIG.D-f2992a32.png?t=1742789418" class="img-logo" alt="Logo de EV" style="width: 120px; height: 25px;">
+        <a class="navbar-brand fw-bold text-gradient" href="welcome.php" style="color: #FF6C0C;">
+            <img src="https://companieslogo.com/img/orig/EVTC_BIG.D-f2992a32.png?t=1742789418" class="img-logo"
+                alt="Logo de EV" style="width: 120px; height: 25px;">
         </a>
-        <a href="juegos.php" class="btn" style="color: orangered;"><i class="bi bi-backspace-fill"></i> Volver</a>
+        <a href="juegos.php" class="btn" style="color: #FF6C0C;"><i class="bi bi-backspace-fill"></i> Volver</a>
         <div class="ms-auto text-white">
-                <span style="background-color: hsla(120, 2%, 10%, 0.84); padding: 5px 10px; border-radius: 5px; font-weight: bold;">
+            <span
+                style="background-color: #1E212C; border:1px solid #4C5F71; padding: 5px 10px; border-radius: 5px; font-weight: bold;">
                 <?php
                 if (isset($_SESSION['usuario'])) {
                     echo "Hola, " . $_SESSION['usuario'];
@@ -87,7 +94,7 @@
                     echo "Invitado";
                 }
                 ?>
-               <i class="bi bi-circle-fill" style="color: #51ff00 ;"></i></span> 
+                <i class="bi bi-circle-fill" style="color: #00CFB4;"></i></span>
         </div>
     </nav>
     </nav>
@@ -95,100 +102,107 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Recargas COD Mobile</h2>
 
-            <form action="../php/crear_pago.php" method="POST">
-                
-                <!-- ID jugador -->
-                <div class="mb-4 text-center bg-dark p-3 rounded">
-                    <input type="text" name="jugador_id" class="form-control w-50 mx-auto "  placeholder="ID del jugador" required>
+        <form action="../php/crear_pago.php" method="POST">
+
+            <!-- ID jugador -->
+            <div class="mb-4 text-center bg-dark p-3 rounded">
+                <input type="text" name="jugador_id" class="form-control w-50 mx-auto " placeholder="ID del jugador"
+                    required>
+            </div>
+
+            <div class="row">
+
+                <!-- CARD 1 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>90 CP</h5>
+                        <p>$7.000</p>
+
+
+                        <button type="submit" name="producto" value="90 CP" class="btn btn-dark"
+                            onclick="setPrecio(7000)">
+                            Comprar
+                        </button>
+                    </div>
                 </div>
 
-                <div class="row">
+                <!-- CARD 2 -->
+                <div class="col-md-4 mb-4">
 
-                    <!-- CARD 1 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px" alt="">
-                            <h5>90 CP</h5>
-                            <p>$7.000</p>
-                        
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>460 CP</h5>
+                        <p>$22.000</p>
 
-                            <button type="submit" name="producto" value="90 CP" class="btn btn-dark"
-                                onclick="setPrecio(7000)">
-                                Comprar
-                            </button>
-                        </div>
+                        <button type="submit" name="producto" value="460 CP" class="btn btn-dark"
+                            onclick="setPrecio(22000)">
+                            Comprar
+                        </button>
                     </div>
-
-                    <!-- CARD 2 -->
-                    <div class="col-md-4 mb-4">
-
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px" alt="">
-                            <h5>460 CP</h5>
-                            <p>$22.000</p>
-
-                            <button type="submit" name="producto" value="460 CP" class="btn btn-dark"
-                                onclick="setPrecio(22000)">
-                                Comprar
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- CARD 3 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px"  alt="">
-                            <h5>1200 CP</h5>
-                            <p>$49.000</p>
-
-                            <button type="submit" name="producto" value="1200 CP" class="btn btn-dark"
-                                onclick="setPrecio(49000)">
-                                Comprar
-                            </button>
-                        </div>
-                    </div>
-
                 </div>
 
-                <!-- CARD 4 -->
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px" alt="">
-                            <h5>2250 CP</h5>
-                            <p>$92.000</p>
+                <!-- CARD 3 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>1200 CP</h5>
+                        <p>$49.000</p>
 
-                            <button type="submit" name="producto" value="2250 CP" class="btn btn-dark"
-                                onclick="setPrecio(92000)">
-                                Comprar
-                            </button>
-                        </div>
+                        <button type="submit" name="producto" value="1200 CP" class="btn btn-dark"
+                            onclick="setPrecio(49000)">
+                            Comprar
+                        </button>
                     </div>
-                    <!-- CARD 5 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px" alt="">
-                            <h5>4500 CP</h5>
-                            <p>$150.000</p>
+                </div>
 
-                            <button type="submit" name="producto" value="4500 CP" class="btn btn-dark"
-                                onclick="setPrecio(150000)">
-                                Comprar
-                            </button>
-                        </div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>2250 CP</h5>
+                        <p>$92.000</p>
+
+                        <button type="submit" name="producto" value="2250 CP" class="btn btn-dark"
+                            onclick="setPrecio(92000)">
+                            Comprar
+                        </button>
                     </div>
-                    <!-- CARD 6 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card text-center p-3">
-                            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 50px; width: 50px" alt="">
-                            <h5>7500 CP</h5>
-                            <p>$220.000</p>
+                </div>
+                <!-- CARD 5 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>4500 CP</h5>
+                        <p>$150.000</p>
 
-                            <button type="submit" name="producto" value="7500 CP" class="btn btn-dark"
-                                onclick="setPrecio(220000)">
-                                Comprar
-                            </button>
-                        </div>
+                        <button type="submit" name="producto" value="4500 CP" class="btn btn-dark"
+                            onclick="setPrecio(150000)">
+                            Comprar
+                        </button>
+                    </div>
+                </div>
+                <!-- CARD 6 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center p-3">
+                        <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+                            style="height: 50px; width: 50px" alt="">
+                        <h5>7500 CP</h5>
+                        <p>$220.000</p>
+
+                        <button type="submit" name="producto" value="7500 CP" class="btn btn-dark"
+                            onclick="setPrecio(220000)">
+                            Comprar
+                        </button>
+                    </div>
 
 
 
@@ -199,7 +213,7 @@
                 <!-- Precio oculto -->
                 <input type="hidden" name="precio" id="precio">
 
-            </form>
+        </form>
     </div>
 
 
@@ -212,7 +226,8 @@
 
 
 
-    
+
 
 </body>
+
 </html>

@@ -27,7 +27,7 @@ $query = "SELECT * FROM users WHERE correo = '$correo' LIMIT 1";
 $resultado = mysqli_query($conexion, $query);
 
 if ($row = mysqli_fetch_assoc($resultado)) {
-    if (password_verify($contrasena, $row['contrasena'])) {
+    if (password_verify($contrasena, $row['contraseña'])) {
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['usuario'] = $row['usuario'];
         $_SESSION['correo']  = $row['correo'];

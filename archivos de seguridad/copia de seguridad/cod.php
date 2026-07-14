@@ -2,63 +2,77 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
-    exit();
+  header("Location: ../index.php");
+  exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cod Mobile Productos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cod Mobile Productos</title>
 
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/">
 
 </head>
 <style>
-    /* 
+  /* 
     DEMO STORE — styles.css
     Dark Gaming Theme · Barlow Condensed */
 
-    :root {
-    --bg-base:        #18191b;
-    --bg-surface:     #16181c;
-    --bg-card:        #1e2128;
-    --bg-card-hover:  #252830;
-    --bg-selected:    #2a2208;
-    --border:         #2e3038;
-    --border-active:  #FF6C0C;
-    --accent:         #FF6C0C;
-    --accent-glow:    rgba(240, 180, 41, 0.25);
-    --accent-dark:    #c99010;
-    --text-primary:   #f0f1f3;
-    --text-secondary: #8a8d96;
-    --text-muted:     #555860;
-    --green:          #3ecf8e;
-    --red-badge:      #e05252;
-    --font-display:   "Calibri", sans-serif;/*'', sans-serif;    */
-    --font-body:      "Calibri", sans-serif; /* '',  sans-serif;  */
-    --radius-sm:      6px;
-    --radius-md:      10px;
-    --radius-lg:      14px;
-    --transition:     0.2s ease;
-    }
+  :root {
+    --bg-base: #0f1319;
+    --bg-surface: #1E212C;
+    --bg-card: #1E212C;
+    --bg-card-hover: #252a35;
+    --bg-selected: #2a2017;
+    --border: #4C5F71;
+    --border-active: #FF6C0C;
+    --accent: #FF6C0C;
+    --accent-glow: rgba(255, 108, 12, 0.25);
+    --accent-dark: #e45f09;
+    --accent-secondary: #00CFB4;
+    --focus: #0062A8;
+    --text-primary: #f0f1f3;
+    --text-secondary: #7D868C;
+    --text-muted: #4C5F71;
+    --green: #00CFB4;
+    --red-badge: #e05252;
+    --font-display: "Calibri", sans-serif;
+    /*'', sans-serif;    */
+    --font-body: "Calibri", sans-serif;
+    /* '',  sans-serif;  */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --transition: 0.2s ease;
+  }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    html { font-size: 16px; scroll-behavior: smooth; }
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
 
-    body {
-  
+  body {
+
     /*  */
     /*background-image: url(../assets/images/bg25.jpg); */
     background-color: var(--bg-base);
@@ -66,14 +80,20 @@ if (!isset($_SESSION['usuario'])) {
     font-family: var(--font-body);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    }
+  }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
 
 
-    /* ── GAME BANNER ── */
-    .game-banner {
+  /* ── GAME BANNER ── */
+  .game-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -81,9 +101,9 @@ if (!isset($_SESSION['usuario'])) {
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border);
     gap: 1rem;
-    }
+  }
 
-    .game-banner__tag {
+  .game-banner__tag {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -92,13 +112,18 @@ if (!isset($_SESSION['usuario'])) {
     font-size: 1rem;
     letter-spacing: 0.04em;
     color: var(--text-primary);
-    }
-    .game-icon { width: 20px; height: 20px; border-radius: 4px; }
+  }
+
+  .game-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
 
 
 
-    /* ── MAIN LAYOUT ── */
-    .shop-layout {
+  /* ── MAIN LAYOUT ── */
+  .shop-layout {
     display: grid;
     grid-template-columns: 1fr 340px;
     gap: 1.5rem;
@@ -106,11 +131,14 @@ if (!isset($_SESSION['usuario'])) {
     margin: 1.5rem auto;
     padding: 0 1.5rem 3rem;
     align-items: start;
-    }
+  }
 
-    /* ── SECTION HELPERS ── */
-    .section-block { margin-bottom: 1.4rem; }
-    .section-label {
+  /* ── SECTION HELPERS ── */
+  .section-block {
+    margin-bottom: 1.4rem;
+  }
+
+  .section-label {
     font-family: var(--font-display);
     font-size: 0.4rem;
     font-weight: 700;
@@ -118,26 +146,26 @@ if (!isset($_SESSION['usuario'])) {
     text-transform: uppercase;
     color: var(--text-secondary);
     margin-bottom: 0.75rem;
-    }  
+  }
 
-    .card-img-top {
-      border-radius: 15px 15px 0 0;
-      height: 20px;
-      width: 10%;
-      object-fit: cover;
-    }
+  .card-img-top {
+    border-radius: 15px 15px 0 0;
+    height: 20px;
+    width: 10%;
+    object-fit: cover;
+  }
 
 
 
-    /* ── PRODUCTS GRID ── */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.65rem;
-      font-family: var(--font-body);
-    }
+  /* ── PRODUCTS GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+    font-family: var(--font-body);
+  }
 
-    .product-card {
+  .product-card {
     position: relative;
     background: var(--bg-card);
     border: 1.5px solid var(--border);
@@ -149,22 +177,22 @@ if (!isset($_SESSION['usuario'])) {
     flex-direction: column;
     gap: 0.1rem;
     overflow: hidden;
-    }
+  }
 
-    .product-card:hover {
+  .product-card:hover {
     background: var(--bg-card-hover);
-    border-color: rgba(240, 180, 41, 0.4);
+    border-color: rgba(255, 108, 12, 0.4);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-    }
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
 
-    .product-card.selected {
+  .product-card.selected {
     background: var(--bg-selected);
     border-color: var(--accent);
     box-shadow: 0 0 0 1px var(--accent), 0 4px 24px var(--accent-glow);
-    }
+  }
 
-    .product-card.selected::after {
+  .product-card.selected::after {
     content: 'âœ”';
     position: absolute;
     top: 0.5rem;
@@ -181,9 +209,9 @@ if (!isset($_SESSION['usuario'])) {
     font-weight: 900;
     line-height: 18px;
     text-align: center;
-    }
+  }
 
-    .badge-popular {
+  .badge-popular {
     position: absolute;
     top: -1px;
     left: -1px;
@@ -195,35 +223,35 @@ if (!isset($_SESSION['usuario'])) {
     letter-spacing: 0.05em;
     padding: 0.15rem 0.5rem;
     border-radius: var(--radius-sm) 0 var(--radius-sm) 0;
-    }
+  }
 
-    .product-card__img {
+  .product-card__img {
     font-size: 1.5rem;
     margin-bottom: 0.25rem;
-    }
+  }
 
-    .product-card__pts {
-     /**/
-    font-family: var(--font-display); 
+  .product-card__pts {
+    /**/
+    font-family: var(--font-display);
     font-size: 1.00rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1;
-    }
+  }
 
-    .product-card__label {
+  .product-card__label {
     font-size: 0.75rem;
     color: var(--text-secondary);
     margin-bottom: 0.3rem;
-    }
+  }
 
-    .product-card__price-old {
+  .product-card__price-old {
     font-size: 0.72rem;
     color: var(--text-muted);
     text-decoration: line-through;
-    }
+  }
 
-    .product-card__price {
+  .product-card__price {
     font-family: var(--font-display);
     font-size: 1.0rem;
     font-weight: 700;
@@ -232,111 +260,111 @@ if (!isset($_SESSION['usuario'])) {
     align-items: center;
     gap: 0.35rem;
     flex-wrap: wrap;
-    }
+  }
 
-    .discount-tag {
-    background: rgba(240, 180, 41, 0.15);
-    color: var(--accent);
+  .discount-tag {
+    background: rgba(0, 207, 180, 0.15);
+    color: var(--accent-secondary);
     font-size: 0.68rem;
     font-weight: 700;
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
-    }
+  }
 
-    /* ── CHECKOUT PANEL ── */
-    .checkout-panel {
+  /* ── CHECKOUT PANEL ── */
+  .checkout-panel {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     position: sticky;
     top: 16px;
-    }
+  }
 
-    .checkout-summary,
-    .delivery-instructions,
-    .vendor-box {
+  .checkout-summary,
+  .delivery-instructions,
+  .vendor-box {
     background: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.2rem 1.3rem;
-    }
+  }
 
-    .checkout-product-name {
+  .checkout-product-name {
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--text-primary);
     margin-bottom: 1rem;
     letter-spacing: 0.02em;
-    }
+  }
 
-    .checkout-row {
+  .checkout-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 0.65rem;
-    }
+  }
 
-    .checkout-label {
+  .checkout-label {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    }
+  }
 
-    .checkout-delivery {
+  .checkout-delivery {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-primary);
-    }
+  }
 
-    .checkout-divider {
+  .checkout-divider {
     height: 1px;
     background: var(--border);
     margin: 0.8rem 0;
-    }
+  }
 
-    .checkout-total-row {
+  .checkout-total-row {
     align-items: flex-end;
-    }
+  }
 
-    .checkout-pricing {
+  .checkout-pricing {
     text-align: right;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-    }
+  }
 
-    .checkout-original {
+  .checkout-original {
     font-size: 0.8rem;
     color: var(--text-muted);
     text-decoration: line-through;
-    }
+  }
 
-    .checkout-final-row {
+  .checkout-final-row {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    }
+  }
 
-    .checkout-badge {
-    background: rgba(62, 207, 142, 0.15);
+  .checkout-badge {
+    background: rgba(0, 207, 180, 0.15);
     color: var(--green);
     font-size: 0.75rem;
     font-weight: 700;
     font-family: var(--font-display);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
-    }
+  }
 
-    .checkout-final-price {
+  .checkout-final-price {
     font-family: var(--font-display);
     font-size: 1.6rem;
     font-weight: 800;
     color: var(--text-primary);
     line-height: 1;
-    }
+  }
 
-    /* Buy Button */
-    .btn-buy {
+  /* Buy Button */
+  .btn-buy {
     width: 100%;
     margin-top: 1rem;
     padding: 0.85rem 1.2rem;
@@ -357,59 +385,71 @@ if (!isset($_SESSION['usuario'])) {
     transition: all 0.18s ease;
     position: relative;
     overflow: hidden;
-    }
+  }
 
-    .btn-buy::before {
+  .btn-buy::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent);
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
     transform: translateX(-100%);
     transition: transform 0.5s ease;
-    }
+  }
 
-    .btn-buy:hover {
+  .btn-buy:hover {
     background: var(--accent-dark);
     transform: translateY(-1px);
     box-shadow: 0 6px 20px var(--accent-glow);
-    }
-    .btn-buy:hover::before { transform: translateX(100%); }
-    .btn-buy:active { transform: translateY(0); }
+  }
 
-    .btn-arrow {
+  .btn-buy:hover::before {
+    transform: translateX(100%);
+  }
+
+  .btn-buy:active {
+    transform: translateY(0);
+  }
+
+  .btn-arrow {
     font-size: 1.1rem;
     transition: transform 0.2s;
-    }
-    .btn-buy:hover .btn-arrow { transform: translateX(4px); }
+  }
 
-    /* Trust badges */
-    .trust-badges {
+  .btn-buy:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Trust badges */
+  .trust-badges {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    }
+  }
 
-    .trust-item {
+  .trust-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.8rem;
     color: var(--text-secondary);
-    }
+  }
 
-    /* Delivery instructions */
-    .instruction-text {
+  /* Delivery instructions */
+  .instruction-text {
     font-size: 0.83rem;
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 0.75rem;
-    }
+  }
 
-    .flag { margin-right: 0.2rem; }
-    .flag.warn {  }
+  .flag {
+    margin-right: 0.2rem;
+  }
 
-    .btn-instructions {
+  .flag.warn {}
+
+  .btn-instructions {
     background: none;
     border: 1px solid var(--border);
     color: var(--text-secondary);
@@ -419,25 +459,26 @@ if (!isset($_SESSION['usuario'])) {
     cursor: pointer;
     transition: all var(--transition);
     font-family: var(--font-body);
-    }
-    .btn-instructions:hover {
+  }
+
+  .btn-instructions:hover {
     border-color: var(--accent);
     color: var(--text-primary);
-    }
+  }
 
-    /* Vendor */
-    .vendor-info {
+  /* Vendor */
+  .vendor-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     margin-top: 0.5rem;
-    }
+  }
 
-    .vendor-avatar {
+  .vendor-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FF6C0C, #c99010);
+    background: linear-gradient(135deg, #FF6C0C, #0062A8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -446,35 +487,35 @@ if (!isset($_SESSION['usuario'])) {
     font-size: 0.85rem;
     color: #0d0e10;
     flex-shrink: 0;
-    }
+  }
 
-    .vendor-name {
+  .vendor-name {
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--text-primary);
-    }
+  }
 
-    .vendor-rating {
+  .vendor-rating {
     font-size: 0.78rem;
     color: var(--text-secondary);
     margin-top: 0.1rem;
-    }
+  }
 
-    /* ── BANNER PLAYER ID ── */
-    .banner-player-id {
+  /* ── BANNER PLAYER ID ── */
+  .banner-player-id {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    }
+  }
 
-    .banner-player-id label {
+  .banner-player-id label {
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-secondary);
     white-space: nowrap;
-    }
+  }
 
-    .banner-player-id input {
+  .banner-player-id input {
     background: var(--bg-card);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
@@ -485,53 +526,84 @@ if (!isset($_SESSION['usuario'])) {
     outline: none;
     transition: border-color var(--transition);
     width: 180px;
+  }
+
+  .banner-player-id input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .banner-player-id input:focus {
+    border-color: var(--focus);
+    box-shadow: 0 0 0 2px rgba(0, 98, 168, 0.2);
+  }
+
+
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
 
-    .banner-player-id input::placeholder { color: var(--text-muted); }
-    .banner-player-id input:focus { border-color: var(--accent); }
-
-
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
 
-    .products-panel { animation: fadeSlideIn 0.4s ease both; }
-    .checkout-panel { animation: fadeSlideIn 0.4s 0.1s ease both; }
+  .products-panel {
+    animation: fadeSlideIn 0.4s ease both;
+  }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
+  .checkout-panel {
+    animation: fadeSlideIn 0.4s 0.1s ease both;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
     .shop-layout {
-        grid-template-columns: 1fr;
-    }
-    .checkout-panel {
-        position: static;
-    }
-    .products-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+      grid-template-columns: 1fr;
     }
 
-    @media (max-width: 600px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .navbar__links { display: none; }
-    .game-banner { flex-direction: column; align-items: flex-start; }
+    .checkout-panel {
+      position: static;
     }
-    
+
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .navbar__links {
+      display: none;
+    }
+
+    .game-banner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 </style>
+
 <body>
-      <?php
-        $nav_back_url  = "juegos.php";
-        $nav_back_text = "Atras";
-        $nav_base      = "../";
-        require_once '../php/navbar.php';
-      ?>
+  <?php
+  $nav_back_url = "juegos.php";
+  $nav_back_text = "Atras";
+  $nav_base = "../";
+  require_once '../php/navbar.php';
+  ?>
   <!-- BANNER -->
   <div class="game-banner">
     <div class="game-banner__tag">
-      <img src="https://media.tycsports.com/files/2021/07/15/307410/cod-mobile-todas-las-novedades-de-la-beta-de-julio-_862x485.jpg" class="card-img-top" alt="Juego 1" alt="" class="game-icon" >
+      <img
+        src="https://media.tycsports.com/files/2021/07/15/307410/cod-mobile-todas-las-novedades-de-la-beta-de-julio-_862x485.jpg"
+        class="card-img-top" alt="Juego 1" alt="" class="game-icon">
       Call of Duty Points
     </div>
     <div class="banner-player-id">
@@ -552,31 +624,41 @@ if (!isset($_SESSION['usuario'])) {
         <div class="products-grid" id="productsGrid">
 
           <div class="product-card" data-id="1" data-pts="88" data-price="16614" data-original="" data-discount="">
-            <img src="https://cdn1.codashop.com/S/content/common/images/denom-image/CODM/30_CODM_CP_new.png" style="height: 40px; width: 40px" alt="">
+            <img src="https://cdn1.codashop.com/S/content/common/images/denom-image/CODM/30_CODM_CP_new.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">88</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price">7.000 COP</div>
           </div>
 
-          <div class="product-card popular-card" data-id="2" data-pts="500" data-price="12927" data-original="18972" data-discount="32">
+          <div class="product-card popular-card" data-id="2" data-pts="500" data-price="12927" data-original="18972"
+            data-discount="32">
             <div class="badge-popular">★ Popular</div>
-            <img src="https://kaleoz-media.seagmcdn.com/kaleoz-store/202111/oss-116f913788ed63121abd36d198aee702.png?x-oss-process=image/format,webp" style="height: 25px; width: 40px" alt="">
+            <img
+              src="https://kaleoz-media.seagmcdn.com/kaleoz-store/202111/oss-116f913788ed63121abd36d198aee702.png?x-oss-process=image/format,webp"
+              style="height: 25px; width: 40px" alt="">
             <div class="product-card__pts">460</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price-old">18.972 COP</div>
             <div class="product-card__price">12.927 COP <span class="discount-tag">-32%</span></div>
           </div>
 
-          <div class="product-card" data-id="3" data-pts="1100" data-price="26233" data-original="37981" data-discount="31">
-             <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="3" data-pts="1100" data-price="26233" data-original="37981"
+            data-discount="31">
+            <img
+              src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">1100</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price-old">9.000 COP</div>
             <div class="product-card__price">26.233 COP <span class="discount-tag">-31%</span></div>
           </div>
 
-          <div class="product-card" data-id="4" data-pts="2400" data-price="29921" data-original="74000" data-discount="61">
-            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="4" data-pts="2400" data-price="29921" data-original="74000"
+            data-discount="61">
+            <img
+              src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+              style="height: 40px; width: 40px" alt="">
 
 
             <div class="product-card__pts">2400</div>
@@ -585,24 +667,33 @@ if (!isset($_SESSION['usuario'])) {
             <div class="product-card__price">29.921 COP <span class="discount-tag">-61%</span></div>
           </div>
 
-          <div class="product-card" data-id="5" data-pts="5000" data-price="56611" data-original="152039" data-discount="62">
-            <img src=" https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="5" data-pts="5000" data-price="56611" data-original="152039"
+            data-discount="62">
+            <img
+              src=" https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">5000</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price-old">152.039 COP</div>
             <div class="product-card__price">56.611 COP <span class="discount-tag">-62%</span></div>
           </div>
 
-          <div class="product-card" data-id="6" data-pts="9500" data-price="94858" data-original="285406" data-discount="67">
-            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="6" data-pts="9500" data-price="94858" data-original="285406"
+            data-discount="67">
+            <img
+              src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">9500</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price-old">285.406 COP</div>
             <div class="product-card__price">94.858 COP <span class="discount-tag">-67%</span></div>
           </div>
 
-          <div class="product-card" data-id="7" data-pts="13000" data-price="142762" data-original="380154" data-discount="63">
-            <img src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="7" data-pts="13000" data-price="142762" data-original="380154"
+            data-discount="63">
+            <img
+              src="https://static.wikia.nocookie.net/callofduty/images/4/4e/COD_Points_stack_5000_BO3.png/revision/latest?cb=20151218135441"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">13000</div>
             <div class="product-card__label">Puntos</div>
             <div class="product-card__price-old">380.154 COP</div>
@@ -610,7 +701,8 @@ if (!isset($_SESSION['usuario'])) {
           </div>
 
 
-          <div class="product-card" data-id="8" data-pts="21000" data-price="216215" data-original="579249" data-discount="63">
+          <div class="product-card" data-id="8" data-pts="21000" data-price="216215" data-original="579249"
+            data-discount="63">
             <img src="https://pbs.twimg.com/media/EaREXFjXgAE-Of7.png" style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">21000</div>
             <div class="product-card__label">Puntos</div>
@@ -618,7 +710,8 @@ if (!isset($_SESSION['usuario'])) {
             <div class="product-card__price">216.215 COP <span class="discount-tag">-63%</span></div>
           </div>
 
-          <div class="product-card" data-id="9" data-pts="26000" data-price="262066" data-original="760307" data-discount="66">
+          <div class="product-card" data-id="9" data-pts="26000" data-price="262066" data-original="760307"
+            data-discount="66">
             <img src="https://pbs.twimg.com/media/EaREXFjXgAE-Of7.png" style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">26000</div>
             <div class="product-card__label">Puntos</div>
@@ -626,7 +719,8 @@ if (!isset($_SESSION['usuario'])) {
             <div class="product-card__price">262.066 COP <span class="discount-tag">-66%</span></div>
           </div>
 
-          <div class="product-card" data-id="10" data-pts="39000" data-price="387339" data-original="1140461" data-discount="67">
+          <div class="product-card" data-id="10" data-pts="39000" data-price="387339" data-original="1140461"
+            data-discount="67">
             <img src="https://pbs.twimg.com/media/EaREXFjXgAE-Of7.png" style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">39000</div>
             <div class="product-card__label">Puntos</div>
@@ -634,10 +728,13 @@ if (!isset($_SESSION['usuario'])) {
             <div class="product-card__price">387.339 COP <span class="discount-tag">-67%</span></div>
           </div>
 
-          <div class="product-card battlepass-card" data-id="11" data-pts="Battle Pass" data-price="106187" data-original="114019" data-discount="7">
-            <img src="https://images.kinguin.net/g/carousel-main-mobile/media/images/products/_battlepassg.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card battlepass-card" data-id="11" data-pts="Battle Pass" data-price="106187"
+            data-original="114019" data-discount="7">
+            <img src="https://images.kinguin.net/g/carousel-main-mobile/media/images/products/_battlepassg.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts" style="font-size:0.85rem;">Battle Pass</div>
-            <div class="product-card__label">Battle Pass <Command></Command></div>
+            <div class="product-card__label">Battle Pass <Command></Command>
+            </div>
             <div class="product-card__price-old">38.000 COP</div>
             <div class="product-card__price">24.000 COP <span class="discount-tag">-7%</span></div>
           </div>
@@ -677,9 +774,12 @@ if (!isset($_SESSION['usuario'])) {
         </button>
 
         <div class="trust-badges">
-          <div class="trust-item"><i class="bi bi-shield-check fs-6 text-warning"></i><span>Garantía de reembolso · P2P</span></div>
-          <div class="trust-item"><i class="bi bi-lightning-fill fs-6 text-warning"></i><span>Pago rápido · Apple Pay / G Pay</span></div>
-          <div class="trust-item"><i class="bi bi-headset fs-6 text-warning"></i><span>Asistencia en directo 24/7 — ¡A tu lado!</span></div>
+          <div class="trust-item"><i class="bi bi-shield-check fs-6 text-warning"></i><span>Garantía de reembolso ·
+              P2P</span></div>
+          <div class="trust-item"><i class="bi bi-lightning-fill fs-6 text-warning"></i><span>Pago rápido · Apple Pay /
+              G Pay</span></div>
+          <div class="trust-item"><i class="bi bi-headset fs-6 text-warning"></i><span>Asistencia en directo 24/7 — ¡A
+              tu lado!</span></div>
         </div>
       </div>
 
@@ -710,120 +810,122 @@ if (!isset($_SESSION['usuario'])) {
 
   <!--JS -->
   <script>
-  (function() {
+    (function () {
 
-    const products = {
-      1:  { name: '88 CP',        price: '7.000 COP',  original: '',              badge: '',     delivery: 'Instante' },
-      2:  { name: '460 CP',        price: '12.927 COP',  original: '18.972 COP',    badge: '-32%', delivery: 'Instante' },
-      3:  { name: '1100 CP',       price: '26.233 COP',  original: '37.981 COP',    badge: '-31%', delivery: 'Instante' },
-      4:  { name: '2400 CP',       price: '29.921 COP',  original: '74.000 COP',    badge: '-61%', delivery: 'Instante' },
-      5:  { name: '5000 CP',       price: '56.611 COP',  original: '152.039 COP',   badge: '-62%', delivery: 'Instante' },
-      6:  { name: '9500 CP',       price: '94.858 COP',  original: '285.406 COP',   badge: '-67%', delivery: 'Instante' },
-      7:  { name: '13000 CP',      price: '142.762 COP', original: '380.154 COP',   badge: '-63%', delivery: 'Instante' },
-      8:  { name: '21000 CP',      price: '216.215 COP', original: '579.249 COP',   badge: '-63%', delivery: 'Instante' },
-      9:  { name: '26000 CP',      price: '262.066 COP', original: '760.307 COP',   badge: '-66%', delivery: 'Instante' },
-      10: { name: '39000 CP',      price: '387.339 COP', original: '1.140.461 COP', badge: '-67%', delivery: 'Instante' },
-      11: { name: '🛡️Battle Pass', price: '24.000 COP', original: '38.000 COP',   badge: '-37%',  delivery: 'Instante' },
-    };
+      const products = {
+        1: { name: '88 CP', price: '7.000 COP', original: '', badge: '', delivery: 'Instante' },
+        2: { name: '460 CP', price: '12.927 COP', original: '18.972 COP', badge: '-32%', delivery: 'Instante' },
+        3: { name: '1100 CP', price: '26.233 COP', original: '37.981 COP', badge: '-31%', delivery: 'Instante' },
+        4: { name: '2400 CP', price: '29.921 COP', original: '74.000 COP', badge: '-61%', delivery: 'Instante' },
+        5: { name: '5000 CP', price: '56.611 COP', original: '152.039 COP', badge: '-62%', delivery: 'Instante' },
+        6: { name: '9500 CP', price: '94.858 COP', original: '285.406 COP', badge: '-67%', delivery: 'Instante' },
+        7: { name: '13000 CP', price: '142.762 COP', original: '380.154 COP', badge: '-63%', delivery: 'Instante' },
+        8: { name: '21000 CP', price: '216.215 COP', original: '579.249 COP', badge: '-63%', delivery: 'Instante' },
+        9: { name: '26000 CP', price: '262.066 COP', original: '760.307 COP', badge: '-66%', delivery: 'Instante' },
+        10: { name: '39000 CP', price: '387.339 COP', original: '1.140.461 COP', badge: '-67%', delivery: 'Instante' },
+        11: { name: '🛡️Battle Pass', price: '24.000 COP', original: '38.000 COP', badge: '-37%', delivery: 'Instante' },
+      };
 
-    function updateCheckout(id) {
-      const p = products[id];
-      if (!p) return;
+      function updateCheckout(id) {
+        const p = products[id];
+        if (!p) return;
 
-      document.getElementById('checkoutName').textContent  = p.name;
-      document.getElementById('checkoutPrice').textContent = p.price;
+        document.getElementById('checkoutName').textContent = p.name;
+        document.getElementById('checkoutPrice').textContent = p.price;
 
-      const origEl  = document.getElementById('checkoutOriginal');
-      const badgeEl = document.getElementById('checkoutBadge');
+        const origEl = document.getElementById('checkoutOriginal');
+        const badgeEl = document.getElementById('checkoutBadge');
 
-      if (p.original) {
-        origEl.textContent   = p.original;
-        badgeEl.textContent  = p.badge;
-        origEl.style.display  = '';
-        badgeEl.style.display = '';
-      } else {
-        origEl.style.display  = 'none';
-        badgeEl.style.display = 'none';
+        if (p.original) {
+          origEl.textContent = p.original;
+          badgeEl.textContent = p.badge;
+          origEl.style.display = '';
+          badgeEl.style.display = '';
+        } else {
+          origEl.style.display = 'none';
+          badgeEl.style.display = 'none';
+        }
+
+        document.getElementById('instructionText').innerHTML =
+          'Activision\u00ae | ' + p.name.replace(/[\u{1F4B0}\u{1F947}\u{1F3C6}\u{1F48E}\u{1F6E1}\uFE0F]/gu, '').trim() +
+          ' \uD83C\uDFAE<br>' +
+          '<span class="flag">\uD83C\uDF10</span> Region: Global<br>' +
+          '<span class="flag warn">\u26D4</span> IMPORTANT NOTE BEFORE PURCHASE';
       }
 
-      document.getElementById('instructionText').innerHTML =
-        'Activision\u00ae | ' + p.name.replace(/[\u{1F4B0}\u{1F947}\u{1F3C6}\u{1F48E}\u{1F6E1}\uFE0F]/gu, '').trim() +
-        ' \uD83C\uDFAE<br>' +
-        '<span class="flag">\uD83C\uDF10</span> Region: Global<br>' +
-        '<span class="flag warn">\u26D4</span> IMPORTANT NOTE BEFORE PURCHASE';
-    }
+      function initCards() {
+        const cards = document.querySelectorAll('.product-card');
 
-    function initCards() {
-      const cards = document.querySelectorAll('.product-card');
+        if (cards.length === 0) {
+          // Si el DOM aún no está listo, reintenta
+          setTimeout(initCards, 100);
+          return;
+        }
 
-      if (cards.length === 0) {
-        // Si el DOM aún no está listo, reintenta
-        setTimeout(initCards, 100);
-        return;
-      }
-
-      cards.forEach(function(card) {
-        card.addEventListener('click', function() {
-          cards.forEach(function(c) { c.classList.remove('selected'); });
-          card.classList.add('selected');
-          updateCheckout(parseInt(card.getAttribute('data-id')));
+        cards.forEach(function (card) {
+          card.addEventListener('click', function () {
+            cards.forEach(function (c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+            updateCheckout(parseInt(card.getAttribute('data-id')));
+          });
         });
-      });
 
-      // Selección por defecto: tarjeta 500 CP
-      var def = document.querySelector('.product-card[data-id="2"]');
-      if (def) {
-        def.classList.add('selected');
-        updateCheckout(2);
-      }
-    }
-
-    // Funciona tanto si el DOM ya cargó como si no
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCards);
-    } else {
-      initCards();
-    }
-
-    // Buy button
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('#btnBuy');
-      if (!btn) return;
-
-      var jugadorId = document.getElementById('jugadorIdInput').value.trim();
-      if (!jugadorId) {
-        alert('⚠️ Por favor ingresa tu ID de jugador antes de continuar.');
-        document.getElementById('jugadorIdInput').focus();
-        return;
+        // Selección por defecto: tarjeta 500 CP
+        var def = document.querySelector('.product-card[data-id="2"]');
+        if (def) {
+          def.classList.add('selected');
+          updateCheckout(2);
+        }
       }
 
-      var producto = document.getElementById('checkoutName').textContent.trim();
-      var precio   = document.getElementById('checkoutPrice').textContent.replace(/[^0-9]/g, '');
+      // Funciona tanto si el DOM ya cargó como si no
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCards);
+      } else {
+        initCards();
+      }
 
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '../php/crear_orden.php';
+      // Buy button
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('#btnBuy');
+        if (!btn) return;
 
-      [['producto', producto], ['precio', precio], ['jugador_id', jugadorId]].forEach(function(pair) {
-        var input = document.createElement('input');
-        input.type  = 'hidden';
-        input.name  = pair[0];
-        input.value = pair[1];
-        form.appendChild(input);
+        var jugadorId = document.getElementById('jugadorIdInput').value.trim();
+        if (!jugadorId) {
+          alert('⚠️ Por favor ingresa tu ID de jugador antes de continuar.');
+          document.getElementById('jugadorIdInput').focus();
+          return;
+        }
+
+        var producto = document.getElementById('checkoutName').textContent.trim();
+        var precio = document.getElementById('checkoutPrice').textContent.replace(/[^0-9]/g, '');
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '../php/crear_orden.php';
+
+        [['producto', producto], ['precio', precio], ['jugador_id', jugadorId]].forEach(function (pair) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = pair[0];
+          input.value = pair[1];
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
       });
 
-      document.body.appendChild(form);
-      form.submit();
-    });
-
-  })();
+    })();
   </script>
 </body>
+
 </html>
 
 </body>
-    <script src="anim.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/validaciones.js"></script>
-    <script src="assets/js/script.js"></script>
+<script src="anim.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/validaciones.js"></script>
+<script src="assets/js/script.js"></script>
+
 </html>

@@ -1,0 +1,60 @@
+.hidden {
+  display: none !important;
+}
+
+/* App shell */
+#appShell {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Layout principal (Explorer) */
+.lab-layout {
+  display: grid;
+  grid-template-columns: clamp(280px, 20vw, 360px) minmax(0, 1fr) clamp(
+      320px,
+      24vw,
+      420px
+    );
+  min-height: calc(100vh - 57px);
+  width: 100%;
+  transition: grid-template-columns 0.25s ease;
+}
+
+.lab-layout.sidebar-hidden {
+  grid-template-columns: 0 minmax(0, 1fr) clamp(320px, 24vw, 420px);
+}
+
+.lab-layout.sidebar-hidden .panel-left {
+  display: none;
+}
+
+/* Desktop grande: más aire */
+@media (min-width: 1700px) {
+  .lab-layout {
+    grid-template-columns: clamp(300px, 19vw, 420px) minmax(0, 1fr) clamp(
+        340px,
+        22vw,
+        480px
+      );
+  }
+}
+
+/* Laptop / tablet horizontal */
+@media (max-width: 1280px) {
+  .lab-layout {
+    grid-template-columns: 300px minmax(0, 1fr) 340px;
+  }
+
+  .lab-layout.sidebar-hidden {
+    grid-template-columns: 0 minmax(0, 1fr) 340px;
+  }
+}
+
+/* Tablet / móvil */
+@media (max-width: 1100px) {
+  .lab-layout,
+  .lab-layout.sidebar-hidden {
+    grid-template-columns: 1fr;
+  }
+}

@@ -9,7 +9,6 @@ if (!isset($conexion)) {
     }
 }
 
-//por si algun pobre diablo quiere pasarse de listo y acceder a esta página sin enviar el formulario, lo redirigimos a la página de inicio
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: ../home.php");
     exit();
@@ -34,12 +33,8 @@ if (empty($_POST['jugador_id']) || empty($_POST['producto']) || empty($_POST['pr
 if (!$resultado) {
     die("Error al crear la orden: " . mysqli_error($conexion));
 }
-// 🔥 AQUÍ VA WEB CHECKOUT (luego lo metemos)
-//AHORA SI, LLEGO LA HORA DE LA INTEGRACION >:3, aquí es donde se haría la llamada a la API de PlaceToPay para iniciar el proceso de pago, usando los datos de la orden que acabamos de crear. Luego, dependiendo de la respuesta de PlaceToPay, actualizaríamos el estado de la orden en la base de datos (por ejemplo, a "pagada" si el pago fue exitoso).
 
-//Empezemos
-
-// 🔥 Configuración de PlaceToPa
+// 🔥 Configuración de PlaceToPay
 $login = "2d9eaf1e662518756a3d78806543af5b";
 $secretKey = "3YC5brb5eAR4xBGQ";
 $url = "https://checkout-test.placetopay.com/api/session";
@@ -61,11 +56,11 @@ $data = [
         "seed" => $seed
     ],
     "payment" => [
-        "reference" => (string)$order_id,
+        "reference" => (string) $order_id,
         "description" => $producto,
         "amount" => [
             "currency" => "COP",
-            "total" => (float)$precio
+            "total" => (float) $precio
         ]
     ],
     "expiration" => date('c', strtotime('+1 hour')),
@@ -78,9 +73,6 @@ $data = [
 [$response] = p2p_json_post($url, $data);
 
 $result = json_decode($response, true);
-
-
-
 
 // Por ahora prueba básica:
 if (isset($result['processUrl'])) {
