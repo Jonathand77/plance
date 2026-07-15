@@ -1,294 +1,357 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
-    }
-
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juegos</title>
-        <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
+    <link rel="stylesheet"
+        href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
 </head>
 
-
 <style>
+    :root {
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+    }
+
     body {
-        /* background-image: url(../assets/images/bg22.jpg); */
         color: white;
-        background-color: #111111;
+        background-color: #0d0e10;
         background-repeat: no-repeat;
         background-position: center;
         background-attachment: fixed;
         background-size: cover;
         font-family: 'Barlow', sans-serif;
     }
+
     .card {
-        /*background: linear-gradient( rgba(146, 50, 255, 0.8) 0%, hsla(281, 100%, 33%, 0.81)); */
-        background: linear-gradient( rgba(36, 36, 36, 0.8) 0%, hsla(0, 0%, 2%, 0.81));
+        background: linear-gradient(rgba(30, 33, 44, 0.85) 0%, rgba(13, 14, 16, 0.9));
         background-size: cover;
         color: #e4e4e4;
-        border: none;
+        border: 1px solid var(--color-secondary-2);
         border-radius: 15px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        align-items: center
-
+        align-items: center;
+        position: relative;
+        overflow: visible;
     }
+
     .card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(255, 174, 0, 0.5);
+        box-shadow: 0 10px 25px rgba(255, 108, 12, 0.3);
+        border-color: var(--color-primary);
     }
+
     .card-img-top {
         border-radius: 15px 15px 0 0;
         height: 200px;
         width: 100%;
         object-fit: cover;
     }
+
     main {
         flex: 1;
     }
-    .navbar {
-        background-color: #252424a9 !important;
-        backdrop-filter: blur(8px);
-        color:  #ffffff;
-    }
-    .back:hover {
-        background: #ff6811f5;
-        transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(255, 94, 0, 0.5);
 
+    .navbar {
+        background-color: rgba(30, 33, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        color: #ffffff;
+        border-bottom: 1px solid var(--color-secondary-2);
     }
-    /*necesito centrar el mensajito naranaja "pago basico" en la parte superior de cada card, y que quede fijo ahi, sin importar el tamaño de la imagen o el contenido de la card. Tambien quiero que tenga un fondo naranja con letras negras, y que se vea como una etiqueta superpuesta a la imagen, pero sin afectar el diseño responsivo de las cards. */
-    .pagob {    
+
+    .back:hover {
+        background: var(--color-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 108, 12, 0.4);
+    }
+
+    /* Etiqueta "Pago Básico" */
+    .pagob {
         position: absolute;
-        top: -10px;
+        top: -12px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: rgb(255, 174, 0);
-        color: rgb(0, 0, 0);
+        background-color: var(--color-primary);
+        color: #0d0e10;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.05em;
-        padding: 0.15rem 0.5rem;
-        /*    border-radius: 0 0 10px 0; */
-        border-radius: 12px;
+        padding: 0.2rem 1rem;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(255, 108, 12, 0.3);
+        white-space: nowrap;
+        pointer-events: none;
     }
 
-
-
-
-
-
-
-
-    .servicio1{
-        background: rgba(0, 183, 255, 0.96);
-        color: rgb(255, 255, 255);
+    .servicio1 {
+        background: var(--color-secondary-3);
+        color: #ffffff;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.05em;
-        padding: 0.15rem 0.5rem;
-        /*    border-radius: 0 0 10px 0; */
-        border-radius: 12px;
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        display: inline-block;
     }
-    .servicio2{
-        background: #ff3939f5;
-        color: rgb(255, 255, 255);
+
+    .servicio2 {
+        background: var(--color-primary);
+        color: #0d0e10;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.05em;
-        padding: 0.15rem 0.5rem;
-        /*    border-radius: 0 0 10px 0; */
-        border-radius: 12px;
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        display: inline-block;
     }
 
     /* Filtro servicio (botones) */
-    .servicio-toggle{
+    .servicio-toggle {
         display: inline-flex;
         overflow: hidden;
         border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.15);
-        background: rgba(0,0,0,0.18);
+        border: 1px solid var(--color-secondary-2);
+        background: rgba(0, 0, 0, 0.3);
     }
-    .servicio-btn{
+
+    .servicio-btn {
         border: 0;
         padding: 0.6rem 1.2rem;
         background: transparent;
-        color: rgba(255,255,255,0.9);
+        color: var(--text-main);
         font-weight: 700;
         letter-spacing: 0.02em;
         cursor: pointer;
         transition: background 0.2s ease, color 0.2s ease;
         line-height: 1;
     }
-    .servicio-btn + .servicio-btn{
-        border-left: 1px solid rgba(255,255,255,0.12);
+
+    .servicio-btn+.servicio-btn {
+        border-left: 1px solid var(--color-secondary-2);
     }
-    .servicio-btn.active{
-        background: rgba(63, 47, 2, 0.7);
-        color: #ffee00;
+
+    .servicio-btn.active {
+        background: rgba(255, 108, 12, 0.15);
+        color: var(--color-primary);
     }
-    
+
+    .servicio-btn:hover {
+        background: rgba(255, 108, 12, 0.08);
+        color: var(--color-primary);
+    }
+
     .second-title {
-        background:rgba(77, 77, 77, 0.08);
-        border-radius:0 12px 12px 0;
-        padding:0.9rem 1.2rem;
+        background: rgba(30, 33, 44, 0.5);
+        border-radius: 0 12px 12px 0;
+        padding: 0.9rem 1.2rem;
         margin: 10px;
-        gap:0.8rem;
+        gap: 0.8rem;
         align-items: center;
         font-size: 1.00rem;
-        color: #f0f1f3;
-        line-height:1.4;
-
+        color: var(--text-main);
+        line-height: 1.4;
+        border-left: 4px solid var(--color-primary);
     }
-    .second-title i{color: #e0cb52;font-size:1.2rem;flex-shrink:0;}
-    .second-title strong{color: #fffb00;}
-    
+
+    .second-title i {
+        color: var(--color-primary);
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .second-title strong {
+        color: var(--color-primary);
+    }
+
+    .btn-productos {
+        background-color: rgba(30, 33, 44, 0.6) !important;
+        color: #ffffff !important;
+        border: 1px solid var(--color-secondary-2) !important;
+        transition: all 0.3s ease !important;
+        border-radius: 8px !important;
+        padding: 0.4rem 1.2rem !important;
+    }
+
+    .btn-productos:hover {
+        background-color: var(--color-primary) !important;
+        color: #0d0e10 !important;
+        border-color: var(--color-primary) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 108, 12, 0.3);
+    }
+
+    .card-body {
+        padding: 1.2rem;
+        width: 100%;
+    }
+
+    .card-title {
+        color: var(--text-main);
+        margin-top: 0.5rem;
+    }
+
+    .card-text {
+        color: var(--color-secondary-5);
+        font-size: 0.9rem;
+    }
 </style>
-
-
 
 <body class="d-flex flex-column min-vh-100">
 
-
     <?php
-        $nav_back_url  = "../sesiones.php";
-        $nav_back_text = "Atras";
-        $nav_base      = "../";
-        require_once '../php/navbar.php';
+    $nav_back_url = "../sesiones.php";
+    $nav_back_text = "Atras";
+    $nav_base = "../";
+    require_once '../php/navbar.php';
     ?>
 
-    <div class="container text-center" >
-       <div class="second-title ">
-        <i class="bi bi-controller fs-3"></i>
-        <div>
-            <strong>Bienvenido a la sesion de juegos mobiles</strong>
-            <br>
-            Elige la tienda en la que vas a hacer tus pagos
+    <div class="container text-center">
+        <div class="second-title">
+            <i class="bi bi-controller fs-3"></i>
+            <div>
+                <strong>Bienvenido a la sesión de juegos móviles</strong>
+                <br>
+                Elige la tienda en la que vas a hacer tus pagos
+            </div>
         </div>
+
+        <section>
+            <div class="container mt-5">
+                <h1 class="text-center mb-3" style="color: var(--text-main);">Juegos</h1>
+
+                <!-- Botones para filtrar por servicio PlaceToPay -->
+                <div class="d-flex justify-content-center mb-4">
+                    <div class="servicio-toggle" role="group" aria-label="Filtrar juegos por servicio">
+                        <button type="button" class="servicio-btn active" data-filter="web">Web Checkout</button>
+                        <button type="button" class="servicio-btn" data-filter="api">API Gateway</button>
+                    </div>
+                </div>
+
+                <div class="row" style="text-align: center;" id="games-row">
+
+                    <!-- Web Checkout - COD Mobile -->
+                    <div class="col-md-4 mb-4" data-servicio="web">
+                        <div class="card h-100">
+                            <img src="https://media.tycsports.com/files/2021/07/15/307410/cod-mobile-todas-las-novedades-de-la-beta-de-julio-_862x485.jpg"
+                                class="card-img-top" alt="Call of Duty Mobile">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio1">Web Checkout</div>
+                                <h5 class="card-title">Call of Duty Mobile</h5>
+                                <p class="card-text">Compra Cod Points móviles</p>
+                                <a href="../games/cod.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Checkout - Free Fire -->
+                    <div class="col-md-4 mb-4" data-servicio="web">
+                        <div class="card h-100">
+                            <img src="https://imagenes.hobbyconsolas.com/files/image_1280_720/uploads/imagenes/2023/04/25/690d3b41af1b7.jpeg"
+                                class="card-img-top" alt="Free Fire">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio1">Web Checkout</div>
+                                <h5 class="card-title">Free Fire</h5>
+                                <p class="card-text">Compra diamantes y más</p>
+                                <a href="../games/freefire.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Checkout - eFootball -->
+                    <div class="col-md-4 mb-4" data-servicio="web">
+                        <div class="card h-100">
+                            <img src="https://www.konami.com/efootball/s/img/main_page_1.png?v=930" class="card-img-top"
+                                alt="Efootball">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio1">Web Checkout</div>
+                                <h5 class="card-title">eFootball Mobile</h5>
+                                <p class="card-text">Compra monedas y más</p>
+                                <a href="../games/efootball.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Web Checkout - EA Sports -->
+                    <div class="col-md-4 mb-4" data-servicio="web">
+                        <div class="card h-100">
+                            <img src="https://media.es.wired.com/photos/64dad651532fc59e0e8d53a4/16:9/w_1280,c_limit/EA%20Sports.jpg"
+                                class="card-img-top" alt="EA Sports">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio1">Web Checkout</div>
+                                <h5 class="card-title">EA FC Sports Mobile</h5>
+                                <p class="card-text">Compra puntos y más</p>
+                                <a href="../games/easport.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Gateway - PUBG -->
+                    <div class="col-md-4 mb-4" data-servicio="api">
+                        <div class="card h-100">
+                            <img src="https://img.redbull.com/images/c_limit,w_1500,h_1000/f_auto,q_auto/redbullcom/2018/02/13/c3c16515-d639-45cd-8d7d-5fe26623130b/pubg"
+                                class="card-img-top" alt="PUBG">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio2">API Gateway</div>
+                                <h5 class="card-title">PUBG Battlegrounds</h5>
+                                <p class="card-text">Compra UC y más</p>
+                                <a href="../games/pubg.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Gateway - Blood Strike -->
+                    <div class="col-md-4 mb-4" data-servicio="api">
+                        <div class="card h-100">
+                            <img src="https://cdn.aptoide.com/imgs/6/8/c/68c301631138548dca9af0d780cccff9_fgraphic.png"
+                                class="card-img-top" alt="Blood Strike">
+                            <div class="pagob">Pago Básico</div>
+                            <div class="card-body">
+                                <div class="servicio2">API Gateway</div>
+                                <h5 class="card-title">Blood Strike</h5>
+                                <p class="card-text">Compra Gold y más</p>
+                                <a href="../games/bloodstrike.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
     </div>
 
-
-
-    <!--<div class="container text-center" >
-        <h3 class="display-4 fw-bold mb-3">Bienvenido a la sesion de juegos 👋</h3>
-        <p class="lead mb-4">Elije el juego en donde vas a hacer tus compras.</p>
-    </div>-->
-
-
-
-    <section>
-        <div class="container mt-5" >
-            <h1 class="text-center mb-3">Juegos</h1>
-
-
-            <!-- Botones para filtrar por servicio PlaceToPay -->
-            <div class="d-flex justify-content-center mb-4">
-                <div class="servicio-toggle" role="group" aria-label="Filtrar juegos por servicio">
-                    <button type="button" class="servicio-btn active" data-filter="web">Web Checkout</button>
-                    <button type="button" class="servicio-btn" data-filter="api">API Gateway</button>
-                </div>
-            </div>
-
-            <div class="row" style="text-align: center;" id="games-row">
-
-                <div class="col-md-4 mb-4" data-servicio="web">
-                    <div class="card h-100"> 
-                        
-                        <img src="https://media.tycsports.com/files/2021/07/15/307410/cod-mobile-todas-las-novedades-de-la-beta-de-julio-_862x485.jpg" class="card-img-top" alt="Juego 1" style="height: 100px width 100px;"><div class="pagob">Pago Basico</div>
-                            
-                        <div class="card-body">
-                            <div class="servicio1">Web Chekout</div>
-                            <h5 class="card-title">Call Of Duty Mobile</h5>
-                            <p class="card-text">Compra Cod Points mobiles</p> 
-                            <a href="../games/cod.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4" data-servicio="web">
-                    <div class="card h-100" >
-                        <img src="https://www.masgamers.com/wp-content/uploads/2022/06/free-fire-nuevo-logo.png" class="card-img-top" alt="Free Fire">
-                        <div class="card-body">
-                            <div class="pagob">Pago Basico</div>
-                            <div class="servicio1">Web Chekout</div>
-                            <h5 class="card-title">Free Fire</h5>
-                            <p class="card-text">Compra diamantes y más.</p>
-                            <a href="../games/freefire.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4" data-servicio="web">
-                    <div class="card h-100">
-                        <img src="https://www.konami.com/efootball/s/img/main_page_1.png?v=930" class="card-img-top" alt="Efootball">
-                        <div class="card-body">
-                            <div class="pagob">Pago Basico</div>
-                            <div class="servicio1">Web Chekout</div>
-                            <h5 class="card-title">Efootball Mobile</h5>
-                            <p class="card-text">Compra monedas y más.</p>
-                            <a href="../games/efootball.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4" data-servicio="web">
-                    <div class="card h-100">
-                        <img src="https://media.es.wired.com/photos/64dad651532fc59e0e8d53a4/16:9/w_1280,c_limit/EA%20Sports.jpg" class="card-img-top" alt="EA Sports">
-                        <div class="card-body">
-                            <div class="pagob">Pago Basico</div>
-                            <div class="servicio1">Web Chekout</div>
-                            <h5 class="card-title">EA FC Sports Mobile</h5>
-                            <p class="card-text">Compra puntos y más</p>
-                            <a href="../games/easport.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>                        </div>
-                    </div>
-                </div>
-                <!-- JUEGOS CON API GATEWAY -->
-                <div class="col-md-4 mb-4" data-servicio="api">
-                    <div class="card h-100">
-
-                        <img src="https://img.redbull.com/images/c_limit,w_1500,h_1000/f_auto,q_auto/redbullcom/2018/02/13/c3c16515-d639-45cd-8d7d-5fe26623130b/pubg" class="card-img-top" alt="Juego 3">
-                        <div class="card-body">
-                            <div class="pagob">Pago Basico</div>
-                            <div class="servicio2">Api Gateway</div>
-                            <h5 class="card-title">PUBG Battlegrounds</h5>
-                            
-                            <p class="card-text">Compra UC y más</p> 
-                            <a href="../games/pubg.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4" data-servicio="api">
-                    <div class="card h-100">
-
-                        <img src="https://cdn.aptoide.com/imgs/6/8/c/68c301631138548dca9af0d780cccff9_fgraphic.png" class="card-img-top" alt="Juego 3">
-                        <div class="card-body">
-                            <div class="pagob">Pago Basico</div>
-                            <div class="servicio2">Api Gateway</div>
-                            <h5 class="card-title">Blood Strike</h5>
-                            
-                            <p class="card-text">Compra Gold y más</p> 
-                            <a href="../games/bloodstrike.php" class="btn" style="background-color: #2424249f; color: #ffffff;">Productos</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-    </section>
     <script>
         (function () {
             const buttons = Array.from(document.querySelectorAll('.servicio-btn'));
@@ -316,4 +379,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/validaciones.js"></script>
 </body>
+
 </html>

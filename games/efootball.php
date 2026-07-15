@@ -2,75 +2,101 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
-    exit();
+  header("Location: ../index.php");
+  exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eFootball Mobile — Monedas</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eFootball Mobile — Monedas</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/">
 </head>
 <style>
-    /* 
-    eFOOTBALL MOBILE — Dark Theme · Azul */
+  /* 
+    eFOOTBALL MOBILE — Dark Theme
+    Paleta estandarizada
+    */
 
-    :root {
-    --bg-base:         #18191b;
-    --bg-surface:     #16181c;
-    --bg-card:        #1e2128;
-    --bg-card-hover:  #252830;
-    --bg-selected:    #08122a;
-    --border:         #2e3038;
-    --border-active:  #0062A8;
-    --accent:         #0062A8;
-    --accent-glow:    rgba(77, 159, 255, 0.25);
-    --accent-dark:    #2176d9;
-    --text-primary:   #f0f1f3;
-    --text-secondary: #8a8d96;
-    --text-muted:     #555860;
-    --green:          #3ecf8e;
-    --red-badge:      #e05252;
-    --font-display:   'Calibri', sans-serif;  /*  'calibri', sans-serif;   'Barlow Condensed', sans-serif; */ 
-    --font-body:      'Calibri', sans-serif;     /*'calibri',  sans-serif; 'Barlow', sans-serif; */  
-    --radius-sm:      6px;
-    --radius-md:      10px;
-    --radius-lg:      14px;
-    --transition:     0.2s ease;
-    }
+  :root {
+    /* Nueva paleta estandarizada */
+    --color-primary: #FF6C0C;
+    --color-secondary-1: #00CFB4;
+    --color-secondary-2: #4C5F71;
+    --color-secondary-3: #0062A8;
+    --color-secondary-4: #1E212C;
+    --color-secondary-5: #7D868C;
+    --text-main: #f1f5f9;
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; }
+    /* Variables específicas del componente */
+    --bg-base: #0d0e10;
+    --bg-surface: #16181c;
+    --bg-card: #1E2128;
+    --bg-card-hover: #252830;
+    --bg-selected: #08122a;
+    --border: #4C5F71;
+    --border-active: #0062A8;
+    --accent: #0062A8;
+    --accent-glow: rgba(0, 98, 168, 0.25);
+    --accent-dark: #004d8a;
+    --text-primary: #f0f1f3;
+    --text-secondary: #7D868C;
+    --text-muted: #4C5F71;
+    --green: #00CFB4;
+    --red-badge: #dc3545;
+    --font-display: 'Calibri', sans-serif;
+    --font-body: 'Calibri', sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --transition: 0.2s ease;
+  }
 
-    body {
-    /* background-image: url(../assets/images/bg25.jpg); */
-    
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
     background-color: var(--bg-base);
-
-
-
     color: var(--text-primary);
     font-family: var(--font-body);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    }
+  }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
 
-    /* ── GAME BANNER ── */
-    .game-banner {
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── GAME BANNER ── */
+  .game-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -78,9 +104,9 @@ if (!isset($_SESSION['usuario'])) {
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border);
     gap: 1rem;
-    }
+  }
 
-    .game-banner__tag {
+  .game-banner__tag {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -89,20 +115,29 @@ if (!isset($_SESSION['usuario'])) {
     font-size: 1rem;
     letter-spacing: 0.04em;
     color: var(--text-primary);
-    }
-    .game-icon { width: 20px; height: 20px; border-radius: 4px; }
+  }
 
-    /* ── BANNER PLAYER ID ── */
-    .banner-player-id { display: flex; align-items: center; gap: 0.5rem; }
+  .game-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
 
-    .banner-player-id label {
+  /* ── BANNER PLAYER ID ── */
+  .banner-player-id {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .banner-player-id label {
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-secondary);
     white-space: nowrap;
-    }
+  }
 
-    .banner-player-id input {
+  .banner-player-id input {
     background: var(--bg-card);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
@@ -113,13 +148,19 @@ if (!isset($_SESSION['usuario'])) {
     outline: none;
     transition: border-color var(--transition);
     width: 180px;
-    }
+  }
 
-    .banner-player-id input::placeholder { color: var(--text-muted); }
-    .banner-player-id input:focus { border-color: var(--accent); }
+  .banner-player-id input::placeholder {
+    color: var(--text-muted);
+  }
 
-    /* ── MAIN LAYOUT ── */
-    .shop-layout {
+  .banner-player-id input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0, 98, 168, 0.15);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .shop-layout {
     display: grid;
     grid-template-columns: 1fr 340px;
     gap: 1.5rem;
@@ -127,10 +168,13 @@ if (!isset($_SESSION['usuario'])) {
     margin: 1.5rem auto;
     padding: 0 1.5rem 3rem;
     align-items: start;
-    }
+  }
 
-    .section-block { margin-bottom: 1.4rem; }
-    .section-label {
+  .section-block {
+    margin-bottom: 1.4rem;
+  }
+
+  .section-label {
     font-family: var(--font-display);
     font-size: 0.8rem;
     font-weight: 700;
@@ -138,16 +182,16 @@ if (!isset($_SESSION['usuario'])) {
     text-transform: uppercase;
     color: var(--text-secondary);
     margin-bottom: 0.75rem;
-    }
+  }
 
-    /* ── PRODUCTS GRID ── */
-    .products-grid {
+  /* ── PRODUCTS GRID ── */
+  .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.65rem;
-    }
+  }
 
-    .product-card {
+  .product-card {
     position: relative;
     background: var(--bg-card);
     border: 1.5px solid var(--border);
@@ -159,22 +203,22 @@ if (!isset($_SESSION['usuario'])) {
     flex-direction: column;
     gap: 0.1rem;
     overflow: hidden;
-    }
+  }
 
-    .product-card:hover {
+  .product-card:hover {
     background: var(--bg-card-hover);
-    border-color: rgba(77, 159, 255, 0.4);
+    border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.35);
-    }
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
 
-    .product-card.selected {
+  .product-card.selected {
     background: var(--bg-selected);
     border-color: var(--accent);
     box-shadow: 0 0 0 1px var(--accent), 0 4px 24px var(--accent-glow);
-    }
+  }
 
-    .product-card.selected::after {
+  .product-card.selected::after {
     content: '✔';
     position: absolute;
     top: 0.5rem;
@@ -191,15 +235,16 @@ if (!isset($_SESSION['usuario'])) {
     font-weight: 900;
     line-height: 18px;
     text-align: center;
-    }
-    .card-img-top {
-      border-radius: 15px 15px 0 0;
-      height: 20px;
-      width: 10%;
-      object-fit: cover;
-    }
+  }
 
-    .badge-popular {
+  .card-img-top {
+    border-radius: 15px 15px 0 0;
+    height: 20px;
+    width: 10%;
+    object-fit: cover;
+  }
+
+  .badge-popular {
     position: absolute;
     top: -1px;
     left: -1px;
@@ -211,22 +256,34 @@ if (!isset($_SESSION['usuario'])) {
     letter-spacing: 0.05em;
     padding: 0.15rem 0.5rem;
     border-radius: var(--radius-sm) 0 var(--radius-sm) 0;
-    }
+  }
 
-    .product-card__img { font-size: 1.5rem; margin-bottom: 0.25rem; }
+  .product-card__img {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
 
-    .product-card__pts {
+  .product-card__pts {
     font-family: var(--font-display);
     font-size: 1.00rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1;
-    }
+  }
 
-    .product-card__label { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.3rem; }
-    .product-card__price-old { font-size: 0.72rem; color: var(--text-muted); text-decoration: line-through; }
+  .product-card__label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+  }
 
-    .product-card__price {
+  .product-card__price-old {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .product-card__price {
     font-family: var(--font-display);
     font-size: 1.0rem;
     font-weight: 700;
@@ -235,35 +292,36 @@ if (!isset($_SESSION['usuario'])) {
     align-items: center;
     gap: 0.35rem;
     flex-wrap: wrap;
-    }
+  }
 
-    .discount-tag {
-    background: rgba(77, 159, 255, 0.15);
+  .discount-tag {
+    background: rgba(0, 98, 168, 0.15);
     color: var(--accent);
     font-size: 0.68rem;
     font-weight: 700;
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
-    }
+  }
 
-    /* ── CHECKOUT PANEL ── */
-    .checkout-panel { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1rem; 
-    position: sticky; 
-    top: 16px; }
+  /* ── CHECKOUT PANEL ── */
+  .checkout-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 16px;
+  }
 
-    .checkout-summary,
-    .delivery-instructions,
-    .vendor-box {
+  .checkout-summary,
+  .delivery-instructions,
+  .vendor-box {
     background: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 1.2rem 1.3rem;
-    }
+  }
 
-    .checkout-product-name {
+  .checkout-product-name {
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 800;
@@ -273,46 +331,86 @@ if (!isset($_SESSION['usuario'])) {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    }
+  }
 
-    .checkout-product-name img {
+  .checkout-product-name img {
     width: 34px;
     height: 34px;
     object-fit: contain;
     flex-shrink: 0;
-    }
-    .checkout-product-name img[src=""],
-    .checkout-product-name img:not([src]) { display: none; }
+  }
 
-    .checkout-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.65rem; }
-    .checkout-label { font-size: 0.85rem; color: var(--text-secondary); }
-    .checkout-delivery { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
-    .checkout-divider { height: 1px; background: var(--border); margin: 0.8rem 0; }
-    .checkout-total-row { align-items: flex-end; }
+  .checkout-product-name img[src=""],
+  .checkout-product-name img:not([src]) {
+    display: none;
+  }
 
-    .checkout-pricing { text-align: right; display: flex; flex-direction: column; gap: 0.15rem; }
-    .checkout-original { font-size: 0.8rem; color: var(--text-muted); text-decoration: line-through; }
-    .checkout-final-row { display: flex; align-items: center; gap: 0.4rem; }
+  .checkout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.65rem;
+  }
 
-    .checkout-badge {
-    background: rgba(62, 207, 142, 0.15);
+  .checkout-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .checkout-delivery {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .checkout-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.8rem 0;
+  }
+
+  .checkout-total-row {
+    align-items: flex-end;
+  }
+
+  .checkout-pricing {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .checkout-original {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .checkout-final-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .checkout-badge {
+    background: rgba(0, 207, 180, 0.15);
     color: var(--green);
     font-size: 0.75rem;
     font-weight: 700;
     font-family: var(--font-display);
     padding: 0.15rem 0.4rem;
     border-radius: 4px;
-    }
+  }
 
-    .checkout-final-price {
+  .checkout-final-price {
     font-family: var(--font-display);
     font-size: 1.6rem;
     font-weight: 800;
     color: var(--text-primary);
     line-height: 1;
-    }
+  }
 
-    .btn-buy {
+  .btn-buy {
     width: 100%;
     margin-top: 1rem;
     padding: 0.85rem 1.2rem;
@@ -333,30 +431,72 @@ if (!isset($_SESSION['usuario'])) {
     transition: all 0.18s ease;
     position: relative;
     overflow: hidden;
-    }
+  }
 
-    .btn-buy::before {
+  .btn-buy::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent);
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
     transform: translateX(-100%);
     transition: transform 0.5s ease;
-    }
+  }
 
-    .btn-buy:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
-    .btn-buy:hover::before { transform: translateX(100%); }
-    .btn-buy:active { transform: translateY(0); }
-    .btn-arrow { font-size: 1.1rem; transition: transform 0.2s; }
-    .btn-buy:hover .btn-arrow { transform: translateX(4px); }
+  .btn-buy:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px var(--accent-glow);
+    color: #fff;
+  }
 
-    .trust-badges { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .trust-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); }
+  .btn-buy:hover::before {
+    transform: translateX(100%);
+  }
 
-    .instruction-text { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
-    .flag { margin-right: 0.2rem; }
+  .btn-buy:active {
+    transform: translateY(0);
+  }
 
-    .btn-instructions {
+  .btn-arrow {
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+
+  .btn-buy:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  .trust-badges {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .trust-item i {
+    color: var(--accent);
+  }
+
+  .instruction-text {
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .flag {
+    margin-right: 0.2rem;
+  }
+
+  .btn-instructions {
     background: none;
     border: 1px solid var(--border);
     color: var(--text-secondary);
@@ -366,16 +506,25 @@ if (!isset($_SESSION['usuario'])) {
     cursor: pointer;
     transition: all var(--transition);
     font-family: var(--font-body);
-    }
-    .btn-instructions:hover { border-color: var(--accent); color: var(--text-primary); }
+  }
 
-    .vendor-info { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+  .btn-instructions:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+  }
 
-    .vendor-avatar {
+  .vendor-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .vendor-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #0062A8, #2176d9);
+    background: linear-gradient(135deg, var(--color-secondary-3), var(--accent-dark));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -384,44 +533,87 @@ if (!isset($_SESSION['usuario'])) {
     font-size: 0.85rem;
     color: #0d0e10;
     flex-shrink: 0;
+  }
+
+  .vendor-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+
+  .vendor-rating {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-top: 0.1rem;
+  }
+
+  .vendor-rating a {
+    color: var(--accent);
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
 
-    .vendor-name { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
-    .vendor-rating { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.1rem; }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-    }
-    .products-panel { animation: fadeSlideIn 0.4s ease both; }
-    .checkout-panel { animation: fadeSlideIn 0.4s 0.1s ease both; }
+  .products-panel {
+    animation: fadeSlideIn 0.4s ease both;
+  }
 
-    @media (max-width: 900px) {
-    .shop-layout { grid-template-columns: 1fr; }
-    .checkout-panel { position: static; }
-    .products-grid { grid-template-columns: repeat(3, 1fr); }
+  .checkout-panel {
+    animation: fadeSlideIn 0.4s 0.1s ease both;
+  }
+
+  @media (max-width: 900px) {
+    .shop-layout {
+      grid-template-columns: 1fr;
     }
-    @media (max-width: 600px) {
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .game-banner { flex-direction: column; align-items: flex-start; }
+
+    .checkout-panel {
+      position: static;
     }
+
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-banner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 </style>
+
 <body>
   <?php
-      $nav_back_url  = "juegos.php";
-      $nav_back_text = "Atras";
-      $nav_base      = "../";
-      require_once '../php/navbar.php';
-    ?>
+  $nav_back_url = "juegos.php";
+  $nav_back_text = "Atras";
+  $nav_base = "../";
+  require_once '../php/navbar.php';
+  ?>
 
   <!-- ── GAME BANNER ── -->
   <div class="game-banner">
     <div class="game-banner__tag">
-      <img src="https://www.konami.com/efootball/s/img/main_page_1.png?v=930" class="card-img-top" alt="" class="game-icon">
+      <img src="https://www.konami.com/efootball/s/img/main_page_1.png?v=930" class="card-img-top" alt=""
+        class="game-icon">
       eFootball Mobile — Monedas
     </div>
     <div class="banner-player-id">
-      <label for="jugadorIdInput">⚠️ ID de jugador</label>
+      <label for="jugadorIdInput">🆔 ID de jugador</label>
       <input type="text" id="jugadorIdInput" placeholder="Ej: AAAA-123-456-789" autocomplete="off" />
     </div>
   </div>
@@ -436,55 +628,67 @@ if (!isset($_SESSION['usuario'])) {
         <div class="products-grid" id="productsGrid">
 
           <div class="product-card" data-id="1" data-pts="120" data-price="5000" data-original="" data-discount="">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006539-icon-300.png" style="height: 40px; width: 40px" alt="">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006539-icon-300.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">120</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price">5.000 COP</div>
           </div>
 
-          <div class="product-card popular-card" data-id="2" data-pts="300" data-price="10500" data-original="14000" data-discount="25">
-             <!-- Badge Popular <div class="badge-popular">★ Popular</div>   -->
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006543-icon-500.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card popular-card" data-id="2" data-pts="300" data-price="10500" data-original="14000"
+            data-discount="25">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006543-icon-500.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">300</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">14.000 COP</div>
             <div class="product-card__price">10.500 COP <span class="discount-tag">-25%</span></div>
           </div>
 
-          <div class="product-card" data-id="3" data-pts="660" data-price="21000" data-original="28000" data-discount="25">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006553-icon-1040.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="3" data-pts="660" data-price="21000" data-original="28000"
+            data-discount="25">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006553-icon-1040.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">660</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">28.000 COP</div>
             <div class="product-card__price">21.000 COP <span class="discount-tag">-25%</span></div>
           </div>
 
-          <div class="product-card" data-id="4" data-pts="1320" data-price="39000" data-original="54000" data-discount="28">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006553-icon-1040.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="4" data-pts="1320" data-price="39000" data-original="54000"
+            data-discount="28">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006553-icon-1040.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">1320</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">54.000 COP</div>
             <div class="product-card__price">39.000 COP <span class="discount-tag">-28%</span></div>
           </div>
 
-          <div class="product-card" data-id="5" data-pts="2640" data-price="72000" data-original="98000" data-discount="27">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006560-icon-2130.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="5" data-pts="2640" data-price="72000" data-original="98000"
+            data-discount="27">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006560-icon-2130.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">2640</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">98.000 COP</div>
             <div class="product-card__price">72.000 COP <span class="discount-tag">-27%</span></div>
           </div>
 
-          <div class="product-card" data-id="6" data-pts="5280" data-price="130000" data-original="180000" data-discount="28">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006564-icon-3250.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="6" data-pts="5280" data-price="130000" data-original="180000"
+            data-discount="28">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006564-icon-3250.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">5280</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">180.000 COP</div>
             <div class="product-card__price">130.000 COP <span class="discount-tag">-28%</span></div>
           </div>
 
-          <div class="product-card" data-id="7" data-pts="10560" data-price="240000" data-original="330000" data-discount="27">
-            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006574-icon-12800.png" style="height: 40px; width: 40px" alt="">
+          <div class="product-card" data-id="7" data-pts="10560" data-price="240000" data-original="330000"
+            data-discount="27">
+            <img src="https://cdn.unipin.com/images/merchant_denominations/1763006574-icon-12800.png"
+              style="height: 40px; width: 40px" alt="">
             <div class="product-card__pts">10560</div>
             <div class="product-card__label">Monedas</div>
             <div class="product-card__price-old">330.000 COP</div>
@@ -528,9 +732,11 @@ if (!isset($_SESSION['usuario'])) {
         </button>
 
         <div class="trust-badges">
-          <div class="trust-item"><i class="bi bi-shield-check fs-6 text-primary"></i><span>Garantía de reembolso · P2P</span></div>
-          <div class="trust-item"><i class="bi bi-lightning-fill fs-6 text-primary"></i><span>Pago rápido · Apple Pay / G Pay</span></div>
-          <div class="trust-item"><i class="bi bi-headset fs-6 text-primary"></i><span>Asistencia en directo 24/7 — ¡A tu lado!</span></div>
+          <div class="trust-item"><i class="bi bi-shield-check fs-6"></i><span>Garantía de reembolso · P2P</span></div>
+          <div class="trust-item"><i class="bi bi-lightning-fill fs-6"></i><span>Pago rápido · Apple Pay / G Pay</span>
+          </div>
+          <div class="trust-item"><i class="bi bi-headset fs-6"></i><span>Asistencia en directo 24/7 — ¡A tu
+              lado!</span></div>
         </div>
       </div>
 
@@ -560,112 +766,113 @@ if (!isset($_SESSION['usuario'])) {
 
   <!-- JS -->
   <script>
-  (function() {
+    (function () {
 
-    const products = {
-      1: { name: ' 120 Monedas',   price: '5.000 COP',   original: '',           badge: '',     delivery: 'Instante' },
-      2: { name: ' 300 Monedas',   price: '10.500 COP',  original: '14.000 COP', badge: '-25%', delivery: 'Instante' },
-      3: { name: ' 660 Monedas',   price: '21.000 COP',  original: '28.000 COP', badge: '-25%', delivery: 'Instante' },
-      4: { name: ' 1320 Monedas',  price: '39.000 COP',  original: '54.000 COP', badge: '-28%', delivery: 'Instante' },
-      5: { name: ' 2640 Monedas',  price: '72.000 COP',  original: '98.000 COP', badge: '-27%', delivery: 'Instante' },
-      6: { name: ' 5280 Monedas',  price: '130.000 COP', original: '180.000 COP',badge: '-28%', delivery: 'Instante' },
-      7: { name: ' 10560 Monedas', price: '240.000 COP', original: '330.000 COP',badge: '-27%', delivery: 'Instante' },
-    };
+      const products = {
+        1: { name: ' 120 Monedas', price: '5.000 COP', original: '', badge: '', delivery: 'Instante' },
+        2: { name: ' 300 Monedas', price: '10.500 COP', original: '14.000 COP', badge: '-25%', delivery: 'Instante' },
+        3: { name: ' 660 Monedas', price: '21.000 COP', original: '28.000 COP', badge: '-25%', delivery: 'Instante' },
+        4: { name: ' 1320 Monedas', price: '39.000 COP', original: '54.000 COP', badge: '-28%', delivery: 'Instante' },
+        5: { name: ' 2640 Monedas', price: '72.000 COP', original: '98.000 COP', badge: '-27%', delivery: 'Instante' },
+        6: { name: ' 5280 Monedas', price: '130.000 COP', original: '180.000 COP', badge: '-28%', delivery: 'Instante' },
+        7: { name: ' 10560 Monedas', price: '240.000 COP', original: '330.000 COP', badge: '-27%', delivery: 'Instante' },
+      };
 
-    function updateCheckout(id) {
-      const p = products[id];
-      if (!p) return;
+      function updateCheckout(id) {
+        const p = products[id];
+        if (!p) return;
 
-      document.getElementById('checkoutName').textContent  = p.name;
-      document.getElementById('checkoutPrice').textContent = p.price;
+        document.getElementById('checkoutName').textContent = p.name;
+        document.getElementById('checkoutPrice').textContent = p.price;
 
-      const imgEl  = document.getElementById('checkoutImg');
-      const cardImg = document.querySelector('.product-card[data-id="' + id + '"] img');
-      if (imgEl && cardImg) {
-        imgEl.src = cardImg.getAttribute('src');
-        imgEl.style.display = '';
-      } else if (imgEl) {
-        imgEl.style.display = 'none';
+        const imgEl = document.getElementById('checkoutImg');
+        const cardImg = document.querySelector('.product-card[data-id="' + id + '"] img');
+        if (imgEl && cardImg) {
+          imgEl.src = cardImg.getAttribute('src');
+          imgEl.style.display = '';
+        } else if (imgEl) {
+          imgEl.style.display = 'none';
+        }
+
+        const origEl = document.getElementById('checkoutOriginal');
+        const badgeEl = document.getElementById('checkoutBadge');
+
+        if (p.original) {
+          origEl.textContent = p.original;
+          badgeEl.textContent = p.badge;
+          origEl.style.display = '';
+          badgeEl.style.display = '';
+        } else {
+          origEl.style.display = 'none';
+          badgeEl.style.display = 'none';
+        }
+
+        document.getElementById('instructionText').innerHTML =
+          'KONAMI\u00ae | ' + p.name.replace(/[\u{1FA99}\u{1F4B0}]/gu, '').trim() +
+          ' \uD83C\uDFAE<br>' +
+          '<span class="flag">\uD83C\uDF10</span> Region: Global<br>' +
+          '<span class="flag warn">\u26D4</span> IMPORTANT NOTE BEFORE PURCHASE';
       }
 
-      const origEl  = document.getElementById('checkoutOriginal');
-      const badgeEl = document.getElementById('checkoutBadge');
+      function initCards() {
+        const cards = document.querySelectorAll('.product-card');
+        if (cards.length === 0) { setTimeout(initCards, 100); return; }
 
-      if (p.original) {
-        origEl.textContent    = p.original;
-        badgeEl.textContent   = p.badge;
-        origEl.style.display  = '';
-        badgeEl.style.display = '';
-      } else {
-        origEl.style.display  = 'none';
-        badgeEl.style.display = 'none';
-      }
-
-      document.getElementById('instructionText').innerHTML =
-        'KONAMI\u00ae | ' + p.name.replace(/[\u{1FA99}\u{1F4B0}]/gu, '').trim() +
-        ' \uD83C\uDFAE<br>' +
-        '<span class="flag">\uD83C\uDF10</span> Region: Global<br>' +
-        '<span class="flag warn">\u26D4</span> IMPORTANT NOTE BEFORE PURCHASE';
-    }
-
-    function initCards() {
-      const cards = document.querySelectorAll('.product-card');
-      if (cards.length === 0) { setTimeout(initCards, 100); return; }
-
-      cards.forEach(function(card) {
-        card.addEventListener('click', function() {
-          cards.forEach(function(c) { c.classList.remove('selected'); });
-          card.classList.add('selected');
-          updateCheckout(parseInt(card.getAttribute('data-id')));
+        cards.forEach(function (card) {
+          card.addEventListener('click', function () {
+            cards.forEach(function (c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+            updateCheckout(parseInt(card.getAttribute('data-id')));
+          });
         });
-      });
 
-      var def = document.querySelector('.product-card[data-id="2"]');
-      if (def) { def.classList.add('selected'); updateCheckout(2); }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCards);
-    } else {
-      initCards();
-    }
-
-    // Buy button
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('#btnBuy');
-      if (!btn) return;
-
-      var jugadorId = document.getElementById('jugadorIdInput').value.trim();
-      if (!jugadorId) {
-        alert('⚠️ Por favor ingresa tu ID de jugador antes de continuar.');
-        document.getElementById('jugadorIdInput').focus();
-        return;
+        var def = document.querySelector('.product-card[data-id="2"]');
+        if (def) { def.classList.add('selected'); updateCheckout(2); }
       }
 
-      var producto = document.getElementById('checkoutName').textContent.trim();
-      var precio   = document.getElementById('checkoutPrice').textContent.replace(/[^0-9]/g, '');
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCards);
+      } else {
+        initCards();
+      }
 
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '../php/crear_orden.php';
+      // Buy button
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('#btnBuy');
+        if (!btn) return;
 
-      [['producto', producto], ['precio', precio], ['jugador_id', jugadorId]].forEach(function(pair) {
-        var input = document.createElement('input');
-        input.type  = 'hidden';
-        input.name  = pair[0];
-        input.value = pair[1];
-        form.appendChild(input);
+        var jugadorId = document.getElementById('jugadorIdInput').value.trim();
+        if (!jugadorId) {
+          alert('⚠️ Por favor ingresa tu ID de jugador antes de continuar.');
+          document.getElementById('jugadorIdInput').focus();
+          return;
+        }
+
+        var producto = document.getElementById('checkoutName').textContent.trim();
+        var precio = document.getElementById('checkoutPrice').textContent.replace(/[^0-9]/g, '');
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '../php/crear_orden.php';
+
+        [['producto', producto], ['precio', precio], ['jugador_id', jugadorId]].forEach(function (pair) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = pair[0];
+          input.value = pair[1];
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
       });
 
-      document.body.appendChild(form);
-      form.submit();
-    });
-
-  })();
+    })();
   </script>
 
 </body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/validaciones.js"></script>
-    <script src="assets/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/validaciones.js"></script>
+<script src="assets/js/script.js"></script>
+
 </html>

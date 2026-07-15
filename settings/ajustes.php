@@ -51,15 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $correo = mysqli_real_escape_string($conexion, $row['correo']);
 
-/*
-|--------------------------------------------------------------------------
-| ACTIVIDAD
-|--------------------------------------------------------------------------
-| OJO:
-| Mantengo esta lógica usando únicamente nombres confirmados en tu archivo.
-| Si luego me confirmas cómo se relaciona `ordenes` con el usuario,
-| te lo ajusto para que todo sea por usuario logueado.
-*/
 $total_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes"))['total'] ?? 0;
 $total_aprobadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'aprobada'"))['total'] ?? 0;
 $total_rechazadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'rechazada'"))['total'] ?? 0;
@@ -74,6 +65,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,19 +78,28 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
 
     <style>
         :root {
-            --bg-main: #1E212C;
+            /* Nueva paleta estandarizada */
+            --color-primary: #FF6C0C;
+            --color-secondary-1: #00CFB4;
+            --color-secondary-2: #4C5F71;
+            --color-secondary-3: #0062A8;
+            --color-secondary-4: #1E212C;
+            --color-secondary-5: #7D868C;
+            --text-main: #f1f5f9;
+
+            /* Variables específicas del componente */
+            --bg-main: #0d0e10;
             --bg-sidebar: #1E212C;
-            --bg-card: #1E212C;
-            --bg-card-soft: #4C5F71;
-            --border: rgba(255,255,255,0.08);
-            --text-main: #f5f7fa;
-            --text-soft: #7d868c;
-            --text-muted: #7d868c;
+            --bg-card: #1E2128;
+            --bg-card-soft: #1E2128;
+            --border: rgba(255, 255, 255, 0.08);
+            --text-soft: #7D868C;
+            --text-muted: #4C5F71;
             --yellow: #FF6C0C;
             --blue-strong: #0062A8;
             --orange: #FF6C0C;
             --success: #00CFB4;
-            --shadow: 0 12px 30px rgba(0,0,0,0.22);
+            --shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
             --radius-lg: 16px;
             --radius-md: 12px;
         }
@@ -146,20 +147,21 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             padding: 10px 14px;
             border: 1px solid var(--border);
             border-radius: 10px;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             transition: .2s ease;
         }
 
         .back-link:hover {
             color: #fff;
-            border-color: rgba(255,255,255,0.16);
-            background: rgba(255,255,255,0.04);
+            border-color: rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .topbar-title {
             font-size: 1.6rem;
             font-weight: 800;
             margin: 0;
+            color: var(--text-main);
         }
 
         .topbar-subtitle {
@@ -169,7 +171,6 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .settings-layout {
-            
             display: grid;
             grid-template-columns: 270px 1fr;
             gap: 20px;
@@ -177,20 +178,20 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .settings-sidebar {
-            background:  #0e0f0f;
+            background: rgba(30, 33, 44, 0.85);
             border-radius: 16px;
             padding: 16px;
             position: sticky;
             top: 20px;
             box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
         .sidebar-menu {
-            background: #000000;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            border-radius: 12px;    
+            border-radius: 12px;
         }
 
         .sidebar-link {
@@ -199,7 +200,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             gap: 12px;
             padding: 12px 14px;
             border-radius: 10px;
-            color: #f1f5f9;
+            color: var(--text-main);
             font-weight: 600;
             transition: .2s ease;
         }
@@ -207,18 +208,23 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         .sidebar-link i {
             width: 18px;
             text-align: center;
-            color: #dce5ec;
+            color: var(--text-soft);
         }
 
         .sidebar-link.active,
         .sidebar-link:hover {
-            background: var(--yellow);
-            color: #000000;
+            background: var(--color-primary);
+            color: #0d0e10;
+        }
+
+        .sidebar-link.active i,
+        .sidebar-link:hover i {
+            color: #0d0e10;
         }
 
         .sidebar-divider {
             height: 1px;
-            background: rgba(255,255,255,0.08);
+            background: var(--border);
             margin: 12px 4px;
         }
 
@@ -239,28 +245,27 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
             overflow: hidden;
-            
         }
 
         .card-header {
-            background-color: #000000;
+            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
             padding: 18px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border);
         }
 
         .card-title {
             margin: 0;
             font-size: 1rem;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-main);
         }
 
         .card-arrow {
-            color: #93a0ac;
+            color: var(--text-soft);
             font-size: 1rem;
         }
 
@@ -288,7 +293,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             height: 62px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.08);
+            border: 2px solid var(--border);
             flex-shrink: 0;
         }
 
@@ -299,8 +304,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #FF6C0C, #d88e11);
-            color: #111;
+            background: linear-gradient(135deg, var(--color-primary), #c99010);
+            color: #0d0e10;
             font-size: 1.45rem;
             font-weight: 800;
             flex-shrink: 0;
@@ -323,17 +328,17 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             gap: .5rem;
             padding: 10px 14px;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid var(--border);
             color: #fff;
             font-weight: 700;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
             transition: .2s ease;
             white-space: nowrap;
         }
 
         .btn-profile:hover {
-            border-color: rgba(255,255,255,0.22);
-            background: rgba(255,255,255,0.05);
+            border-color: rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
         }
 
@@ -350,12 +355,12 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .info-label {
-            color: #9aa6b2;
+            color: var(--text-soft);
             font-size: .92rem;
         }
 
         .info-value {
-            color: #f8fafc;
+            color: var(--text-main);
             font-size: .96rem;
             font-weight: 600;
             word-break: break-word;
@@ -369,7 +374,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .verified-badge i {
-            color: #8fe26a;
+            color: var(--color-secondary-1);
         }
 
         .config-link {
@@ -391,8 +396,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             text-align: center;
             padding: 14px 10px;
             border-radius: 12px;
-            background: rgba(255,255,255,0.015);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border);
         }
 
         .activity-number {
@@ -403,9 +408,25 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             color: #fff;
         }
 
+        .activity-number.pending {
+            color: var(--color-primary);
+        }
+
+        .activity-number.total {
+            color: var(--text-main);
+        }
+
+        .activity-number.approved {
+            color: var(--color-secondary-1);
+        }
+
+        .activity-number.rejected {
+            color: #dc3545;
+        }
+
         .activity-label {
             font-size: .88rem;
-            color: #d5dde5;
+            color: var(--text-soft);
         }
 
         .settings-card {
@@ -441,15 +462,15 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .alert-box.success {
-            background: rgba(73,199,116,0.12);
-            border: 1px solid rgba(73,199,116,0.28);
-            color: #8ee4a9;
+            background: rgba(0, 207, 180, 0.12);
+            border: 1px solid rgba(0, 207, 180, 0.28);
+            color: var(--color-secondary-1);
         }
 
         .alert-box.error {
-            background: rgba(255,106,0,0.10);
-            border: 1px solid rgba(255,106,0,0.25);
-            color: #ffb07a;
+            background: rgba(220, 53, 69, 0.10);
+            border: 1px solid rgba(220, 53, 69, 0.25);
+            color: #dc3545;
         }
 
         .settings-form {
@@ -467,13 +488,13 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
             margin-bottom: 8px;
             font-size: .92rem;
             font-weight: 700;
-            color: #dbe4ec;
+            color: var(--text-soft);
         }
 
         .form-control-custom {
             width: 100%;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: var(--bg-card-soft);
+            border: 1px solid var(--border);
+            background: rgba(30, 33, 44, 0.6);
             color: #fff;
             border-radius: 12px;
             padding: 12px 14px;
@@ -482,8 +503,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .form-control-custom:focus {
-            border-color: var(--blue-strong);
-            box-shadow: 0 0 0 3px rgba(63,115,154,0.18);
+            border-color: var(--color-secondary-3);
+            box-shadow: 0 0 0 3px rgba(0, 98, 168, 0.18);
         }
 
         textarea.form-control-custom {
@@ -505,8 +526,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
 
         .btn-save {
             border: none;
-            background: #FF6C0C;
-            color: #fff;
+            background: var(--color-primary);
+            color: #0d0e10;
             font-weight: 800;
             border-radius: 12px;
             padding: 12px 18px;
@@ -514,7 +535,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
 
         .btn-save:hover {
-            background: #e0a61a;
+            background: var(--color-secondary-3);
+            color: #fff;
         }
 
         @media (max-width: 1100px) {
@@ -563,6 +585,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         }
     </style>
 </head>
+
 <body>
     <div class="settings-page">
         <div class="topbar">
@@ -614,7 +637,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
                                     <?php else: ?>
                                         <div class="avatar-fallback"><?= $initial ?></div>
                                     <?php endif; ?>
-                                     <div>
+                                    <div>
                                         <h3 class="profile-name"><?= htmlspecialchars($row['usuario']) ?></h3>
                                         <div class="profile-id">ID de usuario: <?= htmlspecialchars($row['id']) ?></div>
                                     </div>
@@ -639,7 +662,8 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
                                     <div class="info-label">Teléfono</div>
                                     <div class="info-value">
                                         <span style="color: var(--text-soft);">No configurado</span>
-                                        <a href="#configuracion" class="config-link" style="margin-left: 10px;">Agregar ahora</a>
+                                        <a href="#configuracion" class="config-link" style="margin-left: 10px;">Agregar
+                                            ahora</a>
                                     </div>
                                 </div>
 
@@ -649,20 +673,6 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
                                         <?= !empty($row['location']) ? htmlspecialchars($row['location']) : '<span style="color: var(--text-soft);">No definida</span>' ?>
                                     </div>
                                 </div>
-
-                                <!-- <div class="info-row">
-                                    <div class="info-label">Miembro desde</div>
-                                    <div class="info-value">
-                                        <?= htmlspecialchars(substr($row['created_at'] ?? 'N/A', 0, 10)) ?>
-                                    </div>
-                                </div> -->
-
-                                <!--<?php if (!empty($row['bio'])): ?>
-                                    <div class="info-row">
-                                        <div class="info-label">Bio</div>
-                                        <div class="info-value"><?= htmlspecialchars($row['bio']) ?></div>
-                                    </div>
-                                <?php endif; ?> -->
                             </div>
                         </div>
                     </article>
@@ -676,108 +686,28 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
                         <div class="activity-card-body">
                             <div class="activity-grid">
                                 <div class="activity-item">
-                                    <div class="activity-number"><?= $total_pendientes ?></div>
+                                    <div class="activity-number pending"><?= $total_pendientes ?></div>
                                     <div class="activity-label">Pendiente</div>
                                 </div>
 
                                 <div class="activity-item">
-                                    <div class="activity-number"><?= $total_ordenes ?></div>
+                                    <div class="activity-number total"><?= $total_ordenes ?></div>
                                     <div class="activity-label">Total órdenes</div>
                                 </div>
 
                                 <div class="activity-item">
-                                    <div class="activity-number"><?= $total_aprobadas ?></div>
+                                    <div class="activity-number approved"><?= $total_aprobadas ?></div>
                                     <div class="activity-label">Aprobado</div>
                                 </div>
 
                                 <div class="activity-item">
-                                    <div class="activity-number"><?= $total_rechazadas ?></div>
+                                    <div class="activity-number rejected"><?= $total_rechazadas ?></div>
                                     <div class="activity-label">Rechazado</div>
                                 </div>
                             </div>
                         </div>
                     </article>
                 </section>
-
-                <!--<section id="configuracion" class="card-panel settings-card">
-                    <div class="settings-card-header">
-                        <div>
-                            <h2 class="settings-card-title">Configuración</h2>
-                            <p class="settings-card-desc">
-                                Aquí puedes actualizar algunos datos visibles de tu perfil.
-                            </p>
-                        </div>
-                    </div>
-
-                    <?php if ($alerta): ?>
-                        <div class="alert-box <?= $alerta_tipo ?>">
-                            <?= htmlspecialchars($alerta) ?>
-                        </div>
-                    <?php endif; ?>
-
-                    <form method="POST" class="settings-form">
-                        <div class="form-group">
-                            <label class="form-label">Usuario</label>
-                            <input 
-                                type="text"
-                                class="form-control-custom"
-                                value="<​?= htmlspecialchars($row['usuario']) ?>"
-                                readonly
-                            >
-                            <div class="readonly-note">Este campo se muestra solo como referencia.</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Correo electrónico</label>
-                            <input 
-                                type="email"
-                                class="form-control-custom"
-                                value="<​?= htmlspecialchars($row['correo']) ?>"
-                                readonly
-                            >
-                            <div class="readonly-note">Este campo se muestra solo como referencia.</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="location">Ubicación</label>
-                            <input 
-                                type="text"
-                                id="location"
-                                name="location"
-                                class="form-control-custom"
-                                value="<​?= htmlspecialchars($row['location'] ?? '') ?>"
-                                placeholder="Ej: Bogotá, Colombia"
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Imagen de perfil</label>
-                            <input 
-                                type="text"
-                                class="form-control-custom"
-                                value="<​?= htmlspecialchars($row['profile_image'] ?? '') ?>"
-                                readonly
-                            >
-                            <div class="readonly-note">Si luego quieres, te ayudo a montar aquí el cambio de avatar.</div>
-                        </div>
-
-                        <div class="form-group full">
-                            <label class="form-label" for="bio">Bio</label>
-                            <textarea
-                                id="bio"
-                                name="bio"
-                                class="form-control-custom"
-                                placeholder="Escribe una pequeña descripción para tu perfil..."
-                            ><?= htmlspecialchars($row['bio'] ?? '') ?></textarea>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-save">
-                                Guardar cambios
-                            </button>
-                        </div>
-                    </form>
-                </section> -->
             </main>
         </div>
     </div>
@@ -809,4 +739,5 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
         });
     </script>
 </body>
+
 </html>

@@ -1,7 +1,9 @@
 ﻿<?php
 session_start();
 $autoloadPath = __DIR__ . '/../vendor/autoload.php';
-if (file_exists($autoloadPath)) { require_once $autoloadPath; }
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
 require_once __DIR__ . '/http_client.php';
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
@@ -18,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
 // Recibir y limpiar datos
-$servicio   = trim($_POST['servicio']   ?? '');
-$plan       = trim($_POST['plan']       ?? '');
-$precio     = trim($_POST['precio']     ?? '');
+$servicio = trim($_POST['servicio'] ?? '');
+$plan = trim($_POST['plan'] ?? '');
+$precio = trim($_POST['precio'] ?? '');
 $usuario_id = trim($_POST['usuario_id'] ?? '');
 
 // Validación básica
@@ -33,18 +36,18 @@ if (empty($servicio) || empty($plan) || empty($precio) || empty($usuario_id)) {
 }
 
 // Sanitizar
-$servicio   = mysqli_real_escape_string($conexion, $servicio);
-$plan       = mysqli_real_escape_string($conexion, $plan);
-$precio     = mysqli_real_escape_string($conexion, $precio);
+$servicio = mysqli_real_escape_string($conexion, $servicio);
+$plan = mysqli_real_escape_string($conexion, $plan);
+$precio = mysqli_real_escape_string($conexion, $precio);
 $usuario_id = mysqli_real_escape_string($conexion, $usuario_id);
 
 // Calcular próximo cobro (1 mes desde hoy) y fecha fin (12 meses desde hoy)
 $next_payment = date('Y-m-d', strtotime('+1 month'));
-$fecha_fin    = date('Y-m-d', strtotime('+12 months'));
+$fecha_fin = date('Y-m-d', strtotime('+12 months'));
 
 // Insertar en tabla recurrencias
 $estado = "pendiente";
-$query  = "INSERT INTO recurrencias (servicio, plan, precio, usuario_id, estado, periodicidad, next_payment, fecha_fin)
+$query = "INSERT INTO recurrencias (servicio, plan, precio, usuario_id, estado, periodicidad, next_payment, fecha_fin)
            VALUES ('$servicio', '$plan', '$precio', '$usuario_id', '$estado', 'M', '$next_payment', '$fecha_fin')";
 
 $resultado = mysqli_query($conexion, $query);
@@ -59,14 +62,14 @@ $rec_id = mysqli_insert_id($conexion);
 // 🔄 WEB CHECKOUT — PlaceToPay con RECURRENCIA
 // ══════════════════════════════════════════
 
-$login     = "2d9eaf1e662518756a3d78806543af5b";
+$login = "2d9eaf1e662518756a3d78806543af5b";
 $secretKey = "3YC5brb5eAR4xBGQ";
-$url       = "https://checkout-test.placetopay.com/api/session";
+$url = "https://checkout-test.placetopay.com/api/session";
 
 // Auth
-$seed     = date('c');
-$nonce    = bin2hex(random_bytes(16));
-$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$seed = date('c');
+$nonce = bin2hex(random_bytes(16));
+$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
 $nonceB64 = base64_encode($nonce);
 
 // Descripción limpia
@@ -75,36 +78,36 @@ $descripcion = substr(preg_replace('/[^a-zA-Z0-9 ]/u', '', $servicio . ' ' . $pl
 // Request con campo recurring
 $data = [
     "locale" => "es_CO",
-    "auth"   => [
-        "login"   => $login,
+    "auth" => [
+        "login" => $login,
         "tranKey" => $tranKey,
-        "nonce"   => $nonceB64,
-        "seed"    => $seed
+        "nonce" => $nonceB64,
+        "seed" => $seed
     ],
     // Pre-diligenciar correo del usuario
-    "buyer"  => [
+    "buyer" => [
         "email" => $usuario_id
     ],
     "payment" => [
-        "reference"   => "REC-" . (string)$rec_id,
+        "reference" => "REC-" . (string) $rec_id,
         "description" => $descripcion,
-        "amount"      => [
+        "amount" => [
             "currency" => "COP",
-            "total"    => (float)$precio
+            "total" => (float) $precio
         ],
         // ← CLAVE: campo recurring para cobro automático mensual
-        "recurring"   => [
-            "periodicity"   => "M",          // M = mensual
-            "interval"      => "1",           // cada 1 mes
-            "nextPayment"   => $next_payment, // próximo cobro
-            "maxPeriods"    => 12             // máximo 12 meses
+        "recurring" => [
+            "periodicity" => "M",          // M = mensual
+            "interval" => "1",           // cada 1 mes
+            "nextPayment" => $next_payment, // próximo cobro
+            "maxPeriods" => 12             // máximo 12 meses
         ]
     ],
     "expiration" => date('c', strtotime('+1 hour')),
-    "returnUrl"  => "http://localhost/plance/retorno_rec.php?rec=" . $rec_id,
-    "notifyUrl"  => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
-    "ipAddress"  => $_SERVER['REMOTE_ADDR'],
-    "userAgent"  => $_SERVER['HTTP_USER_AGENT']
+    "returnUrl" => "http://localhost/plance/retorno_rec.php?rec=" . $rec_id,
+    "notifyUrl" => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
+    "ipAddress" => $_SERVER['REMOTE_ADDR'],
+    "userAgent" => $_SERVER['HTTP_USER_AGENT']
 ];
 
 // Llamada a PlaceToPay

@@ -9,10 +9,11 @@ if (!isset($_SESSION['usuario'])) {
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
-$id   = intval($_GET['id']   ?? 0);
+$id = intval($_GET['id'] ?? 0);
 $tipo = $_GET['tipo'] ?? '';
 
 $tipos_permitidos = ['orden', 'suscripcion', 'recurrencia'];
@@ -22,26 +23,29 @@ if (!$id || !in_array($tipo, $tipos_permitidos)) {
 }
 
 $id_safe = mysqli_real_escape_string($conexion, $id);
-$correo  = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
+$correo = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
 
 // Obtener la transacción según el tipo
 if ($tipo === 'orden') {
-    $trx = mysqli_fetch_assoc(mysqli_query($conexion,
+    $trx = mysqli_fetch_assoc(mysqli_query(
+        $conexion,
         "SELECT *, 'orden' as tipo FROM ordenes WHERE id = '$id_safe' AND estado = 'aprobada'"
     ));
-    $nombre   = $trx['producto']   ?? '';
-    $usuario  = $trx['jugador_id'] ?? '';
+    $nombre = $trx['producto'] ?? '';
+    $usuario = $trx['jugador_id'] ?? '';
 } elseif ($tipo === 'suscripcion') {
-    $trx = mysqli_fetch_assoc(mysqli_query($conexion,
+    $trx = mysqli_fetch_assoc(mysqli_query(
+        $conexion,
         "SELECT *, 'suscripcion' as tipo FROM suscripciones WHERE id = '$id_safe' AND estado = 'aprobada' AND usuario_id = '$correo'"
     ));
-    $nombre  = ($trx['plataforma'] ?? '') . ' — ' . ($trx['plan'] ?? '');
+    $nombre = ($trx['plataforma'] ?? '') . ' — ' . ($trx['plan'] ?? '');
     $usuario = $trx['usuario_id'] ?? '';
 } else {
-    $trx = mysqli_fetch_assoc(mysqli_query($conexion,
+    $trx = mysqli_fetch_assoc(mysqli_query(
+        $conexion,
         "SELECT *, 'recurrencia' as tipo FROM recurrencias WHERE id = '$id_safe' AND estado = 'aprobada' AND usuario_id = '$correo'"
     ));
-    $nombre  = ($trx['servicio'] ?? '') . ' — ' . ($trx['plan'] ?? '');
+    $nombre = ($trx['servicio'] ?? '') . ' — ' . ($trx['plan'] ?? '');
     $usuario = $trx['usuario_id'] ?? '';
 }
 
@@ -50,12 +54,13 @@ if (!$trx) {
     exit();
 }
 
-$msg      = $_SESSION['reverso_msg']      ?? '';
+$msg = $_SESSION['reverso_msg'] ?? '';
 $msg_type = $_SESSION['reverso_msg_type'] ?? '';
 unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,17 +69,42 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"
+        rel="stylesheet" />
 </head>
 <style>
     :root {
-        --bg-base: #0d0e10; --bg-surface: #16181c;
-        --bg-card: #1e2128; --border: #2e3038;
-        --text-primary: #f0f1f3; --text-secondary: #8a8d96;
-        --font-display: 'Barlow ', sans-serif;
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+
+        /* Variables específicas del componente */
+        --bg-base: #0d0e10;
+        --bg-surface: #16181c;
+        --bg-card: #1E2128;
+        --border: #4C5F71;
+        --text-primary: #f0f1f3;
+        --text-secondary: #7D868C;
+        --font-display: 'Barlow', sans-serif;
         --font-body: 'Barlow', sans-serif;
+        --color-success: #00CFB4;
+        --color-danger: #dc3545;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
     body {
         background-color: var(--bg-base);
         color: var(--text-primary);
@@ -82,133 +112,309 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
     }
-    .navbar { background-color: #0f0f0fa9 !important; backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+
+    .navbar {
+        background-color: rgba(30, 33, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+    }
 
     .detalle-layout {
-        max-width: 900px; margin: 2rem auto;
-        padding: 0 1.2rem 3rem;
-        display: grid; grid-template-columns: 1fr 300px;
-        gap: 1.2rem; align-items: start;
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 0 1.5rem 3rem;
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 1.5rem;
+        align-items: start;
     }
 
     .pcard {
         background: var(--bg-surface);
         border: 1px solid var(--border);
-        border-radius: 14px; padding: 1.4rem 1.6rem;
+        border-radius: 16px;
+        padding: 1.6rem 2rem;
     }
+
     .pcard-title {
-        font-family: var(--font-display); font-size: 0.78rem;
-        font-weight: 700; letter-spacing: 0.1em;
-        text-transform: uppercase; color: var(--text-secondary);
-        margin-bottom: 1rem; padding-bottom: 0.6rem;
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.8rem;
         border-bottom: 1px solid var(--border);
     }
+
     .info-row {
-        display: flex; justify-content: space-between;
-        padding: 0.5rem 0; font-size: 0.875rem;
-        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 0;
+        font-size: 0.95rem;
+        border-bottom: 1px solid rgba(76, 95, 113, 0.25);
     }
-    .info-row:last-child { border-bottom: none; }
-    .info-row span:first-child { color: var(--text-secondary); }
-    .info-row span:last-child  { font-weight: 600; color: var(--text-primary); text-align: right; max-width: 60%; }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-row span:first-child {
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .info-row span:last-child {
+        font-weight: 600;
+        color: var(--text-primary);
+        text-align: right;
+        max-width: 65%;
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
 
     .estado-badge {
-        display: inline-block; padding: 0.2rem 0.2rem;
-        border-radius: 4px; font-size: 0.78rem; font-weight: 400;
-        font-family: var(--font-display); letter-spacing: 0.05em;
-        background: rgba(62,207,142,0.15); color: #3ecf8e;
+        display: inline-block;
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        font-family: var(--font-display);
+        letter-spacing: 0.05em;
+        background: rgba(0, 207, 180, 0.15);
+        color: var(--color-secondary-1);
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     /* Botón opciones */
-    .opciones-wrap { position: relative; }
+    .opciones-wrap {
+        position: relative;
+    }
+
     .btn-opciones {
-        width: 100%; padding: 0.75rem 1rem;
-        background: #e05252; color: #fff;
-        border: none; border-radius: 8px;
-        font-family: var(--font-display); font-size: 1rem;
-        font-weight: 800; letter-spacing: 0.05em;
-        text-transform: uppercase; cursor: pointer;
-        display: flex; align-items: center;
+        width: 100%;
+        padding: 0.85rem 1.2rem;
+        background: var(--color-danger);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
         justify-content: space-between;
         transition: background 0.2s;
     }
-    .btn-opciones:hover { background: #c93d3d; }
+
+    .btn-opciones:hover {
+        background: #b02a37;
+    }
 
     .opciones-menu {
         display: none;
-        position: absolute; top: calc(100% + 6px);
-        left: 0; right: 0;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
         background: var(--bg-surface);
         border: 1px solid var(--border);
-        border-radius: 10px; overflow: hidden;
+        border-radius: 12px;
+        overflow: hidden;
         z-index: 99;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         animation: dropFade 0.15s ease;
     }
+
     @keyframes dropFade {
-        from { opacity: 0; transform: translateY(-6px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-    .opciones-menu.show { display: block; }
+
+    .opciones-menu.show {
+        display: block;
+    }
 
     .opcion-item {
-        display: flex; align-items: center; gap: 0.6rem;
-        padding: 0.75rem 1rem; font-size: 0.88rem;
-        color: var(--text-primary); cursor: pointer;
-        transition: background 0.15s; text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.85rem 1.2rem;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: background 0.15s;
+        text-decoration: none;
         border-bottom: 1px solid var(--border);
     }
-    .opcion-item:last-child { border-bottom: none; }
-    .opcion-item:hover { background: rgba(255,255,255,0.05); text-decoration: none; }
-    .opcion-item.danger { color: #e05252; }
-    .opcion-item.danger:hover { background: rgba(224,82,82,0.1); }
+
+    .opcion-item:last-child {
+        border-bottom: none;
+    }
+
+    .opcion-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+    }
+
+    .opcion-item.danger {
+        color: var(--color-danger);
+    }
+
+    .opcion-item.danger:hover {
+        background: rgba(220, 53, 69, 0.1);
+    }
 
     /* Info box reverso */
     .reverso-info {
-        background: rgba(224,82,82,0.08);
-        border: 1px solid rgba(224,82,82,0.2);
-        border-radius: 8px; padding: 0.75rem 1rem;
-        margin-top: 1rem; font-size: 0.82rem;
-        color: #e05252; line-height: 1.5;
+        background: rgba(220, 53, 69, 0.08);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        margin-top: 1.2rem;
+        font-size: 0.85rem;
+        color: var(--color-danger);
+        line-height: 1.6;
     }
 
-    .alert-success-custom { background: rgba(62,207,142,0.12); color: #3ecf8e; border: 1px solid rgba(62,207,142,0.3); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.88rem; }
-    .alert-error-custom   { background: rgba(224,82,82,0.12);  color: #e05252; border: 1px solid rgba(224,82,82,0.3);  border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.88rem; }
+    .reverso-info i {
+        margin-right: 0.4rem;
+    }
 
-    @media (max-width: 700px) {
-        .detalle-layout { grid-template-columns: 1fr; }
+    .alert-success-custom {
+        background: rgba(0, 207, 180, 0.12);
+        color: var(--color-secondary-1);
+        border: 1px solid rgba(0, 207, 180, 0.3);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        font-size: 0.92rem;
+    }
+
+    .alert-error-custom {
+        background: rgba(220, 53, 69, 0.12);
+        color: var(--color-danger);
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+        font-size: 0.92rem;
+    }
+
+    /* Modal carta */
+    .modal-carta-btn {
+        background: var(--color-primary);
+        color: #0d0e10;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .modal-carta-btn:hover {
+        background: var(--color-secondary-3);
+        color: #fff;
+    }
+
+    /* Badge de tipo */
+    .tipo-badge {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(255, 108, 12, 0.12);
+        color: var(--color-primary);
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .detalle-layout {
+            grid-template-columns: 1fr;
+            padding: 0 1rem 2rem;
+        }
+
+        .pcard {
+            padding: 1.2rem 1.2rem;
+        }
+
+        .info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.3rem;
+            padding: 0.6rem 0;
+        }
+
+        .info-row span:last-child {
+            text-align: left;
+            max-width: 100%;
+            width: 100%;
+        }
     }
 </style>
+
 <body>
     <?php
-    $nav_back_url  = "reversos.php";
+    $nav_back_url = "reversos.php";
     $nav_back_text = "Volver";
-    $nav_base      = "../";
+    $nav_base = "../";
     require_once '../php/navbar.php';
     ?>
 
     <?php if ($msg): ?>
-    <div style="max-width:900px;margin:1rem auto;padding:0 1.2rem;">
-        <div class="alert-<?= $msg_type === 'success' ? 'success' : 'error' ?>-custom">
-            <?= htmlspecialchars($msg) ?>
+        <div style="max-width:960px;margin:1rem auto;padding:0 1.5rem;">
+            <div class="alert-<?= $msg_type === 'success' ? 'success' : 'error' ?>-custom">
+                <?= htmlspecialchars($msg) ?>
+            </div>
         </div>
-    </div>
     <?php endif; ?>
 
     <div class="detalle-layout">
 
         <!-- IZQUIERDA: Info transacción -->
         <div>
-            <div class="pcard" style="margin-bottom:1.2rem;">
+            <div class="pcard" style="margin-bottom:1.5rem;">
                 <div class="pcard-title">📋 Información de la transacción</div>
 
                 <div class="info-row">
                     <span>ID Transacción</span>
-                    <span>#<?= htmlspecialchars($trx['id']) ?></span>
+                    <span><strong>#<?= htmlspecialchars($trx['id']) ?></strong></span>
                 </div>
                 <div class="info-row">
                     <span>Tipo</span>
-                    <span><?= $tipo === 'orden' ? '🎮 Pago Básico' : ($tipo === 'suscripcion' ? '📺 Suscripción' : '<i class="bi bi-calendar-check-fill" style="color: #0062A8;"></i>Recurrencia') ?></span>
+                    <span>
+                        <?php if ($tipo === 'orden'): ?>
+                            <span class="tipo-badge">🎮 Pago Básico</span>
+                        <?php elseif ($tipo === 'suscripcion'): ?>
+                            <span class="tipo-badge"
+                                style="background:rgba(0,207,180,0.12); color:var(--color-secondary-1);">📺
+                                Suscripción</span>
+                        <?php else: ?>
+                            <span class="tipo-badge"
+                                style="background:rgba(0,98,168,0.12); color:var(--color-secondary-3);"><i
+                                    class="bi bi-calendar-check-fill"></i> Recurrencia</span>
+                        <?php endif; ?>
+                    </span>
                 </div>
                 <div class="info-row">
                     <span>Producto / Servicio</span>
@@ -216,15 +422,17 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                 </div>
                 <div class="info-row">
                     <span>Estado</span>
-                    <span><span class="estado-badge">APROBADA</span></span>
+                    <span><span class="estado-badge">✅ APROBADA</span></span>
                 </div>
                 <div class="info-row">
                     <span>Fecha</span>
                     <span><?= htmlspecialchars($trx['created_at']) ?></span>
                 </div>
-                <div class="info-row">
-                    <span>Total pagado</span>
-                    <span style="color:#3ecf8e; font-size:1.1rem;">$<?= number_format($trx['precio'], 0, ',', '.') ?> COP</span>
+                <div class="info-row" style="border-bottom: none; padding-top: 0.8rem; margin-top: 0.2rem;">
+                    <span style="font-size: 1rem; font-weight: 600;">Total pagado</span>
+                    <span
+                        style="color:var(--color-secondary-1); font-size: 1.4rem; font-weight: 800;">$<?= number_format($trx['precio'], 0, ',', '.') ?>
+                        COP</span>
                 </div>
             </div>
 
@@ -232,12 +440,12 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                 <div class="pcard-title"><i class="bi bi-person-vcard-fill"></i> Información del pagador</div>
                 <div class="info-row">
                     <span>Usuario / Correo</span>
-                    <span><?= htmlspecialchars($usuario) ?></span>
+                    <span><strong><?= htmlspecialchars($usuario) ?></strong></span>
                 </div>
-                <div class="info-row">
+                <div class="info-row" style="border-bottom: none;">
                     <span>Request ID</span>
-                    <span style="font-size:0.75rem; color:#8a8d96;">
-                        <?= !empty($trx['request_id']) ? htmlspecialchars(substr($trx['request_id'], 0, 20)) . '...' : 'N/A' ?>
+                    <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:400;">
+                        <?= !empty($trx['request_id']) ? htmlspecialchars(substr($trx['request_id'], 0, 24)) . '…' : 'N/A' ?>
                     </span>
                 </div>
             </div>
@@ -267,9 +475,8 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                         </a>
 
                         <!-- Reversar transacción -->
-                        <a href="javascript:void(0)"
-                           onclick="confirmarReverso(<?= $id ?>, '<?= $tipo ?>')"
-                           class="opcion-item danger">
+                        <a href="javascript:void(0)" onclick="confirmarReverso(<?= $id ?>, '<?= $tipo ?>')"
+                            class="opcion-item danger">
                             <i class="bi bi-arrow-counterclockwise"></i> Reversar transacción
                         </a>
 
@@ -278,7 +485,8 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
 
                 <div class="reverso-info">
                     <i class="bi bi-exclamation-triangle-fill"></i>
-                    <strong> Importante:</strong> El reverso solo está disponible antes de la hora de corte del día. Una vez reversada la transacción, el dinero será devuelto automáticamente.
+                    <strong>Importante:</strong> El reverso solo está disponible antes de la hora de corte del día. Una
+                    vez reversada la transacción, el dinero será devuelto automáticamente.
                 </div>
             </div>
         </div>
@@ -286,27 +494,39 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
     </div>
 
     <!-- Modal carta de reverso -->
-    <div id="modalCarta" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:999; align-items:center; justify-content:center;">
-        <div style="background:#16181c; border:1px solid #2e3038; border-radius:14px; padding:2rem; max-width:500px; width:90%; font-family:'Barlow',sans-serif;">
-            <h3 style="font-family:'Barlow',sans-serif; font-size:1.3rem; font-weight:800; color:#f0f1f3; margin-bottom:1rem;">
+    <div id="modalCarta"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:999; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+        <div
+            style="background:var(--bg-surface); border:1px solid var(--border); border-radius:16px; padding:2rem 2rem; max-width:520px; width:92%; font-family:'Barlow',sans-serif; max-height:90vh; overflow-y:auto;">
+            <h3
+                style="font-family:'Barlow',sans-serif; font-size:1.4rem; font-weight:800; color:var(--text-primary); margin-bottom:1.2rem;">
                 📄 Carta de Reverso
             </h3>
-            <div style="background:#1e2128; border-radius:8px; padding:1.2rem; font-size:0.85rem; color:#8a8d96; line-height:1.7;">
-                <p style="color:#f0f1f3; font-weight:600; margin-bottom:0.5rem;">Señores PlaceToPay / Evertec:</p>
-                <p>Por medio de la presente, el usuario <strong style="color:#f0f1f3;"><?= htmlspecialchars($usuario) ?></strong> solicita formalmente el reverso de la transacción con los siguientes datos:</p>
+            <div
+                style="background:var(--bg-card); border-radius:10px; padding:1.4rem; font-size:0.88rem; color:var(--text-secondary); line-height:1.8;">
+                <p style="color:var(--text-primary); font-weight:600; margin-bottom:0.5rem;">Señores PlaceToPay /
+                    Evertec:</p>
+                <p>Por medio de la presente, el usuario <strong
+                        style="color:var(--text-primary);"><?= htmlspecialchars($usuario) ?></strong> solicita
+                    formalmente el reverso de la transacción con los siguientes datos:</p>
                 <br>
-                <p>• <strong style="color:#f0f1f3;">ID Transacción:</strong> #<?= htmlspecialchars($trx['id']) ?></p>
-                <p>• <strong style="color:#f0f1f3;">Producto:</strong> <?= htmlspecialchars($nombre) ?></p>
-                <p>• <strong style="color:#f0f1f3;">Valor:</strong> $<?= number_format($trx['precio'], 0, ',', '.') ?> COP</p>
-                <p>• <strong style="color:#f0f1f3;">Fecha:</strong> <?= htmlspecialchars($trx['created_at']) ?></p>
+                <p>• <strong style="color:var(--text-primary);">ID Transacción:</strong>
+                    #<?= htmlspecialchars($trx['id']) ?></p>
+                <p>• <strong style="color:var(--text-primary);">Producto:</strong> <?= htmlspecialchars($nombre) ?></p>
+                <p>• <strong style="color:var(--text-primary);">Valor:</strong>
+                    $<?= number_format($trx['precio'], 0, ',', '.') ?> COP</p>
+                <p>• <strong style="color:var(--text-primary);">Fecha:</strong>
+                    <?= htmlspecialchars($trx['created_at']) ?></p>
                 <br>
-                <p>Atentamente,<br><strong style="color:#f0f1f3;"><?= htmlspecialchars($_SESSION['usuario']) ?></strong></p>
+                <p>Atentamente,<br><strong
+                        style="color:var(--text-primary);"><?= htmlspecialchars($_SESSION['usuario']) ?></strong></p>
             </div>
-            <div style="display:flex; gap:0.8rem; margin-top:1.2rem;">
-                <button onclick="window.print()" style="flex:1; padding:0.65rem; background:#FF6C0C; color:#0d0e10; border:none; border-radius:8px; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.95rem; text-transform:uppercase; cursor:pointer;">
+            <div style="display:flex; gap:0.8rem; margin-top:1.5rem;">
+                <button onclick="window.print()" class="modal-carta-btn" style="flex:1;">
                     🖨️ Imprimir
                 </button>
-                <button onclick="document.getElementById('modalCarta').style.display='none'" style="flex:1; padding:0.65rem; background:transparent; color:#8a8d96; border:1px solid #2e3038; border-radius:8px; font-family:'Barlow',sans-serif; font-weight:700; font-size:0.95rem; text-transform:uppercase; cursor:pointer;">
+                <button onclick="document.getElementById('modalCarta').style.display='none'"
+                    style="flex:1; padding:0.75rem; background:transparent; color:var(--text-secondary); border:1px solid var(--border); border-radius:10px; font-family:'Barlow',sans-serif; font-weight:700; font-size:0.95rem; text-transform:uppercase; cursor:pointer; transition:border-color 0.2s;">
                     Cerrar
                 </button>
             </div>
@@ -316,7 +536,7 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function toggleOpciones() {
-            const menu    = document.getElementById('opcionesMenu');
+            const menu = document.getElementById('opcionesMenu');
             const chevron = document.getElementById('chevron');
             menu.classList.toggle('show');
             chevron.className = menu.classList.contains('show')
@@ -324,7 +544,7 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
         }
 
         // Cerrar menú si click fuera
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!e.target.closest('.opciones-wrap')) {
                 document.getElementById('opcionesMenu').classList.remove('show');
                 document.getElementById('chevron').className = 'bi bi-chevron-down';
@@ -346,6 +566,14 @@ unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
                 window.location.href = '../php/procesar_reverso.php?id=' + id + '&tipo=' + tipo;
             }
         }
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.getElementById('modalCarta').style.display = 'none';
+            }
+        });
     </script>
 </body>
+
 </html>

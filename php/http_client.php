@@ -1,6 +1,7 @@
 <?php
 if (!function_exists('p2p_json_post')) {
-    function p2p_json_post_via_curl_cli(string $url, string $jsonBody): array {
+    function p2p_json_post_via_curl_cli(string $url, string $jsonBody): array
+    {
         if (!function_exists('exec')) {
             return [false, 'exec() no esta disponible para usar curl.exe'];
         }
@@ -57,7 +58,8 @@ if (!function_exists('p2p_json_post')) {
         return [$response, ''];
     }
 
-    function p2p_json_post(string $url, array $payload): array {
+    function p2p_json_post(string $url, array $payload): array
+    {
         $jsonBody = json_encode($payload);
         if ($jsonBody === false) {
             return [false, 'No se pudo serializar el payload JSON'];

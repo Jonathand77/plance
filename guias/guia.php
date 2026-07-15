@@ -1,35 +1,49 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guía</title>
-        <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"
+        rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
+    <link rel="stylesheet"
+        href="../assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/estilos.css'); ?>">
 </head>
 
-
 <style>
+    :root {
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+    }
+
     body {
         background:
-            radial-gradient(circle at top left, rgba(0, 0, 0, 0.18), transparent 28%),
-            radial-gradient(circle at top right, rgba(0, 0, 0, 0.12), transparent 26%),
-            linear-gradient(180deg, #202020 0%, #000000 45%, #000000 100%);
+            radial-gradient(circle at top left, rgba(255, 108, 12, 0.08), transparent 28%),
+            radial-gradient(circle at top right, rgba(0, 98, 168, 0.06), transparent 26%),
+            linear-gradient(180deg, #1E212C 0%, #0d0e10 45%, #0d0e10 100%);
         color: white;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -39,10 +53,10 @@
     }
 
     .navbar {
-        background-color: rgba(0, 0, 0, 0.72) !important;
+        background-color: rgba(30, 33, 44, 0.85) !important;
         backdrop-filter: blur(10px);
         color: #ffff;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid var(--color-secondary-2);
     }
 
     .guide-hero {
@@ -58,12 +72,16 @@
         font-weight: 800;
         margin-bottom: 0.65rem;
         letter-spacing: 0.02em;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-secondary-5));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
     .guide-subtitle {
         max-width: 760px;
         margin: 0 auto;
-        color: rgba(226, 232, 240, 0.78);
+        color: var(--color-secondary-5);
         font-size: 1.02rem;
     }
 
@@ -89,27 +107,32 @@
         color: #ffffff;
         border-radius: 22px;
         overflow: hidden;
-        border: 1px solid rgba(255, 217, 0, 0.14);
+        border: 1px solid rgba(255, 108, 12, 0.14);
         background:
-            linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(26, 26, 26, 0.98) 100%);
+            linear-gradient(180deg, rgba(20, 20, 20, 0.98) 0%, rgba(30, 33, 44, 0.98) 100%);
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
         transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
         animation: fadeIn 0.8s ease forwards;
         opacity: 0;
     }
 
-    .doc-card:nth-child(1) { animation-delay: 0.08s; }
-    .doc-card:nth-child(2) { animation-delay: 0.16s; }
+    .doc-card:nth-child(1) {
+        animation-delay: 0.08s;
+    }
+
+    .doc-card:nth-child(2) {
+        animation-delay: 0.16s;
+    }
 
     .doc-card::before {
         content: "";
         position: absolute;
         inset: 0;
         background:
-            linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
         background-size: 42px 42px;
-        mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), transparent 78%);
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent 78%);
         pointer-events: none;
     }
 
@@ -117,14 +140,14 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at top center, rgba(0, 0, 0, 0.12), transparent 45%);
+        background: radial-gradient(circle at top center, rgba(255, 108, 12, 0.06), transparent 45%);
         pointer-events: none;
     }
 
     .doc-card:hover {
         transform: translateY(-8px);
-        border-color: rgba(236, 181, 31, 0.4);
-        box-shadow: 0 26px 60px rgba(0, 0, 0, 0.35);
+        border-color: rgba(255, 108, 12, 0.4);
+        box-shadow: 0 26px 60px rgba(255, 108, 12, 0.15);
         color: #ffffff;
     }
 
@@ -149,8 +172,8 @@
         width: 180px;
         height: 128px;
         border-radius: 18px;
-        border: 1px solid rgba(255,255,255,0.12);
-        background: linear-gradient(180deg, #747d8e 0%, #5d6678 100%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(180deg, var(--color-secondary-5) 0%, var(--color-secondary-2) 100%);
     }
 
     .visual-window::before {
@@ -173,9 +196,9 @@
         width: 74px;
         height: 96px;
         border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.08);
-        background: linear-gradient(180deg, #7f8797 0%, #667082 100%);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: linear-gradient(180deg, var(--color-secondary-5) 0%, var(--color-secondary-2) 100%);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     }
 
     .doc-card--user .doc-card-visual .mini-lines,
@@ -195,8 +218,8 @@
         width: 188px;
         height: 132px;
         border-radius: 18px;
-        border: 1px solid rgba(255,255,255,0.12);
-        background: linear-gradient(180deg, #7a8191 0%, #646d7f 100%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(180deg, var(--color-secondary-3) 0%, var(--color-secondary-2) 100%);
     }
 
     .visual-panel::before {
@@ -211,13 +234,13 @@
     }
 
     .visual-panel::after {
-        content: "<​/>";
+        content: "</>";
         position: absolute;
         inset: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: rgba(0, 0, 0, 0.55);
+        color: rgba(255, 255, 255, 0.25);
         font-size: 3rem;
         font-weight: 800;
         letter-spacing: 0.08em;
@@ -227,24 +250,41 @@
         position: absolute;
         padding: 0.18rem 0.45rem;
         border-radius: 7px;
-        background: rgba(255,255,255,0.9);
-        color: #8c92a0;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--color-secondary-2);
         font-size: 0.72rem;
         font-weight: 800;
-        box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
         z-index: 2;
     }
 
-    .tag-api { left: calc(50% - 108px); top: 36px; }
-    .tag-dev { right: calc(50% - 115px); top: 32px; }
-    .tag-user { right: calc(50% - 102px); bottom: 34px; }
+    .tag-api {
+        left: calc(50% - 108px);
+        top: 36px;
+        background: rgba(255, 108, 12, 0.9);
+        color: #fff;
+    }
+
+    .tag-dev {
+        right: calc(50% - 115px);
+        top: 32px;
+        background: rgba(0, 98, 168, 0.9);
+        color: #fff;
+    }
+
+    .tag-user {
+        right: calc(50% - 102px);
+        bottom: 34px;
+        background: rgba(0, 207, 180, 0.9);
+        color: #fff;
+    }
 
     .visual-shield {
         width: 122px;
         height: 144px;
-        background: linear-gradient(180deg, #667082 0%, #4f5868 100%);
+        background: linear-gradient(180deg, var(--color-secondary-3) 0%, var(--color-secondary-2) 100%);
         clip-path: polygon(50% 0%, 88% 14%, 88% 58%, 76% 84%, 50% 100%, 24% 84%, 12% 58%, 12% 14%);
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .visual-shield::before {
@@ -290,7 +330,7 @@
     }
 
     .doc-card-text {
-        color: rgba(226, 232, 240, 0.78);
+        color: var(--color-secondary-5);
         line-height: 1.55;
         font-size: 1rem;
         margin-bottom: 1.4rem;
@@ -301,10 +341,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: rgb(255, 209, 5);
+        color: var(--color-primary);
         font-weight: 700;
         font-size: 1rem;
-        border-top: 1px solid rgba(255,255,255,0.07);
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
         padding-top: 1rem;
     }
 
@@ -318,9 +358,9 @@
     }
 
     .back:hover {
-        background: #ff6811f5;
+        background: var(--color-primary);
         transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(255, 94, 0, 0.5);
+        box-shadow: 0 5px 15px rgba(255, 108, 12, 0.4);
     }
 
     @keyframes fadeIn {
@@ -328,6 +368,7 @@
             opacity: 0;
             transform: translateY(18px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -347,57 +388,62 @@
 
 
 <body class="d-flex flex-column min-vh-100">
-    
-        <?php
-            $nav_back_url  = "../home.php";
-            $nav_back_text = "Atras";
-            $nav_base      = "../";
-            require_once '../php/navbar.php';
-        ?>
 
-        <div class="guide-hero">
-            <h4 class="guide-title">Guías</h4>
-            <p class="guide-subtitle">Explora la documentación principal de tu proyecto en un formato visual inspirado en la documentación oficial. Elige la guía de usuario o la guía técnica para continuar.</p>
+    <?php
+    $nav_back_url = "../home.php";
+    $nav_back_text = "Atras";
+    $nav_base = "../";
+    require_once '../php/navbar.php';
+    ?>
+
+    <div class="guide-hero">
+        <h4 class="guide-title">Guías</h4>
+        <p class="guide-subtitle">Explora la documentación principal de tu proyecto en un formato visual inspirado en la
+            documentación oficial. Elige la guía de usuario o la guía técnica para continuar.</p>
+    </div>
+
+    <section class="guide-section">
+        <div class="guide-grid">
+
+            <a href="guia-user.php" class="doc-card doc-card--user">
+                <div class="doc-card-visual">
+                    <div class="visual-window"></div>
+                    <span class="mini-lines"></span>
+                </div>
+                <div class="doc-card-body">
+                    <h2 class="doc-card-title">Guía Usuario</h2>
+                    <p class="doc-card-text">Conoce el flujo de compra, la experiencia del comprador y la navegación
+                        básica para entender cómo interactúa el usuario con la plataforma.</p>
+                    <div class="doc-card-link">
+                        <span>Ver Guía</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="guia-developer.php" class="doc-card doc-card--developer">
+                <div class="doc-card-visual">
+                    <div class="visual-panel"></div>
+                    <span class="mini-tag tag-api">API</span>
+                    <span class="mini-tag tag-dev">DEV</span>
+                    <span class="mini-tag tag-user">SDK</span>
+                </div>
+                <div class="doc-card-body">
+                    <h2 class="doc-card-title">Guía Developer</h2>
+                    <p class="doc-card-text">Accede a la parte técnica de la integración, estructura del proyecto y
+                        recursos clave para implementar los servicios de PlacetoPay de forma ordenada.</p>
+                    <div class="doc-card-link">
+                        <span>Ver Guía</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
         </div>
+    </section>
 
-        <section class="guide-section">
-            <div class="guide-grid">
-
-                <a href="guia-user.php" class="doc-card doc-card--user">
-                    <div class="doc-card-visual">
-                        <div class="visual-window"></div>
-                        <span class="mini-lines"></span>
-                    </div>
-                    <div class="doc-card-body">
-                        <h2 class="doc-card-title">Guía Usuario</h2>
-                        <p class="doc-card-text">Conoce el flujo de compra, la experiencia del comprador y la navegación básica para entender cómo interactúa el usuario con la plataforma.</p>
-                        <div class="doc-card-link">
-                            <span>Ver Guia</span>
-                            <i class="bi bi-arrow-right"></i>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="guia-developer.php" class="doc-card doc-card--developer">
-                    <div class="doc-card-visual">
-                        <div class="visual-panel"></div>
-                        <span class="mini-tag tag-api">API</span>
-                        <span class="mini-tag tag-dev">DEV</span>
-                        <span class="mini-tag tag-user">SDK</span>
-                    </div>
-                    <div class="doc-card-body">
-                        <h2 class="doc-card-title">Guía Developer</h2>
-                        <p class="doc-card-text">Accede a la parte técnica de la integración, estructura del proyecto y recursos clave para implementar los servicios de PlacetoPay de forma ordenada.</p>
-                        <div class="doc-card-link">
-                            <span>Ver Guia</span>
-                            <i class="bi bi-arrow-right"></i>
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-        </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/validaciones.js"></script>
 </body>
+
 </html>

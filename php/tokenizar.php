@@ -13,7 +13,8 @@ if (!isset($_SESSION['usuario'])) {
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
 $sub_id = intval($_GET['sub'] ?? 0);
@@ -35,35 +36,35 @@ if (!$subs) {
 // 🔐 Crear sesión de SOLO tokenización
 // subscription puro — NO cobra nada
 // ══════════════════════════════════════════
-$login     = "2d9eaf1e662518756a3d78806543af5b";
+$login = "2d9eaf1e662518756a3d78806543af5b";
 $secretKey = "3YC5brb5eAR4xBGQ";
-$url       = "https://checkout-test.placetopay.com/api/session";
+$url = "https://checkout-test.placetopay.com/api/session";
 
-$seed     = date('c');
-$nonce    = bin2hex(random_bytes(16));
-$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$seed = date('c');
+$nonce = bin2hex(random_bytes(16));
+$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
 $nonceB64 = base64_encode($nonce);
 
 $data = [
     "locale" => "es_CO",
-    "auth"   => [
-        "login"   => $login,
+    "auth" => [
+        "login" => $login,
         "tranKey" => $tranKey,
-        "nonce"   => $nonceB64,
-        "seed"    => $seed
+        "nonce" => $nonceB64,
+        "seed" => $seed
     ],
     "buyer" => [
         "email" => $subs['usuario_id']
     ],
     // subscription puro — solo tokeniza, NO cobra
     "subscription" => [
-        "reference"   => "TOKEN-SUB-" . $sub_id,
+        "reference" => "TOKEN-SUB-" . $sub_id,
         "description" => "Guardar tarjeta para " . $subs['plataforma'] . " " . $subs['plan']
     ],
     "expiration" => date('c', strtotime('+30 minutes')),
-    "returnUrl"  => "http://localhost/plance/retorno_token.php?sub=" . $sub_id,
-    "ipAddress"  => $_SERVER['REMOTE_ADDR'],
-    "userAgent"  => $_SERVER['HTTP_USER_AGENT']
+    "returnUrl" => "http://localhost/plance/retorno_token.php?sub=" . $sub_id,
+    "ipAddress" => $_SERVER['REMOTE_ADDR'],
+    "userAgent" => $_SERVER['HTTP_USER_AGENT']
 ];
 
 [$response, $curlError] = p2p_json_post($url, $data);
@@ -77,7 +78,7 @@ $result = json_decode($response, true);
 if (isset($result['processUrl'])) {
     // Guardar requestId de tokenización en sesión
     $_SESSION['token_requestId'] = $result['requestId'] ?? '';
-    $_SESSION['token_sub_id']    = $sub_id;
+    $_SESSION['token_sub_id'] = $sub_id;
     header("Location: " . $result['processUrl']);
     exit();
 } else {

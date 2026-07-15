@@ -18,10 +18,11 @@ if (empty($_SESSION['gw_pending'])) {
 }
 
 $producto = $_SESSION['gw_pending']['producto'] ?? 'Producto';
-$precio   = $_SESSION['gw_pending']['precio']   ?? 0;
+$precio = $_SESSION['gw_pending']['precio'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,24 +34,46 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base:    #0d0e10;
+            /* Nueva paleta estandarizada */
+            --color-primary: #FF6C0C;
+            --color-secondary-1: #00CFB4;
+            --color-secondary-2: #4C5F71;
+            --color-secondary-3: #0062A8;
+            --color-secondary-4: #1E212C;
+            --color-secondary-5: #7D868C;
+            --text-main: #f1f5f9;
+
+            /* Variables específicas del componente */
+            --bg-base: #0d0e10;
             --bg-surface: #16181c;
-            --bg-card:    #1e2128;
-            --border:     #2e3038;
-            --accent:     #FF6C0C;
-            --accent-soft: rgba(240,180,41,0.1);
-            --text-primary:   #f0f1f3;
-            --text-secondary: #8a8d96;
+            --bg-card: #1E2128;
+            --border: #4C5F71;
+            --accent: #FF6C0C;
+            --accent-soft: rgba(255, 108, 12, 0.10);
+            --text-primary: #f0f1f3;
+            --text-secondary: #7D868C;
             --font-display: 'Barlow', sans-serif;
-            --font-body:    'Barlow', sans-serif;
+            --font-body: 'Barlow', sans-serif;
+            --color-success: #00CFB4;
+            --color-danger: #dc3545;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: var(--bg-base);
             color: var(--text-primary);
             font-family: var(--font-body);
             min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 2rem;
         }
 
@@ -59,122 +82,270 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
             border: 1px solid var(--border);
             border-radius: 18px;
             padding: 2.5rem 2rem;
-            max-width: 520px; width: 100%;
+            max-width: 520px;
+            width: 100%;
             animation: fadeUp 0.4s ease both;
         }
+
         @keyframes fadeUp {
-            from { opacity:0; transform:translateY(16px); }
-            to   { opacity:1; transform:translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header */
         .demo-banner {
-            background: rgba(240,180,41,0.08);
-            border: 1px solid rgba(240,180,41,0.25);
-            border-radius: 10px; padding: 0.8rem 1rem;
-            text-align: center; margin-bottom: 1.8rem;
-            font-size: 0.88rem; color: var(--accent); font-weight: 600;
+            background: rgba(255, 108, 12, 0.08);
+            border: 1px solid rgba(255, 108, 12, 0.25);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            text-align: center;
+            margin-bottom: 1.8rem;
+            font-size: 0.88rem;
+            color: var(--accent);
+            font-weight: 600;
         }
-        .demo-banner strong { display: block; font-size: 1rem; margin-bottom: 0.2rem; }
+
+        .demo-banner strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
 
         .card-title-main {
             font-family: var(--font-display);
-            font-size: 1.6rem; font-weight: 800;
-            color: var(--text-primary); text-align: center;
-            margin-bottom: 0.4rem; letter-spacing: 0.02em;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
         }
+
         .card-subtitle {
-            text-align: center; color: var(--text-secondary);
-            font-size: 0.88rem; margin-bottom: 2rem; line-height: 1.5;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
         }
 
         /* Producto info */
         .product-info {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: 10px; padding: 0.9rem 1.2rem;
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 1.8rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
         }
-        .product-info-name { font-weight: 600; font-size: 0.9rem; }
-        .product-info-price { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; color: var(--accent); }
+
+        .product-info-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .product-info-price {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
 
         /* Estado selector */
         .estado-label {
-            font-family: var(--font-display); font-size: 0.75rem;
-            font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--text-secondary); margin-bottom: 0.6rem; display: block;
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+            display: block;
         }
 
-        .estados-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.7rem; margin-bottom: 1.5rem; }
+        .estados-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
 
         .estado-btn {
             border: 1.5px solid var(--border);
-            background: var(--bg-card); border-radius: 12px;
-            padding: 1rem 0.5rem; cursor: pointer;
-            text-align: center; transition: all 0.2s; position: relative;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem 0.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            position: relative;
         }
-        .estado-btn:hover { transform: translateY(-2px); }
-        .estado-btn.selected { box-shadow: 0 0 0 2px currentColor; }
 
-        .estado-btn.aprobada  { --c: #3ecf8e; }
-        .estado-btn.pendiente { --c: #FF6C0C; }
-        .estado-btn.rechazada { --c: #e05252; }
+        .estado-btn:hover {
+            transform: translateY(-2px);
+        }
 
-        .estado-btn.aprobada:hover,  .estado-btn.aprobada.selected  { border-color: #3ecf8e; background: rgba(62,207,142,0.08); }
-        .estado-btn.pendiente:hover, .estado-btn.pendiente.selected { border-color: #FF6C0C; background: rgba(240,180,41,0.08); }
-        .estado-btn.rechazada:hover, .estado-btn.rechazada.selected { border-color: #e05252; background: rgba(224,82,82,0.08); }
+        .estado-btn.selected {
+            box-shadow: 0 0 0 2px currentColor;
+        }
+
+        .estado-btn.aprobada {
+            --c: var(--color-success);
+        }
+
+        .estado-btn.pendiente {
+            --c: var(--color-primary);
+        }
+
+        .estado-btn.rechazada {
+            --c: var(--color-danger);
+        }
+
+        .estado-btn.aprobada:hover,
+        .estado-btn.aprobada.selected {
+            border-color: var(--color-success);
+            background: rgba(0, 207, 180, 0.08);
+        }
+
+        .estado-btn.pendiente:hover,
+        .estado-btn.pendiente.selected {
+            border-color: var(--color-primary);
+            background: rgba(255, 108, 12, 0.08);
+        }
+
+        .estado-btn.rechazada:hover,
+        .estado-btn.rechazada.selected {
+            border-color: var(--color-danger);
+            background: rgba(220, 53, 69, 0.08);
+        }
 
         .estado-btn .check {
-            display: none; position: absolute; top: 0.4rem; right: 0.5rem;
-            font-size: 0.7rem; font-weight: 900;
+            display: none;
+            position: absolute;
+            top: 0.4rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 900;
         }
-        .estado-btn.selected .check { display: block; color: var(--c); }
 
-        .estado-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
-        .estado-name {
-            font-family: var(--font-display); font-size: 0.95rem;
-            font-weight: 800; letter-spacing: 0.04em;
+        .estado-btn.selected .check {
+            display: block;
+            color: var(--c);
         }
-        .estado-btn.aprobada  .estado-name { color: #3ecf8e; }
-        .estado-btn.pendiente .estado-name { color: #FF6C0C; }
-        .estado-btn.rechazada .estado-name { color: #e05252; }
+
+        .estado-icon {
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .estado-name {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .estado-btn.aprobada .estado-name {
+            color: var(--color-success);
+        }
+
+        .estado-btn.pendiente .estado-name {
+            color: var(--color-primary);
+        }
+
+        .estado-btn.rechazada .estado-name {
+            color: var(--color-danger);
+        }
 
         /* Razón selector */
-        .razon-wrap { margin-bottom: 1.5rem; }
+        .razon-wrap {
+            margin-bottom: 1.5rem;
+        }
+
         .razon-select {
-            width: 100%; background: var(--bg-card);
-            border: 1.5px solid var(--border); border-radius: 10px;
-            color: var(--text-primary); font-family: var(--font-body);
-            font-size: 0.88rem; padding: 0.6rem 0.9rem; outline: none;
-            transition: border-color 0.2s; appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%238a8d96'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 0.8rem center;
+            width: 100%;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            padding: 0.6rem 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237D868C'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
             padding-right: 2rem;
         }
-        .razon-select:focus { border-color: var(--accent); }
-        .razon-select option { background: #1e2128; }
+
+        .razon-select:focus {
+            border-color: var(--accent);
+        }
+
+        .razon-select option {
+            background: var(--bg-card);
+        }
 
         /* Botón procesar */
         .btn-procesar {
-            width: 100%; padding: 0.9rem;
-            background: var(--accent); border: none; border-radius: 10px;
-            color: #0d0e10; font-family: var(--font-display);
-            font-size: 1.1rem; font-weight: 800; letter-spacing: 0.06em;
-            text-transform: uppercase; cursor: pointer;
-            transition: all 0.2s; display: flex;
-            align-items: center; justify-content: center; gap: 0.5rem;
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            color: #0d0e10;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
-        .btn-procesar:hover { background: #c99010; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(240,180,41,0.3); }
-        .btn-procesar:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .btn-procesar:hover {
+            background: #c99010;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 108, 12, 0.3);
+        }
+
+        .btn-procesar:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .cancel-link {
-            display: block; text-align: center; margin-top: 0.8rem;
-            font-size: 0.82rem; color: var(--text-secondary); text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 0.8rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-decoration: none;
             transition: color 0.2s;
         }
-        .cancel-link:hover { color: #e05252; }
+
+        .cancel-link:hover {
+            color: var(--color-danger);
+        }
     </style>
 </head>
+
 <body>
     <div class="main-card">
 
@@ -191,8 +362,8 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
 
         <!-- Info producto -->
         <div class="product-info">
-            <span class="product-info-name">ðŸŽ® <?= htmlspecialchars($producto) ?></span>
-            <span class="product-info-price">$<?= number_format((float)$precio, 0, ',', '.') ?> COP</span>
+            <span class="product-info-name">🎮 <?= htmlspecialchars($producto) ?></span>
+            <span class="product-info-price">$<?= number_format((float) $precio, 0, ',', '.') ?> COP</span>
         </div>
 
         <!-- Selector de estado -->
@@ -236,7 +407,7 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
             <input type="hidden" name="estado_elegido" id="estadoElegido" value="aprobada">
             <input type="hidden" name="razon_elegida" id="razonElegida" value="APPROVED_TRANSACTION">
             <?php foreach ($_SESSION['gw_pending'] as $key => $value): ?>
-            <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($value) ?>">
+                <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($value) ?>">
             <?php endforeach; ?>
         </form>
 
@@ -248,56 +419,57 @@ $precio   = $_SESSION['gw_pending']['precio']   ?? 0;
     </div>
 
     <script>
-    let estadoActual = 'aprobada';
+        let estadoActual = 'aprobada';
 
-    const razonesPorEstado = {
-        aprobada:  ['APPROVED_TRANSACTION (00)'],
-        pendiente: ['PENDING_TRANSACTION (?-)', 'PENDING_VALIDATION (?V)'],
-        rechazada: ['CANCELLED_TRANSACTION (?C)', 'FAILED_TRANSACTION (?F)', 'REJECTED_TRANSACTION (?R)']
-    };
+        const razonesPorEstado = {
+            aprobada: ['APPROVED_TRANSACTION (00)'],
+            pendiente: ['PENDING_TRANSACTION (?-)', 'PENDING_VALIDATION (?V)'],
+            rechazada: ['CANCELLED_TRANSACTION (?C)', 'FAILED_TRANSACTION (?F)', 'REJECTED_TRANSACTION (?R)']
+        };
 
-    const valoresPorEstado = {
-        aprobada:  ['APPROVED_TRANSACTION'],
-        pendiente: ['PENDING_TRANSACTION', 'PENDING_VALIDATION'],
-        rechazada: ['CANCELLED_TRANSACTION', 'FAILED_TRANSACTION', 'REJECTED_TRANSACTION']
-    };
+        const valoresPorEstado = {
+            aprobada: ['APPROVED_TRANSACTION'],
+            pendiente: ['PENDING_TRANSACTION', 'PENDING_VALIDATION'],
+            rechazada: ['CANCELLED_TRANSACTION', 'FAILED_TRANSACTION', 'REJECTED_TRANSACTION']
+        };
 
-    function selectEstado(estado, el) {
-        estadoActual = estado;
-        document.querySelectorAll('.estado-btn').forEach(b => b.classList.remove('selected'));
-        el.classList.add('selected');
-        document.getElementById('estadoElegido').value = estado;
+        function selectEstado(estado, el) {
+            estadoActual = estado;
+            document.querySelectorAll('.estado-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('estadoElegido').value = estado;
 
-        // Actualizar razones
-        const select = document.getElementById('razonSelect');
-        select.innerHTML = '';
-        razonesPorEstado[estado].forEach(function(label, i) {
-            const opt = document.createElement('option');
-            opt.value = valoresPorEstado[estado][i];
-            opt.textContent = label;
-            select.appendChild(opt);
-        });
-        actualizarRazon();
-    }
+            // Actualizar razones
+            const select = document.getElementById('razonSelect');
+            select.innerHTML = '';
+            razonesPorEstado[estado].forEach(function (label, i) {
+                const opt = document.createElement('option');
+                opt.value = valoresPorEstado[estado][i];
+                opt.textContent = label;
+                select.appendChild(opt);
+            });
+            actualizarRazon();
+        }
 
-    function actualizarRazon() {
-        const select = document.getElementById('razonSelect');
-        document.getElementById('razonElegida').value = select.value;
-    }
+        function actualizarRazon() {
+            const select = document.getElementById('razonSelect');
+            document.getElementById('razonElegida').value = select.value;
+        }
 
-    document.getElementById('razonSelect').addEventListener('change', actualizarRazon);
+        document.getElementById('razonSelect').addEventListener('change', actualizarRazon);
 
-    function procesar() {
-        actualizarRazon();
-        document.getElementById('btnProcesar').disabled = true;
-        document.getElementById('btnProcesar').innerHTML = '<i class="bi bi-hourglass-split"></i> Procesando...';
-        document.getElementById('estadoForm').submit();
-    }
+        function procesar() {
+            actualizarRazon();
+            document.getElementById('btnProcesar').disabled = true;
+            document.getElementById('btnProcesar').innerHTML = '<i class="bi bi-hourglass-split"></i> Procesando...';
+            document.getElementById('estadoForm').submit();
+        }
 
-    // Init
-    selectEstado('aprobada', document.querySelector('.estado-btn.aprobada'));
+        // Init
+        selectEstado('aprobada', document.querySelector('.estado-btn.aprobada'));
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

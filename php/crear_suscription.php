@@ -15,29 +15,31 @@ require_once 'conexion_be.php';
 require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
-$servicio   = trim($_POST['servicio']   ?? '');
-$plan       = trim($_POST['plan']       ?? '');
-$precio     = trim($_POST['precio']     ?? '');
+$servicio = trim($_POST['servicio'] ?? '');
+$plan = trim($_POST['plan'] ?? '');
+$precio = trim($_POST['precio'] ?? '');
 $usuario_id = trim($_POST['usuario_id'] ?? '');
 
 if (empty($servicio) || empty($plan) || empty($precio) || empty($usuario_id)) {
     die("❌ Faltan datos.");
 }
 
-$servicio   = mysqli_real_escape_string($conexion, $servicio);
-$plan       = mysqli_real_escape_string($conexion, $plan);
-$precio     = mysqli_real_escape_string($conexion, $precio);
+$servicio = mysqli_real_escape_string($conexion, $servicio);
+$plan = mysqli_real_escape_string($conexion, $plan);
+$precio = mysqli_real_escape_string($conexion, $precio);
 $usuario_id = mysqli_real_escape_string($conexion, $usuario_id);
 
 $estado = "pendiente";
-$query  = "INSERT INTO suscription (servicio, plan, precio, usuario_id, estado)
+$query = "INSERT INTO suscription (servicio, plan, precio, usuario_id, estado)
            VALUES ('$servicio', '$plan', '$precio', '$usuario_id', '$estado')";
 
 $resultado = mysqli_query($conexion, $query);
-if (!$resultado) die("❌ Error al guardar: " . mysqli_error($conexion));
+if (!$resultado)
+    die("❌ Error al guardar: " . mysqli_error($conexion));
 
 $sub_id = mysqli_insert_id($conexion);
 
@@ -45,40 +47,41 @@ $sub_id = mysqli_insert_id($conexion);
 // WEB CHECKOUT — Suscripción pura (subscription)
 // Solo tokeniza, NO cobra
 // ══════════════════════════════════════════
-$login     = "2d9eaf1e662518756a3d78806543af5b";
+$login = "2d9eaf1e662518756a3d78806543af5b";
 $secretKey = "3YC5brb5eAR4xBGQ";
-$url       = "https://checkout-test.placetopay.com/api/session";
+$url = "https://checkout-test.placetopay.com/api/session";
 
-$seed     = date('c');
-$nonce    = bin2hex(random_bytes(16));
-$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$seed = date('c');
+$nonce = bin2hex(random_bytes(16));
+$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
 $nonceB64 = base64_encode($nonce);
 
 $descripcion = substr(preg_replace('/[^a-zA-Z0-9 ]/u', '', $servicio . ' ' . $plan), 0, 80);
 
 $data = [
     "locale" => "es_CO",
-    "auth"   => [
-        "login"   => $login,
+    "auth" => [
+        "login" => $login,
         "tranKey" => $tranKey,
-        "nonce"   => $nonceB64,
-        "seed"    => $seed
+        "nonce" => $nonceB64,
+        "seed" => $seed
     ],
     "buyer" => ["email" => $usuario_id],
     // subscription puro — solo tokeniza la tarjeta, NO cobra
     "subscription" => [
-        "reference"   => "SUB-" . (string)$sub_id,
+        "reference" => "SUB-" . (string) $sub_id,
         "description" => $descripcion
     ],
     "expiration" => date('c', strtotime('+30 minutes')),
-    "returnUrl"  => "http://localhost/plance/retorno_suscription.php?sub=" . $sub_id,
-    "notifyUrl"  => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
-    "ipAddress"  => $_SERVER['REMOTE_ADDR'],
-    "userAgent"  => $_SERVER['HTTP_USER_AGENT']
+    "returnUrl" => "http://localhost/plance/retorno_suscription.php?sub=" . $sub_id,
+    "notifyUrl" => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
+    "ipAddress" => $_SERVER['REMOTE_ADDR'],
+    "userAgent" => $_SERVER['HTTP_USER_AGENT']
 ];
 
 [$response, $curlError] = p2p_json_post($url, $data);
-if (!$response) die("❌ Error de conexión: " . $curlError);
+if (!$response)
+    die("❌ Error de conexión: " . $curlError);
 
 $result = json_decode($response, true);
 

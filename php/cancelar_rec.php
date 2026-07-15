@@ -12,11 +12,12 @@ if (file_exists($autoloadPath)) {
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
-$rec_id      = intval($_GET['id'] ?? 0);
-$redirect    = '../historial/reg-rec.php';
+$rec_id = intval($_GET['id'] ?? 0);
+$redirect = '../historial/reg-rec.php';
 
 if (!$rec_id) {
     header("Location: $redirect");
@@ -24,10 +25,11 @@ if (!$rec_id) {
 }
 
 // Verificar que la recurrencia pertenece al usuario en sesión
-$rec_id_safe   = mysqli_real_escape_string($conexion, $rec_id);
-$correo_safe   = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
+$rec_id_safe = mysqli_real_escape_string($conexion, $rec_id);
+$correo_safe = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
 
-$rec = mysqli_fetch_assoc(mysqli_query($conexion,
+$rec = mysqli_fetch_assoc(mysqli_query(
+    $conexion,
     "SELECT * FROM recurrencias WHERE id = '$rec_id_safe' AND usuario_id = '$correo_safe'"
 ));
 
@@ -45,7 +47,8 @@ if (strtolower($rec['estado']) !== 'aprobada') {
 }
 
 // Actualizar estado a cancelada en BD
-mysqli_query($conexion,
+mysqli_query(
+    $conexion,
     "UPDATE recurrencias SET estado = 'cancelada' WHERE id = '$rec_id_safe'"
 );
 

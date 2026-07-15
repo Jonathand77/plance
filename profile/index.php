@@ -9,49 +9,39 @@ if (!isset($_SESSION['usuario'])) {
 require_once '../php/conexion_be.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
 $user_id = intval($_SESSION['user_id'] ?? 0);
-$row     = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
+$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
 
 if (!$row) {
     header("Location: ../index.php");
     exit();
 }
 
-$correo   = mysqli_real_escape_string($conexion, $row['correo']);
+$correo = mysqli_real_escape_string($conexion, $row['correo']);
 $total_ordenes_pago = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias "))['total'];
 
 $total_aprobadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias WHERE ordenes.estado = 'aprobada'"))['total'];
 
 $total_ordenes_rechazadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias WHERE ordenes.estado = 'rechazada'"))['total'];
 
-$total_ordenes  = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes "))['total'];
+$total_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes "))['total'];
 
-
-
-
-
-
-$total_subs      = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo'"))['total'];
+$total_subs = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo'"))['total'];
 
 $total_recurrencias = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo' "))['total'];
-
 
 $total_pendientes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'pendiente'"))['total'];
 
 // ── Gateway ──
-$total_gw_ordenes   = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_ordenes WHERE correo = '$correo'"))['total'] ?? 0;
-$total_gw_subs      = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_suscripciones WHERE correo = '$correo'"))['total'] ?? 0;
+$total_gw_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_ordenes WHERE correo = '$correo'"))['total'] ?? 0;
+$total_gw_subs = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_suscripciones WHERE correo = '$correo'"))['total'] ?? 0;
 $total_gw_suscription = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_suscription WHERE correo = '$correo'"))['total'] ?? 0;
 
-
-
-
-
 // ── Datos para el calendario (últimos 365 días) ──
-// Traer fechas de ordenes y suscripciones del usuario
 $actividad_dias = [];
 
 $res_ord = mysqli_query($conexion, "SELECT DATE(created_at) as dia, COUNT(*) as cnt FROM ordenes WHERE created_at >= DATE_SUB(NOW(), INTERVAL 365 DAY) GROUP BY dia");
@@ -66,22 +56,20 @@ while ($r = mysqli_fetch_assoc($res_sub)) {
 
 $actividad_json = json_encode($actividad_dias);
 
-$msg      = $_SESSION['profile_msg']      ?? '';
+$msg = $_SESSION['profile_msg'] ?? '';
 $msg_type = $_SESSION['profile_msg_type'] ?? '';
 unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
 
-
 // Valores por defecto
-$nav_back_url  = $nav_back_url  ?? 'home.php';
+$nav_back_url = $nav_back_url ?? 'home.php';
 $nav_back_text = $nav_back_text ?? 'volver';
-$nav_base      = $nav_base      ?? '../';
+$nav_base = $nav_base ?? '../';
 
 // Traer foto de perfil del usuario en sesión
-$nav_avatar    = '';
-$nav_initials  = '';
+$nav_avatar = '';
+$nav_initials = '';
 
 if (isset($_SESSION['user_id'])) {
-    // Reutilizar conexión si ya existe, si no crear una
     if (!isset($conexion)) {
         $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
     }
@@ -90,18 +78,17 @@ if (isset($_SESSION['user_id'])) {
         $nav_row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT profile_image, usuario FROM users WHERE id = '$nav_uid'"));
         if ($nav_row) {
             $nav_initials = strtoupper(substr($nav_row['usuario'] ?? 'U', 0, 1));
-            $img_path     = $nav_base . 'uploads/' . ($nav_row['profile_image'] ?? '');
+            $img_path = $nav_base . 'uploads/' . ($nav_row['profile_image'] ?? '');
             if (!empty($nav_row['profile_image']) && file_exists($nav_base . 'uploads/' . $nav_row['profile_image'])) {
                 $nav_avatar = $nav_base . 'uploads/' . htmlspecialchars($nav_row['profile_image']);
             }
         }
     }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,55 +103,70 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <style>
     :root {
-        --bg-base:        #19191a;
-        --bg-surface:     #212224;
-        --bg-card:        #1d1d1d;
-        --border:         #2e3038;
-        --accent:         #FF6C0C;
-        --accent-dark:    #c99010;
-        --text-primary:   #f0f1f3;
-        --text-secondary: #8a8d96;
-        --text-muted:     #555860;
-        --green:          #3ecf8e;
-        --font-display:   'Barlow', sans-serif;
-        --font-body:      'Barlow', sans-serif;
-        --radius-md:      10px;
-        --radius-lg:      14px;
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+
+        /* Variables específicas del componente */
+        --bg-base: #0d0e10;
+        --bg-surface: #16181c;
+        --bg-card: #1E2128;
+        --border: #4C5F71;
+        --accent: #FF6C0C;
+        --accent-dark: #c99010;
+        --text-primary: #f0f1f3;
+        --text-secondary: #7D868C;
+        --text-muted: #4C5F71;
+        --green: #00CFB4;
+        --font-display: 'Barlow', sans-serif;
+        --font-body: 'Barlow', sans-serif;
+        --radius-md: 10px;
+        --radius-lg: 14px;
+        --color-success: #00CFB4;
+        --color-danger: #dc3545;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        /* background-image: url(../assets/images/bg7.jpg); */
+    body {
         background-color: var(--bg-base);
-        
         color: var(--text-primary);
         font-family: var(--font-body);
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
-
-
         background-repeat: no-repeat;
         background-position: center;
         background-attachment: fixed;
         background-size: cover;
-
     }
+
     .navbar {
-        background-color: #0f0f0fa9 !important;
+        background-color: rgba(30, 33, 44, 0.85) !important;
         backdrop-filter: blur(8px);
         border-bottom: 1px solid var(--border);
     }
-        /* ── DROPDOWN ── */
+
+    /* ── DROPDOWN ── */
     .dropdown {
         position: relative;
         display: inline-block;
     }
 
     .dropbtn {
-        background: hsla(120, 2%, 10%, 0.84);
-        color: #FF6C0C;
-        border: 1.5px solid rgba(240, 180, 41, 0.3);
+        background: rgba(30, 33, 44, 0.84);
+        color: var(--accent);
+        border: 1.5px solid rgba(255, 108, 12, 0.3);
         border-radius: 8px;
         padding: 6px 14px;
         font-weight: 700;
@@ -175,9 +177,10 @@ if (isset($_SESSION['user_id'])) {
         align-items: center;
         gap: 0.3rem;
     }
+
     .dropbtn:hover {
-        border-color: #FF6C0C;
-        background: rgba(240, 180, 41, 0.1);
+        border-color: var(--accent);
+        background: rgba(255, 108, 12, 0.1);
     }
 
     .dropdown-content {
@@ -185,51 +188,61 @@ if (isset($_SESSION['user_id'])) {
         position: absolute;
         left: 0;
         top: calc(100% + 6px);
-        background: #16181c;
-        border: 1px solid #2e3038;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
         border-radius: 10px;
         min-width: 170px;
         z-index: 999;
         overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         animation: dropFade 0.15s ease;
     }
 
     @keyframes dropFade {
-        from { opacity: 0; transform: translateY(-6px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .dropdown-content a {
         display: block;
         padding: 0.6rem 1rem;
-        color: #f0f1f3;
+        color: var(--text-primary);
         font-size: 0.87rem;
         font-weight: 500;
         text-decoration: none;
         transition: background 0.15s, color 0.15s;
     }
+
     .dropdown-content a:hover {
-        background: rgba(240, 180, 41, 0.1);
-        color: #FF6C0C;
+        background: rgba(255, 108, 12, 0.1);
+        color: var(--accent);
         text-decoration: none;
     }
 
     .dropdown-content hr {
-        border-color: #2e3038;
+        border-color: var(--border);
         margin: 0.2rem 0;
     }
 
     .dropdown-content .cerrar-sesion {
-        color: #e05252 !important;
+        color: var(--color-danger) !important;
     }
+
     .dropdown-content .cerrar-sesion:hover {
-        background: rgba(224, 82, 82, 0.1) !important;
-        color: #e05252 !important;
+        background: rgba(220, 53, 69, 0.1) !important;
+        color: var(--color-danger) !important;
     }
 
-    .dropdown:hover .dropdown-content { display: block; }
-
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
     .profile-layout {
         max-width: 860px;
@@ -239,15 +252,17 @@ if (isset($_SESSION['user_id'])) {
         flex-direction: column;
         gap: 1.2rem;
     }
+
     .pcard {
         background: var(--bg-surface);
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 1.4rem 1.6rem;
     }
+
     .resumencard {
-        background: rgba(29, 29, 29, 0.8);
-        border: 1px solid rgba(255,255,255,0.1);
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
         border-radius: var(--radius-lg);
         padding: 1.4rem 1.6rem;
     }
@@ -263,194 +278,366 @@ if (isset($_SESSION['user_id'])) {
     }
 
     /* PERFIL HEADER */
-    .profile-header { display: flex; align-items: flex-start; gap: 1.5rem; }
+    .profile-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
 
     .avatar-img {
-        width: 90px; height: 90px;
-        border-radius: 50%; object-fit: cover;
-        border: 2.5px solid var(--accent); flex-shrink: 0;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2.5px solid var(--accent);
+        flex-shrink: 0;
     }
+
     .avatar-initials {
-        width: 90px; height: 90px;
+        width: 90px;
+        height: 90px;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-        display: flex; align-items: center; justify-content: center;
-        font-family: var(--font-display); font-size: 2rem; font-weight: 800;
-        color: #0d0e10; border: 2.5px solid var(--accent); flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0d0e10;
+        border: 2.5px solid var(--accent);
+        flex-shrink: 0;
     }
 
-    .profile-info { flex: 1; }
+    .profile-info {
+        flex: 1;
+    }
 
     .profile-top-row {
-        display: flex; align-items: center;
+        display: flex;
+        align-items: center;
         justify-content: space-between;
-        gap: 1rem; flex-wrap: wrap; margin-bottom: 0.3rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.3rem;
     }
 
     .profile-name {
         font-family: var(--font-display);
-        font-size: 1.8rem; font-weight: 800;
-        color: var(--text-primary); line-height: 1;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
     }
 
     .btn-edit {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        background: var(--bg-card); border: 1.5px solid var(--border);
-        color: var(--text-primary); border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        color: var(--text-primary);
+        border-radius: 8px;
         padding: 0.4rem 1rem;
-        font-family: var(--font-display); font-size: 0.88rem;
-        font-weight: 700; letter-spacing: 0.04em;
-        text-decoration: none; transition: all 0.2s; white-space: nowrap;
+        font-family: var(--font-display);
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        transition: all 0.2s;
+        white-space: nowrap;
     }
-    .btn-edit:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
 
-    .profile-correo { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+    .btn-edit:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .profile-correo {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
 
     .profile-bio {
-        font-size: 0.88rem; color: var(--text-secondary);
-        margin-bottom: 0.6rem; /* font-style: italic; */
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.6rem;
     }
 
-    .profile-meta { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .profile-meta {
+        display: flex;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+    }
 
     .meta-item {
-        font-size: 0.78rem; color: var(--text-muted);
-        display: flex; align-items: center; gap: 0.3rem;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
     }
 
     /* ACTIVIDAD */
     .activity-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
     }
+
     .activity-box {
-        background: var(--bg-card); border: 1px solid var(--border);
-        border-radius: var(--radius-md); padding: 1rem;
-        text-align: center; transition: border-color 0.2s;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        text-align: center;
+        transition: border-color 0.2s;
     }
-    .activity-box:hover { border-color: var(--accent); }
+
+    .activity-box:hover {
+        border-color: var(--accent);
+    }
+
     .activity-num {
-        font-family: var(--font-display); font-size: 2rem;
-        font-weight: 800; color: var(--accent); line-height: 1;
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent);
+        line-height: 1;
     }
-    .activity-label { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem; }
 
-
-     /* RESUMEN */
-     .summary-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem;
+    .activity-label {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        margin-top: 0.3rem;
     }
+
+    /* RESUMEN */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+    }
+
     .summary-box {
-        background: rgba(29, 29, 29, 0.8);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: var(--radius-md); padding: 1rem;
-        text-align: center; transition: border-color 0.2s;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        text-align: center;
+        transition: border-color 0.2s;
     }
-    .summary-box:hover { border-color: var(--accent); }
-    .summary-num {
-        font-family: var(--font-display); font-size: 2rem;
-        font-weight: 800; color: var(--accent); line-height: 1;
-    }
-    .summary-label { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.3rem; }
 
+    .summary-box:hover {
+        border-color: var(--accent);
+    }
+
+    .summary-num {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent);
+        line-height: 1;
+    }
+
+    .summary-label {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        margin-top: 0.3rem;
+    }
 
     /* Alerts */
-    .alert-custom { padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.88rem; }
-    .alert-success { background: rgba(62,207,142,0.12); color: #3ecf8e; border: 1px solid rgba(62,207,142,0.3); }
-    .alert-error   { background: rgba(224,82,82,0.12);  color: #e05252; border: 1px solid rgba(224,82,82,0.3); }
+    .alert-custom {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.88rem;
+    }
+
+    .alert-success {
+        background: rgba(0, 207, 180, 0.12);
+        color: var(--color-success);
+        border: 1px solid rgba(0, 207, 180, 0.3);
+    }
+
+    .alert-error {
+        background: rgba(220, 53, 69, 0.12);
+        color: var(--color-danger);
+        border: 1px solid rgba(220, 53, 69, 0.3);
+    }
 
     /* CALENDARIO */
     .calendar-header {
-        display: flex; justify-content: space-between;
-        align-items: center; margin-bottom: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
     }
+
     .calendar-total {
-        font-size: 0.82rem; color: var(--text-secondary);
+        font-size: 0.82rem;
+        color: var(--text-secondary);
     }
+
     .calendar-scroll {
         overflow-x: auto;
         padding-bottom: 0.4rem;
     }
+
     .calendar-grid {
-        display: flex; gap: 3px;
+        display: flex;
+        gap: 3px;
         min-width: max-content;
     }
+
     .cal-col {
-        display: flex; flex-direction: column; gap: 3px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
     }
+
     .cal-cell {
-        width: 13px; height: 13px;
+        width: 13px;
+        height: 13px;
         border-radius: 2px;
         background: var(--bg-card);
-        border: 1px solid rgba(255,255,255,0.04);
+        border: 1px solid rgba(255, 255, 255, 0.04);
         cursor: default;
         transition: transform 0.1s;
         position: relative;
     }
-    .cal-cell:hover { transform: scale(1.3); z-index: 10; }
-    .cal-cell.level-1 { background: rgba(240,180,41,0.25); }
-    .cal-cell.level-2 { background: rgba(240,180,41,0.5);  }
-    .cal-cell.level-3 { background: rgba(240,180,41,0.75); }
-    .cal-cell.level-4 { background: #FF6C0C; }
-    .cal-cell.empty   { background: transparent; border-color: transparent; cursor: default; }
+
+    .cal-cell:hover {
+        transform: scale(1.3);
+        z-index: 10;
+    }
+
+    .cal-cell.level-1 {
+        background: rgba(255, 108, 12, 0.25);
+    }
+
+    .cal-cell.level-2 {
+        background: rgba(255, 108, 12, 0.5);
+    }
+
+    .cal-cell.level-3 {
+        background: rgba(255, 108, 12, 0.75);
+    }
+
+    .cal-cell.level-4 {
+        background: var(--accent);
+    }
+
+    .cal-cell.empty {
+        background: transparent;
+        border-color: transparent;
+        cursor: default;
+    }
 
     .cal-months {
-        display: flex; gap: 3px;
+        display: flex;
+        gap: 3px;
         margin-bottom: 4px;
         min-width: max-content;
         padding-left: 0;
     }
+
     .cal-month-label {
-        font-size: 0.68rem; color: var(--text-muted);
+        font-size: 0.68rem;
+        color: var(--text-muted);
         white-space: nowrap;
     }
 
     .cal-legend {
-        display: flex; align-items: center; gap: 0.4rem;
-        margin-top: 0.6rem; justify-content: flex-end;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.6rem;
+        justify-content: flex-end;
     }
-    .cal-legend span { font-size: 0.72rem; color: var(--text-muted); }
+
+    .cal-legend span {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+    }
+
     .cal-legend-cell {
-        width: 12px; height: 12px; border-radius: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+    }
+
+    /* Botón volver */
+    .btn-back-nav {
+        color: var(--accent);
+        font-weight: 600;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn-back-nav:hover {
+        background: rgba(255, 108, 12, 0.10);
+        color: var(--accent);
+        text-decoration: none;
     }
 
     @media (max-width: 600px) {
-        .profile-header  { flex-direction: column; }
-        .activity-grid   { grid-template-columns: repeat(2, 1fr); }
-        .profile-top-row { flex-direction: column; align-items: flex-start; }
+        .profile-header {
+            flex-direction: column;
+        }
+
+        .activity-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .profile-top-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 </style>
+
 <body>
 
-    <nav class="navbar navbar-dark navbar-expand-lg px-2">
-        <a class="navbar-brand fw-bold" href="../home.php" style="color: orange;">
+    <nav class="navbar navbar-dark navbar-expand-lg px-3 py-2">
+        <a class="navbar-brand fw-bold" href="../home.php" style="color: var(--accent);">
             <img src="../assets/icons/iconoy.png" alt="Logo" style="width: 30px;">
         </a>
-        
-        <a href="../home.php" class="btn" style="color: #FF6C0C;"><i class="fa-solid fa-circle-arrow-left"></i> Atras</a>
-        <div class="ms-auto">
-            <span style="background-color: hsla(120,2%,10%,0.84); padding: 5px 10px; border-radius: 5px; font-weight: bold; color: #fff;">
+        <a href="../home.php" class="btn-back-nav"><i class="fa-solid fa-circle-arrow-left"></i> Atrás</a>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <span
+                style="background-color: rgba(30,33,44,0.84); padding: 5px 12px; border-radius: 8px; font-weight: 600; color: var(--text-main);">
                 <?= isset($_SESSION['usuario']) ? "Hola, " . htmlspecialchars($_SESSION['usuario']) : "Invitado" ?>
-                <i class="bi bi-circle-fill" style="color: #51ff00;"></i> <!-- Indicador de usuario activo (PERO ES UN ICONO ESTATICO) -->
+                <i class="bi bi-circle-fill" style="color: var(--color-secondary-1);"></i>
             </span>
-
 
             <!-- El desplegable a la derecha -->
             <div class="dropdown">
-                <button class="dropbtn">Opciones</button>
+                <button class="dropbtn">Opciones ▼</button>
                 <div class="dropdown-content">
-                    <a href="<?= $nav_base ?>contactos.php">Contactos</a>
-                    <a href="<?= $nav_base ?>php/cerrar_sesion.php" class="cerrar-sesion">Cerrar sesión</a>
+                    <a href="<?= $nav_base ?>contactos.php"><i class="bi bi-envelope-fill"></i> Contactos</a>
+                    <hr>
+                    <a href="<?= $nav_base ?>php/cerrar_sesion.php" class="cerrar-sesion"><i
+                            class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
                 </div>
-            </div>  
-
-            <!--<a href="../php/cerrar_sesion.php" class="btn btn-sm btn-outline ms-3" style="background: #ff5e00f5;">Cerrar sesión</a> -->
+            </div>
         </div>
     </nav>
 
     <div class="profile-layout">
 
         <?php if ($msg): ?>
-        <div class="alert-custom alert-<?= $msg_type ?>"><?= htmlspecialchars($msg) ?></div>
+            <div class="alert-custom alert-<?= $msg_type ?>"><?= htmlspecialchars($msg) ?></div>
         <?php endif; ?>
 
         <!-- PERFIL -->
@@ -475,38 +662,45 @@ if (isset($_SESSION['user_id'])) {
                     <div class="profile-correo"><?= htmlspecialchars($row['correo']) ?></div>
 
                     <?php if (!empty($row['bio'])): ?>
-                    <div class="profile-bio">"<?= htmlspecialchars($row['bio']) ?>"</div>
+                        <div class="profile-bio">"<?= htmlspecialchars($row['bio']) ?>"</div>
                     <?php endif; ?>
 
                     <div class="profile-meta">
-                        <span class="meta-item"><i class="bi bi-person-badge"></i> ID: <?= htmlspecialchars($row['id']) ?></span>
+                        <span class="meta-item"><i class="bi bi-person-badge"></i> ID:
+                            <?= htmlspecialchars($row['id']) ?></span>
                         <?php if (!empty($row['location'])): ?>
-                        <span class="meta-item"><i class="bi bi-geo-alt-fill"></i> <?= htmlspecialchars($row['location']) ?></span>
+                            <span class="meta-item"><i class="bi bi-geo-alt-fill"></i>
+                                <?= htmlspecialchars($row['location']) ?></span>
                         <?php endif; ?>
-                        <span class="meta-item"><i class="bi bi-calendar3"></i> Unido: <?= htmlspecialchars(substr($row['created_at'] ?? 'N/A', 0, 10)) ?></span>
+                        <span class="meta-item"><i class="bi bi-calendar3"></i> Unido:
+                            <?= htmlspecialchars(substr($row['created_at'] ?? 'N/A', 0, 10)) ?></span>
                     </div>
                 </div>
             </div>
-        </div>                        
+        </div>
+
         <!-- ACTIVIDAD -->
         <div class="pcard">
             <div class="pcard-title">Mi Actividad</div>
             <div class="activity-grid">
                 <div class="activity-box">
                     <div class="activity-num"><?= $total_ordenes_pago ?></div>
-                    <div class="activity-label"><i class="bi bi-wallet-fill text-warning"></i> Total de ordenes</div>
+                    <div class="activity-label"><i class="bi bi-wallet-fill" style="color: var(--accent);"></i> Total de
+                        órdenes</div>
                 </div>
                 <div class="activity-box">
                     <div class="activity-num"><?= $total_aprobadas ?></div>
-                    <div class="activity-label"><i class="bi bi-cart-check-fill text-warning"></i> Total Pagos Aprobados</div>
+                    <div class="activity-label"><i class="bi bi-cart-check-fill"
+                            style="color: var(--color-secondary-1);"></i> Total Pagos Aprobados</div>
                 </div>
                 <div class="activity-box">
-                    <div class="activity-num"><?= $total_ordenes_rechazadas?></div>
-                    <div class="activity-label"><i class="fa-solid fa-xmark text-warning"></i> Total Pagos Rechazados</div>
+                    <div class="activity-num"><?= $total_ordenes_rechazadas ?></div>
+                    <div class="activity-label"><i class="fa-solid fa-xmark" style="color: var(--color-danger);"></i>
+                        Total Pagos Rechazados</div>
                 </div>
-
             </div>
         </div>
+
         <!-- RESUMEN -->
         <div class="resumencard">
             <div class="pcard-title">Resumen</div>
@@ -525,15 +719,18 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="summary-box">
                     <div class="summary-num"><?= $total_gw_ordenes ?></div>
-                    <div class="summary-label">⚡ Gateway Pagos</div>
+                    <div class="summary-label"><i class="bi bi-lightning-fill" style="color: var(--accent);"></i>
+                        Gateway Pagos</div>
                 </div>
                 <div class="summary-box">
                     <div class="summary-num"><?= $total_gw_subs ?></div>
-                    <div class="summary-label">⚡ Gateway Suscripciones</div>
+                    <div class="summary-label"><i class="bi bi-lightning-fill" style="color: var(--accent);"></i>
+                        Gateway Suscripciones</div>
                 </div>
                 <div class="summary-box">
                     <div class="summary-num"><?= $total_gw_suscription ?></div>
-                    <div class="summary-label">⚡ Gateway Suscripción pura</div>
+                    <div class="summary-label"><i class="bi bi-lightning-fill" style="color: var(--accent);"></i>
+                        Gateway Suscripción pura</div>
                 </div>
             </div>
         </div>
@@ -550,7 +747,8 @@ if (isset($_SESSION['user_id'])) {
             </div>
             <div class="cal-legend">
                 <span>Menos</span>
-                <div class="cal-legend-cell" style="background:var(--bg-card); border:1px solid rgba(255,255,255,0.04);"></div>
+                <div class="cal-legend-cell"
+                    style="background:var(--bg-card); border:1px solid rgba(255,255,255,0.04);"></div>
                 <div class="cal-legend-cell level-1"></div>
                 <div class="cal-legend-cell level-2"></div>
                 <div class="cal-legend-cell level-3"></div>
@@ -563,102 +761,91 @@ if (isset($_SESSION['user_id'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        (function () {
+            const data = <?= $actividad_json ?>;
+            const grid = document.getElementById('calGrid');
+            const months = document.getElementById('calMonths');
+            const calTotal = document.getElementById('calTotal');
 
-    <!-- Script para renderizar el calendario de actividad -->
-    (function() {
-        const data     = <?= $actividad_json ?>;
-        const grid     = document.getElementById('calGrid');
-        const months   = document.getElementById('calMonths');
-        const calTotal = document.getElementById('calTotal');
+            const total = Object.values(data).reduce((a, b) => a + b, 0);
+            calTotal.textContent = total + ' actividad' + (total !== 1 ? 'es' : '') + ' en el último año';
 
-        // Calcular total de actividades
-        const total = Object.values(data).reduce((a, b) => a + b, 0);
-        calTotal.textContent = total + ' actividad' + (total !== 1 ? 'es' : '') + ' en el último año';
+            const today = new Date();
+            const end = new Date(today);
+            const start = new Date(today);
+            start.setDate(start.getDate() - 364);
+            start.setDate(start.getDate() - start.getDay());
 
-        // Construir 52 semanas + días restantes
-        const today    = new Date();
-        const end      = new Date(today);
-        // Empezar desde el domingo de hace ~52 semanas
-        const start    = new Date(today);
-        start.setDate(start.getDate() - 364);
-        // Ajustar al domingo anterior
-        start.setDate(start.getDate() - start.getDay());
+            const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
-        const DAYS   = ['D','L','M','X','J','V','S'];
-        const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
-        function toKey(d) {
-            return d.getFullYear() + '-' +
-                   String(d.getMonth()+1).padStart(2,'0') + '-' +
-                   String(d.getDate()).padStart(2,'0');
-        }
-
-        function getLevel(cnt) {
-            if (!cnt) return 0;
-            if (cnt === 1) return 1;
-            if (cnt === 2) return 2;
-            if (cnt <= 4) return 3;
-            return 4;
-        }
-
-        let monthLabels   = [];
-        let lastMonth     = -1;
-        let colIndex      = 0;
-
-        const cur = new Date(start);
-        while (cur <= end) {
-            const col = document.createElement('div');
-            col.className = 'cal-col';
-
-            // Registrar etiqueta del mes para esta columna
-            const m = cur.getMonth();
-            if (m !== lastMonth) {
-                monthLabels.push({ col: colIndex, label: MONTHS[m] });
-                lastMonth = m;
+            function toKey(d) {
+                return d.getFullYear() + '-' +
+                    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(d.getDate()).padStart(2, '0');
             }
 
-            for (let d = 0; d < 7; d++) {
-                const cell = document.createElement('div');
+            function getLevel(cnt) {
+                if (!cnt) return 0;
+                if (cnt === 1) return 1;
+                if (cnt === 2) return 2;
+                if (cnt <= 4) return 3;
+                return 4;
+            }
 
-                if (cur > end) {
-                    cell.className = 'cal-cell empty';
-                } else {
-                    const key   = toKey(cur);
-                    const cnt   = data[key] || 0;
-                    const level = getLevel(cnt);
-                    cell.className = 'cal-cell' + (level ? ' level-' + level : '');
+            let monthLabels = [];
+            let lastMonth = -1;
+            let colIndex = 0;
 
-                    // Tooltip
-                    const label = cnt
-                        ? cnt + ' actividad' + (cnt > 1 ? 'es' : '') + ' — ' + key
-                        : 'Sin actividad — ' + key;
-                    cell.title = label;
+            const cur = new Date(start);
+            while (cur <= end) {
+                const col = document.createElement('div');
+                col.className = 'cal-col';
+
+                const m = cur.getMonth();
+                if (m !== lastMonth) {
+                    monthLabels.push({ col: colIndex, label: MONTHS[m] });
+                    lastMonth = m;
                 }
 
-                col.appendChild(cell);
-                cur.setDate(cur.getDate() + 1);
+                for (let d = 0; d < 7; d++) {
+                    const cell = document.createElement('div');
+
+                    if (cur > end) {
+                        cell.className = 'cal-cell empty';
+                    } else {
+                        const key = toKey(cur);
+                        const cnt = data[key] || 0;
+                        const level = getLevel(cnt);
+                        cell.className = 'cal-cell' + (level ? ' level-' + level : '');
+
+                        const label = cnt
+                            ? cnt + ' actividad' + (cnt > 1 ? 'es' : '') + ' — ' + key
+                            : 'Sin actividad — ' + key;
+                        cell.title = label;
+                    }
+
+                    col.appendChild(cell);
+                    cur.setDate(cur.getDate() + 1);
+                }
+
+                grid.appendChild(col);
+                colIndex++;
             }
 
-            grid.appendChild(col);
-            colIndex++;
-        }
-
-        // Renderizar etiquetas de meses
-        // Calculamos ancho por columna: 13px celda + 3px gap = 16px
-        const colW = 16;
-        let lastLabelRight = -999;
-        monthLabels.forEach(({ col, label }) => {
-            const left = col * colW;
-            if (left - lastLabelRight < 28) return; // evitar solapamiento
-            const span = document.createElement('div');
-            span.className = 'cal-month-label';
-            span.style.width = '28px';
-            span.textContent = label;
-            months.appendChild(span);
-            lastLabelRight = left + 28;
-        });
-
-    })();
+            const colW = 16;
+            let lastLabelRight = -999;
+            monthLabels.forEach(({ col, label }) => {
+                const left = col * colW;
+                if (left - lastLabelRight < 28) return;
+                const span = document.createElement('div');
+                span.className = 'cal-month-label';
+                span.style.width = '28px';
+                span.textContent = label;
+                months.appendChild(span);
+                lastLabelRight = left + 28;
+            });
+        })();
     </script>
 </body>
+
 </html>

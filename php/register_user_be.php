@@ -5,10 +5,10 @@ if (!isset($conexion)) {
 }
 
 // Sanitizar datos
-$id         = mysqli_real_escape_string($conexion, $_POST['id'] ?? '');
-$nombre     = mysqli_real_escape_string($conexion, $_POST['nombre'] ?? '');
-$correo     = mysqli_real_escape_string($conexion, $_POST['correo'] ?? '');
-$usuario    = mysqli_real_escape_string($conexion, $_POST['usuario'] ?? '');
+$id = mysqli_real_escape_string($conexion, $_POST['id'] ?? '');
+$nombre = mysqli_real_escape_string($conexion, $_POST['nombre'] ?? '');
+$correo = mysqli_real_escape_string($conexion, $_POST['correo'] ?? '');
+$usuario = mysqli_real_escape_string($conexion, $_POST['usuario'] ?? '');
 $contrasena = $_POST['contrasena'] ?? '';
 
 // Trim

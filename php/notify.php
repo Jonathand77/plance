@@ -1,8 +1,6 @@
 ﻿<?php
 
-
 file_put_contents('notify_debug.log', date('Y-m-d H:i:s') . " - Received notify:\n" . file_get_contents('php://input') . "\n\n", FILE_APPEND);
-
 
 // notify.php — Endpoint para recibir notificaciones de PlaceToPay
 session_start();
@@ -31,7 +29,6 @@ define('P2P_TRANKEY', '3YC5brb5eAR4xBGQ');
 // Recibir body
 $body = file_get_contents('php://input');
 $data = json_decode($body, true);
-
 
 // DEBUG temporal
 file_put_contents(__DIR__ . '/webhook_log.txt', date('Y-m-d H:i:s') . "\n" . $body . "\n\n", FILE_APPEND);
@@ -64,9 +61,9 @@ if ($signature !== $expectedSignature) {
 }
 
 // Extraer datos
-$status     = $data['status']['status'] ?? '';
+$status = $data['status']['status'] ?? '';
 $request_id = $data['requestId'] ?? '';
-$reference  = $data['payment'][0]['reference'] ?? '';
+$reference = $data['payment'][0]['reference'] ?? '';
 
 if (empty($status) || empty($request_id)) {
     http_response_code(400);
@@ -74,20 +71,21 @@ if (empty($status) || empty($request_id)) {
 }
 
 // Mapear estado
-$nuevo_estado = match($status) {
+$nuevo_estado = match ($status) {
     'APPROVED' => 'aprobada',
     'REJECTED' => 'rechazada',
-    'PENDING'  => 'pendiente',
-    default    => 'cancelada'
+    'PENDING' => 'pendiente',
+    default => 'cancelada'
 };
 
 $request_id_safe = mysqli_real_escape_string($conexion, $request_id);
-$estado_safe     = mysqli_real_escape_string($conexion, $nuevo_estado);
+$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
 
 // Función para extraer token
-function extraer_token($data) {
+function extraer_token($data)
+{
     $token = '';
-    
+
     // Intento 1: subscription.instrument
     if (isset($data['subscription']['instrument']) && is_array($data['subscription']['instrument'])) {
         foreach ($data['subscription']['instrument'] as $item) {
@@ -96,7 +94,7 @@ function extraer_token($data) {
             }
         }
     }
-    
+
     // Intento 2: payment[0].subscription
     if (isset($data['payment'][0]['subscription']) && is_array($data['payment'][0]['subscription'])) {
         foreach ($data['payment'][0]['subscription'] as $item) {
@@ -105,74 +103,72 @@ function extraer_token($data) {
             }
         }
     }
-    
+
     return '';
 }
 
 // Identificar tabla por prefijo de referencia
-if (strpos($reference, 'REC-') === 0) {                                                                            
+if (strpos($reference, 'REC-') === 0) {
     // Recurrencias
     $id = intval(str_replace('REC-', '', $reference));
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $query = "UPDATE recurrencias SET estado = '$estado_safe' WHERE id = '$id_safe' AND request_id = '$request_id_safe'";
-    
+
 } elseif (strpos($reference, 'SUB-') === 0) {
     // Suscripciones (tabla suscripciones)
     $id = intval(str_replace('SUB-', '', $reference));
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $token = '';
     if ($nuevo_estado === 'aprobada') {
         $token = extraer_token($data);
     }
     $token_safe = mysqli_real_escape_string($conexion, $token);
-    
+
     $query = "UPDATE suscripciones SET estado = '$estado_safe', token = '$token_safe' WHERE id = '$id_safe' AND request_id = '$request_id_safe'";
-    
+
 } elseif (strpos($reference, 'SUB-') === 0) {
     // Suscripciones puras (tabla suscription)
     $id = intval(str_replace('SUB-', '', $reference));
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $token = '';
     if ($nuevo_estado === 'aprobada') {
         $token = extraer_token($data);
     }
     $token_safe = mysqli_real_escape_string($conexion, $token);
-    
+
     $query = "UPDATE suscription SET estado = '$estado_safe', token = '$token_safe' WHERE id = '$id_safe' AND request_id = '$request_id_safe'";
-    
+
 } elseif (strpos($reference, 'SREC-') === 0) {
     // Suscripciones recurrentes (tabla suscription_rec)
     $id = intval(str_replace('SREC-', '', $reference));
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $query = "UPDATE suscription_rec SET estado = '$estado_safe' WHERE id = '$id_safe' AND request_id = '$request_id_safe'";
-    
+
 } elseif (strpos($reference, 'GW-') === 0) {
     // Gateway ordenes (pago básico sin WC)
     $id = intval(str_replace('GW-', '', $reference));
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $query = "UPDATE gateway_ordenes SET estado = '$estado_safe' WHERE id = '$id_safe' AND request_id = '$request_id_safe'";
-    
+
 } else {
     // Ordenes básicas (solo número)
     $id = intval($reference);
     $id_safe = mysqli_real_escape_string($conexion, $id);
-    
+
     $query = "UPDATE ordenes SET estado = '$estado_safe' WHERE id = '$id_safe'";
 }
 
-
-
 // else {
-    // Ordenes básicas (solo número)
-    $id = intval($reference);
-    $id_safe = mysqli_real_escape_string($conexion, $id);
-    
-    $query = "UPDATE ordenes SET estado = '$estado_safe' WHERE id = '$id_safe'";
+// Ordenes básicas (solo número)
+$id = intval($reference);
+$id_safe = mysqli_real_escape_string($conexion, $id);
+
+$query = "UPDATE ordenes SET estado = '$estado_safe' WHERE id = '$id_safe'";
 // } 
 
 // Ejecutar query y validar

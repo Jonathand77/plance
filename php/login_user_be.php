@@ -8,7 +8,7 @@ if (file_exists($autoloadPath)) {
 }
 
 // Leer POST de forma segura
-$correo     = mysqli_real_escape_string($conexion, $_POST['correo'] ?? '');
+$correo = mysqli_real_escape_string($conexion, $_POST['correo'] ?? '');
 $contrasena = $_POST['contrasena'] ?? '';
 
 // Validar campos
@@ -30,7 +30,7 @@ if ($row = mysqli_fetch_assoc($resultado)) {
     if (password_verify($contrasena, $row['contraseña'])) {
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['usuario'] = $row['usuario'];
-        $_SESSION['correo']  = $row['correo'];
+        $_SESSION['correo'] = $row['correo'];
 
         header("Location: ../home.php");
         exit();

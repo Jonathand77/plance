@@ -3,7 +3,9 @@
 /* 1. System UI Stack (La que usan GitHub, Medium y Facebook) 
    Se adapta al sistema: San Francisco en Mac/iOS y Segoe UI en Windows. */
 .font-system {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
 }
 
 /* 2. El estándar moderno (Sans Serif)
@@ -27,7 +29,9 @@
 /* 5. Estilo sofisticado y delgado
    Se ve muy bien en diseños minimalistas de Mac y Windows. */
 .font-trebuchet {
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  font-family:
+    "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
 }
 
 /* 6. Estética de máquina de escribir o código
@@ -47,13 +51,17 @@
 .font-georgia {
   font-family: Georgia, serif;
 }
-/* --- /////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* --- FUENTES DE SISTEMA RECOMENDADAS (HIDDEN GEMS) --- */
 
 /* 1. Estilo "Apple/Minimalista" (San Francisco / Segoe UI)
    Es la apuesta más segura hoy en día para que una web parezca profesional. */
 .estilo-moderno-ui {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
 /* 2. Estilo "Humanista" (Optima / Candara)

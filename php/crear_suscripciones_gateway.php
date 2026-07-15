@@ -15,18 +15,19 @@ require_once 'conexion_be.php';
 require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {
     $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) die("Error de conexión: " . mysqli_connect_error());
+    if (!$conexion)
+        die("Error de conexión: " . mysqli_connect_error());
 }
 
 // Recibir datos
 $servicio = trim($_POST['servicio'] ?? '');
-$plan     = trim($_POST['plan']     ?? '');
-$precio   = trim($_POST['precio']   ?? '');
-$nombre   = trim($_POST['nombre']   ?? '');
-$correo   = trim($_POST['correo']   ?? '');
+$plan = trim($_POST['plan'] ?? '');
+$precio = trim($_POST['precio'] ?? '');
+$nombre = trim($_POST['nombre'] ?? '');
+$correo = trim($_POST['correo'] ?? '');
 $telefono = trim($_POST['telefono'] ?? '');
 $tipo_doc = trim($_POST['tipo_doc'] ?? '');
-$num_doc  = trim($_POST['num_doc']  ?? '');
+$num_doc = trim($_POST['num_doc'] ?? '');
 
 if (empty($servicio) || empty($plan) || empty($precio) || empty($nombre) || empty($correo) || empty($num_doc)) {
     die("❌ Faltan datos. Por favor completa todos los campos.");
@@ -34,63 +35,63 @@ if (empty($servicio) || empty($plan) || empty($precio) || empty($nombre) || empt
 
 // Sanitizar
 $servicio = mysqli_real_escape_string($conexion, $servicio);
-$plan     = mysqli_real_escape_string($conexion, $plan);
-$precio   = mysqli_real_escape_string($conexion, $precio);
-$nombre   = mysqli_real_escape_string($conexion, $nombre);
-$correo   = mysqli_real_escape_string($conexion, $correo);
+$plan = mysqli_real_escape_string($conexion, $plan);
+$precio = mysqli_real_escape_string($conexion, $precio);
+$nombre = mysqli_real_escape_string($conexion, $nombre);
+$correo = mysqli_real_escape_string($conexion, $correo);
 $telefono = mysqli_real_escape_string($conexion, $telefono);
 $tipo_doc = mysqli_real_escape_string($conexion, $tipo_doc);
-$num_doc  = mysqli_real_escape_string($conexion, $num_doc);
+$num_doc = mysqli_real_escape_string($conexion, $num_doc);
 
 // ══════════════════════════════════════════
 // API Gateway Real — Pago + Suscripción
 // Endpoint: api-test.placetopay.com
 // ══════════════════════════════════════════
-$login     = "2d9eaf1e662518756a3d78806543af5b";
+$login = "2d9eaf1e662518756a3d78806543af5b";
 $secretKey = "3YC5brb5eAR4xBGQ";
-$endpoint  = "https://api-test.placetopay.com/rest/gateway/process";
+$endpoint = "https://api-test.placetopay.com/rest/gateway/process";
 
-$seed     = date('c');
-$nonce    = bin2hex(random_bytes(16));
-$tranKey  = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
+$seed = date('c');
+$nonce = bin2hex(random_bytes(16));
+$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
 $nonceB64 = base64_encode($nonce);
 
-$reference       = 'GWSUB-' . strtoupper(bin2hex(random_bytes(4)));
+$reference = 'GWSUB-' . strtoupper(bin2hex(random_bytes(4)));
 $guardar_tarjeta = ($_POST['guardar_tarjeta'] ?? '0') === '1';
 
 $card_number = preg_replace('/\s/', '', $_POST['card_number'] ?? '');
 $card_expiry = trim($_POST['card_expiry'] ?? '12/26');
-$card_cvv    = trim($_POST['card_cvv']    ?? '');
+$card_cvv = trim($_POST['card_cvv'] ?? '');
 
 $body = [
     "auth" => [
-        "login"   => $login,
+        "login" => $login,
         "tranKey" => $tranKey,
-        "nonce"   => $nonceB64,
-        "seed"    => $seed
+        "nonce" => $nonceB64,
+        "seed" => $seed
     ],
     "payer" => [
-        "name"         => $nombre,
-        "surname"      => "",
-        "email"        => $correo,
+        "name" => $nombre,
+        "surname" => "",
+        "email" => $correo,
         "documentType" => $tipo_doc,
-        "document"     => $num_doc,
-        "mobile"       => $telefono
+        "document" => $num_doc,
+        "mobile" => $telefono
     ],
     "payment" => [
-        "reference"   => $reference,
+        "reference" => $reference,
         "description" => $servicio . ' — ' . $plan,
-        "amount"      => [
+        "amount" => [
             "currency" => "COP",
-            "total"    => (float)$precio
+            "total" => (float) $precio
         ],
-        "subscribe"   => true
+        "subscribe" => true
     ],
     "instrument" => [
         "card" => [
-            "number"     => $card_number,
+            "number" => $card_number,
             "expiration" => $card_expiry,
-            "cvv"        => $card_cvv
+            "cvv" => $card_cvv
         ]
     ],
     "ipAddress" => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
@@ -99,67 +100,68 @@ $body = [
 
 [$response] = p2p_json_post($endpoint, $body);
 
-$result     = json_decode($response, true);
-$gw_reason  = $result['status']['reason']  ?? '';
+$result = json_decode($response, true);
+$gw_reason = $result['status']['reason'] ?? '';
 $gw_message = $result['status']['message'] ?? 'Sin respuesta del servidor';
-$gw_token   = $result['subscription']['token']['token'] ?? '';
+$gw_token = $result['subscription']['token']['token'] ?? '';
 
 // ── Estado elegido por el usuario en estados-subs-gateway.php ──
 $estado_elegido = trim($_POST['estado_elegido'] ?? '');
-$razon_elegida  = trim($_POST['razon_elegida']  ?? $gw_reason);
+$razon_elegida = trim($_POST['razon_elegida'] ?? $gw_reason);
 
 if (in_array($estado_elegido, ['aprobada-token', 'aprobada-sin', 'pendiente', 'rechazada'])) {
-    $nuevo_estado = match($estado_elegido) {
+    $nuevo_estado = match ($estado_elegido) {
         'aprobada-token', 'aprobada-sin' => 'aprobada',
         'pendiente' => 'pendiente',
-        default     => 'rechazada'
+        default => 'rechazada'
     };
-    $status    = match($nuevo_estado) {
-        'aprobada'  => 'APPROVED',
+    $status = match ($nuevo_estado) {
+        'aprobada' => 'APPROVED',
         'pendiente' => 'PENDING',
-        default     => 'REJECTED'
+        default => 'REJECTED'
     };
     $con_token = ($estado_elegido === 'aprobada-token');
-    $token     = $con_token ? (!empty($gw_token) ? $gw_token : 'TOK-' . strtoupper(bin2hex(random_bytes(8)))) : '';
+    $token = $con_token ? (!empty($gw_token) ? $gw_token : 'TOK-' . strtoupper(bin2hex(random_bytes(8)))) : '';
 } else {
     $gw_status = $result['status']['status'] ?? 'FAILED';
-    $nuevo_estado = match($gw_status) {
+    $nuevo_estado = match ($gw_status) {
         'APPROVED' => 'aprobada',
-        'PENDING'  => 'pendiente',
-        default    => 'rechazada'
+        'PENDING' => 'pendiente',
+        default => 'rechazada'
     };
-    $status    = $gw_status;
+    $status = $gw_status;
     $con_token = !empty($gw_token);
-    $token     = $con_token ? $gw_token : '';
+    $token = $con_token ? $gw_token : '';
 }
 
 // Guardar en BD
 $estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-$ref_safe    = mysqli_real_escape_string($conexion, $reference);
-$token_safe  = mysqli_real_escape_string($conexion, $token);
+$ref_safe = mysqli_real_escape_string($conexion, $reference);
+$token_safe = mysqli_real_escape_string($conexion, $token);
 
 $query = "INSERT INTO gateway_suscripciones (servicio, plan, precio, nombre, correo, telefono, tipo_doc, num_doc, estado, request_id, token)
           VALUES ('$servicio', '$plan', '$precio', '$nombre', '$correo', '$telefono', '$tipo_doc', '$num_doc', '$estado_safe', '$ref_safe', '$token_safe')";
 
 $resultado = mysqli_query($conexion, $query);
-if (!$resultado) die("❌ Error al guardar: " . mysqli_error($conexion));
+if (!$resultado)
+    die("❌ Error al guardar: " . mysqli_error($conexion));
 
 $orden_id = mysqli_insert_id($conexion);
 
 // Guardar en sesión para retorno
 $_SESSION['gw_sub_result'] = [
-    'orden_id'  => $orden_id,
-    'tipo'      => 'suscripciones',
-    'status'    => $status,
-    'estado'    => $nuevo_estado,
-    'servicio'  => $servicio,
-    'plan'      => $plan,
-    'precio'    => $precio,
-    'nombre'    => $nombre,
-    'correo'    => $correo,
+    'orden_id' => $orden_id,
+    'tipo' => 'suscripciones',
+    'status' => $status,
+    'estado' => $nuevo_estado,
+    'servicio' => $servicio,
+    'plan' => $plan,
+    'precio' => $precio,
+    'nombre' => $nombre,
+    'correo' => $correo,
     'reference' => $reference,
-    'token'     => $token,
-    'message'   => $gw_message,
+    'token' => $token,
+    'message' => $gw_message,
 ];
 
 unset($_SESSION['gw_subs_pending']);

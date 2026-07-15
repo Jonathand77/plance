@@ -1,110 +1,52 @@
 ﻿<?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sesiones</title>
-        <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <!-- Tu CSS -->
-    <link rel="stylesheet" href="assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/assets/css/estilos.css'); ?>">
+    <link rel="stylesheet"
+        href="assets/css/estilos.css?v=<?php echo filemtime(__DIR__ . '/assets/css/estilos.css'); ?>">
 </head>
 
-
 <style>
+    :root {
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+    }
+
     body {
-        /* background-image: url(assets/images/bg24.jpg);  */
-        background-color: #181818;
+        background-color: #0d0e10;
         color: white;
         background-repeat: no-repeat;
         background-position: center;
         background-attachment: fixed;
         background-size: cover;
-
         font-family: 'Barlow', sans-serif;
-    }
-
-
-
-    /*.dashboard-card-1, .dashboard-card-2{
-
-        
-
-        background: rgba(20, 20, 20, 0.7);
-        text-align: center;
-        align-self: start;
-        border-radius: 15px;
-        transition: 0.3s ease;
-        cursor: pointer;
-        border: 1px solid rgba(255,255,255,0.05);
-        margin: auto;
-        width: 100%;
-        height: 120%;
-        color: white;
-        transform: translateY(30px);
-        animation: fadeIn 1.5s ease-in-out forwards;
-        opacity: 0;
-        transition: all 0.6s ease;
-    } */
-
-
-    /*.dashboard-card-1:hover{
-        transform: translateY(-10px);
-        box-shadow: 0 0 20px rgba(0, 207, 180, 0.55);
-        color:  #00CFB4;
-        background-color: #0a0a0a73;
-        
-    } */
-
-    /*.dashboard-card-2:hover{
-        transform: translateY(-10px);
-        box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);
-        background-color: #0a0a0a73;
-             color: #0062A8;
-
-        /* box-shadow: 0 0 20px rgba(0, 98, 168, 0.55);  BOX SHADOW ORIGINAL*/
-            /* color: #0062A8; COLOR ORIGINAL
-    }*/
-
-    .pagob {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    background-color: rgb(255, 174, 0);
-    color: rgb(0, 0, 0);
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    padding: 0.15rem 0.5rem;
-    /*    border-radius: 0 0 10px 0; */
-    border-radius: 10px;
-    }
-
-    .suscrip {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    background-color: rgb(255, 174, 0);
-    color: rgb(0, 0, 0);
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    padding: 0.15rem 0.5rem;
-    /*    border-radius: 0 0 10px 0; */
-    border-radius: 10px;
     }
 
     .card-img-top {
@@ -113,21 +55,25 @@
         width: 100%;
         object-fit: cover;
     }
+
     main {
         flex: 1;
     }
-    .navbar {
-        background-color: #0f0f0fa9 !important;
-        backdrop-filter: blur(8px);
-        color:  #ffffff;
-    }
-    .back:hover {
-        background: #ff6811f5;
-        transform: translateY(-1px);
-        box-shadow: 0 5px 10px rgba(255, 94, 0, 0.5);
 
+    .navbar {
+        background-color: rgba(30, 33, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        color: #ffffff;
+        border-bottom: 1px solid var(--color-secondary-2);
     }
-        /* ── SPEED DIAL (iconos tipo navegador) ── */
+
+    .back:hover {
+        background: var(--color-primary);
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 108, 12, 0.4);
+    }
+
+    /* ── SPEED DIAL (iconos tipo navegador) ── */
     .speed-dial-grid {
         display: flex;
         flex-wrap: wrap;
@@ -146,126 +92,110 @@
         animation: fadeIn 0.6s ease forwards;
         opacity: 0;
     }
-    .speed-dial-item:nth-child(1) { animation-delay: 0.1s; }
-    .speed-dial-item:nth-child(2) { animation-delay: 0.2s; }
-    .speed-dial-item:nth-child(3) { animation-delay: 0.3s; }
+
+    .speed-dial-item:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .speed-dial-item:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .speed-dial-item:nth-child(3) {
+        animation-delay: 0.3s;
+    }
 
     .speed-dial-icon {
         width: 170px;
         height: 100px;
         border-radius: 18px;
-        background: rgba(30, 30, 32, 0.85);
-        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(30, 33, 44, 0.85);
+        border: 1px solid var(--color-secondary-2);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 2rem;
         transition: all 0.22s ease;
-        box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(6px);
     }
 
     .speed-dial-item:hover .speed-dial-icon {
         transform: translateY(-6px) scale(1.08);
-        border-color: rgba(240, 180, 41, 0.5);
-        box-shadow: 0 8px 28px rgba(240, 180, 41, 0.25);
-        background: rgba(240, 180, 41, 0.08);
+        border-color: rgba(255, 108, 12, 0.5);
+        box-shadow: 0 8px 28px rgba(255, 108, 12, 0.25);
+        background: rgba(255, 108, 12, 0.08);
     }
 
     .speed-dial-label {
         font-size: 0.78rem;
         font-weight: 600;
-        color: rgba(255,255,255,0.75);
+        color: rgba(255, 255, 255, 0.75);
         text-align: center;
         max-width: 150px;
-
         overflow: hidden;
         text-overflow: ellipsis;
         transition: color 0.2s;
     }
+
     .speed-dial-item:hover .speed-dial-label {
-        color: #FF6C0C;
+        color: var(--color-primary);
     }
 
     @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px); /* opcional: pequeño movimiento */
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 </style>
 
-
 <body class="d-flex flex-column min-vh-100">
-        <?php
-            $nav_back_url  = "home.php";
-            $nav_back_text = "Atras";
-            $nav_base      = "./";
-            require_once 'php/navbar.php';
-        ?>
+    <?php
+    $nav_back_url = "home.php";
+    $nav_back_text = "Atras";
+    $nav_base = "./";
+    require_once 'php/navbar.php';
+    ?>
 
-        <div class="container text-center" >
-            <h3 class="display-4 fw-bold mb-3" >Sesiones</h3>
-            <p class="lead mb-4">Elige la sesión que vas a usar.</p>
-        </div>
-
-        <!-- Speed Dial tipo navegador  -->
-        <div class="speed-dial-grid">
-
-            <a href="games/juegos.php" class="speed-dial-item" title="Juegos Mobiles">
-                <div class="speed-dial-icon">
-                    <i class="fa-solid fa-gamepad fs-3" style="color: #FF6C0C;"></i>
-                </div>
-                <span class="speed-dial-label">Juegos Mobiles</span>
-            </a>
-
-            <a href="plataformas/suscripciones.php" class="speed-dial-item" title="Plataformas Digitales">
-                <div class="speed-dial-icon">
-                    <i class="bi bi-google-play" style="color:  #FF6C0C;"></i>
-                </div>
-                <span class="speed-dial-label">Plataformas Digitales</span>
-            </a>
-
-            <a href="textil/textiles.php" class="speed-dial-item" title="Ropa">
-                <div class="speed-dial-icon">
-                    <i class="fa-solid fa-tshirt fs-3" style="color: #FF6C0C;"></i>
-                </div>
-                <span class="speed-dial-label">Ropa</span>
-            </a>
-
-        </div>
+    <div class="container text-center">
+        <h3 class="display-4 fw-bold mb-3" style="color: var(--text-main);">Sesiones</h3>
+        <p class="lead mb-4" style="color: var(--color-secondary-5);">Elige la sesión que vas a usar.</p>
     </div>
 
+    <!-- Speed Dial tipo navegador -->
+    <div class="speed-dial-grid">
 
-        <!-- <section>
-            <div class="row g-4 justify-content-center text-center">
-                <div class= "col-md-3 "> 
-                    <a href="games/juegos.php" style="text-decoration: none;">
-                            <div class="dashboard-card-1 p-1" >
-                            <i class="fa-solid fa-gamepad fs-3 text-warning"></i>
-                            
-                            <h5 class="">Juegos</h4>
-                            <small class="text" style="color: rgb(255, 196, 0);">Compra recargas y productos en linea </small>
-                        </div>
-                    </a>
-                </div>       
-                <div class="col-md-3">
-                    <a href="plataformas/suscripciones.php" style="text-decoration: none;">
-                        <div class="dashboard-card-2 p-1">
-                            <i class="bi bi-google-play fs-3 text-warning"></i>
-                            <h6 class="">Plataformas Digitales</h6>
-                            <small class="text" style="color: rgb(255, 196, 0);" >Paga tus plataformas de streaming</small>
-                        </div>
-                    </a>
-                </div>
+        <a href="games/juegos.php" class="speed-dial-item" title="Juegos Móviles">
+            <div class="speed-dial-icon">
+                <i class="fa-solid fa-gamepad fs-3" style="color: var(--color-primary);"></i>
             </div>
-    </section> -->
+            <span class="speed-dial-label">Juegos Móviles</span>
+        </a>
+
+        <a href="plataformas/suscripciones.php" class="speed-dial-item" title="Plataformas Digitales">
+            <div class="speed-dial-icon">
+                <i class="bi bi-google-play" style="color: var(--color-primary);"></i>
+            </div>
+            <span class="speed-dial-label">Plataformas Digitales</span>
+        </a>
+
+        <a href="textil/textiles.php" class="speed-dial-item" title="Ropa">
+            <div class="speed-dial-icon">
+                <i class="fa-solid fa-tshirt fs-3" style="color: var(--color-primary);"></i>
+            </div>
+            <span class="speed-dial-label">Ropa</span>
+        </a>
+
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/validaciones.js"></script>
 </body>
+
 </html>

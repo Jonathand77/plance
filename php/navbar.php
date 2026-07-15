@@ -15,13 +15,13 @@
  */
 
 // Valores por defecto
-$nav_back_url  = $nav_back_url  ?? 'home.php';
+$nav_back_url = $nav_back_url ?? 'home.php';
 $nav_back_text = $nav_back_text ?? 'Volver';
-$nav_base      = $nav_base      ?? '../';
+$nav_base = $nav_base ?? '../';
 
 // Traer foto de perfil del usuario en sesión
-$nav_avatar    = '';
-$nav_initials  = '';
+$nav_avatar = '';
+$nav_initials = '';
 
 if (isset($_SESSION['user_id'])) {
     // Reutilizar conexión si ya existe, si no crear una
@@ -33,7 +33,7 @@ if (isset($_SESSION['user_id'])) {
         $nav_row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT profile_image, usuario FROM users WHERE id = '$nav_uid'"));
         if ($nav_row) {
             $nav_initials = strtoupper(substr($nav_row['usuario'] ?? 'U', 0, 1));
-            $img_path     = $nav_base . 'uploads/' . ($nav_row['profile_image'] ?? '');
+            $img_path = $nav_base . 'uploads/' . ($nav_row['profile_image'] ?? '');
             if (!empty($nav_row['profile_image']) && file_exists($nav_base . 'uploads/' . $nav_row['profile_image'])) {
                 $nav_avatar = $nav_base . 'uploads/' . htmlspecialchars($nav_row['profile_image']);
             }
@@ -43,12 +43,27 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <style>
-    .navbar {
-        background-color: #0f0f0fa9 !important;
-        backdrop-filter: blur(8px);
-        
+    :root {
+        /* Nueva paleta estandarizada */
+        --color-primary: #FF6C0C;
+        --color-secondary-1: #00CFB4;
+        --color-secondary-2: #4C5F71;
+        --color-secondary-3: #0062A8;
+        --color-secondary-4: #1E212C;
+        --color-secondary-5: #7D868C;
+        --text-main: #f1f5f9;
+        --color-danger: #dc3545;
     }
 
+    .navbar {
+        background-color: rgba(30, 33, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--color-secondary-2);
+    }
+
+    .navbar-brand img {
+        filter: brightness(0) saturate(100%) invert(60%) sepia(89%) saturate(3000%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    }
 
     /* ── NAVBAR AVATAR ── */
     .nav-avatar-wrap {
@@ -57,41 +72,53 @@ if (isset($_SESSION['user_id'])) {
         gap: 0.5rem;
         text-decoration: none;
     }
-    .nav-avatar-wrap:hover { text-decoration: none; }
+
+    .nav-avatar-wrap:hover {
+        text-decoration: none;
+    }
 
     .nav-avatar-img {
         width: 32px;
         height: 32px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid #FF6C0C;
+        border: 2px solid var(--color-primary);
         transition: border-color 0.2s, transform 0.2s;
     }
-    .nav-avatar-img:hover { border-color: #fff; transform: scale(1.08); }
+
+    .nav-avatar-img:hover {
+        border-color: var(--text-main);
+        transform: scale(1.08);
+    }
 
     .nav-avatar-initials {
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #FF6C0C, #c99010);
+        background: linear-gradient(135deg, var(--color-primary), #c99010);
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-weight: 800;
         font-size: 0.8rem;
         color: #0d0e10;
-        border: 2px solid #FF6C0C;
+        border: 2px solid var(--color-primary);
         transition: border-color 0.2s, transform 0.2s;
         flex-shrink: 0;
     }
-    .nav-avatar-initials:hover { border-color: #fff; transform: scale(1.08); }
+
+    .nav-avatar-initials:hover {
+        border-color: var(--text-main);
+        transform: scale(1.08);
+    }
 
     .nav-username {
-        background-color: hsla(120, 2%, 10%, 0.84);
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-weight: bold;
-        color: #ffffff;
+        background-color: rgba(30, 33, 44, 0.84);
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 0.9rem;
     }
 
     /* ── DROPDOWN ── */
@@ -101,9 +128,9 @@ if (isset($_SESSION['user_id'])) {
     }
 
     .dropbtn {
-        background: hsla(120, 2%, 10%, 0.84);
-        color: #FF6C0C;
-        border: 1.5px solid rgba(240, 180, 41, 0.3);
+        background: rgba(30, 33, 44, 0.84);
+        color: var(--color-primary);
+        border: 1.5px solid rgba(255, 108, 12, 0.3);
         border-radius: 8px;
         padding: 6px 14px;
         font-weight: 700;
@@ -114,9 +141,10 @@ if (isset($_SESSION['user_id'])) {
         align-items: center;
         gap: 0.3rem;
     }
+
     .dropbtn:hover {
-        border-color: #FF6C0C;
-        background: rgba(240, 180, 41, 0.1);
+        border-color: var(--color-primary);
+        background: rgba(255, 108, 12, 0.10);
     }
 
     .dropdown-content {
@@ -124,66 +152,107 @@ if (isset($_SESSION['user_id'])) {
         position: absolute;
         left: 0;
         top: calc(100% + 6px);
-        background: #16181c;
-        border: 1px solid #2e3038;
+        background: var(--color-secondary-4);
+        border: 1px solid var(--color-secondary-2);
         border-radius: 10px;
         min-width: 170px;
         z-index: 999;
         overflow: hidden;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         animation: dropFade 0.15s ease;
     }
 
     @keyframes dropFade {
-        from { opacity: 0; transform: translateY(-6px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .dropdown-content a {
         display: block;
         padding: 0.6rem 1rem;
-        color: #f0f1f3;
+        color: var(--text-main);
         font-size: 0.87rem;
         font-weight: 500;
         text-decoration: none;
         transition: background 0.15s, color 0.15s;
     }
+
     .dropdown-content a:hover {
-        background: rgba(240, 180, 41, 0.1);
-        color: #FF6C0C;
+        background: rgba(255, 108, 12, 0.10);
+        color: var(--color-primary);
         text-decoration: none;
     }
 
     .dropdown-content hr {
-        border-color: #2e3038;
+        border-color: var(--color-secondary-2);
         margin: 0.2rem 0;
     }
 
     .dropdown-content .cerrar-sesion {
-        color: #e05252 !important;
+        color: var(--color-danger) !important;
     }
+
     .dropdown-content .cerrar-sesion:hover {
-        background: rgba(224, 82, 82, 0.1) !important;
-        color: #e05252 !important;
+        background: rgba(220, 53, 69, 0.10) !important;
+        color: var(--color-danger) !important;
     }
 
-    .dropdown:hover .dropdown-content { display: block; }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 
+    /* Botón Volver */
+    .btn-back-nav {
+        color: var(--color-primary);
+        font-weight: 600;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+    }
 
+    .btn-back-nav:hover {
+        background: rgba(255, 108, 12, 0.10);
+        color: var(--color-primary);
+    }
 
+    /* Responsive */
+    @media (max-width: 600px) {
+        .nav-username {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+        }
+
+        .dropbtn {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+        }
+
+        .navbar {
+            padding: 0.3rem 0.5rem !important;
+        }
+    }
 </style>
 
-<nav class="navbar navbar-dark navbar-expand-lg px-2">
-    <a class="navbar-brand fw-bold" href="<?= $nav_base ?>home.php" style="color: orange;">
-        <img src="<?= $nav_base ?>assets/icons/iconoy.png" alt="Logo" style="width: 30px;">
+<nav class="navbar navbar-dark navbar-expand-lg px-3 py-2">
+    <a class="navbar-brand fw-bold" href="<?= $nav_base ?>home.php" style="color: var(--color-primary);">
+        <img src="<?= $nav_base ?>assets/icons/iconoy.png" alt="Logo" style="width: 50px;">
     </a>
 
- 
-  
-    <!-- BOTON DE RETROSESO -->
-    <a href="<?= htmlspecialchars($nav_back_url) ?>" class="btn" style="color: black; color: #FF6C0C;">
+    <!-- BOTON DE RETROCESO -->
+    <a href="<?= htmlspecialchars($nav_back_url) ?>" class="btn-back-nav">
         <i class="fa-solid fa-circle-arrow-left fs-6"></i> <?= htmlspecialchars($nav_back_text) ?>
-    </a>  <!---->
+    </a>
+
     <div class="ms-auto d-flex align-items-center gap-2">
 
         <!-- Nombre del usuario -->
@@ -199,18 +268,17 @@ if (isset($_SESSION['user_id'])) {
                 <div class="nav-avatar-initials"><?= $nav_initials ?: 'U' ?></div>
             <?php endif; ?>
         </a>
-         <!-- El desplegable a la derecha -->
+
+        <!-- El desplegable a la derecha -->
         <div class="dropdown">
             <button class="dropbtn">Opciones ▼</button>
             <div class="dropdown-content">
-                <a href="<?= $nav_base ?>profile/index.php">Perfil</a>
-                <a href="<?= $nav_base ?>contactos.php">Contactos</a>
+                <a href="<?= $nav_base ?>profile/index.php"><i class="bi bi-person-fill"></i> Perfil</a>
+                <a href="<?= $nav_base ?>contactos.php"><i class="bi bi-envelope-fill"></i> Contactos</a>
                 <hr>
-                <a href="<?= $nav_base ?>php/cerrar_sesion.php" class="cerrar-sesion">Cerrar sesión</a>
+                <a href="<?= $nav_base ?>php/cerrar_sesion.php" class="cerrar-sesion"><i
+                        class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
             </div>
-        </div> 
-       <!-- <a href="<?= $nav_base ?>php/cerrar_sesion.php" class="btn btn-sm btn-outline ms-1" style="background: #ff5e00f5;">
-            Cerrar sesión
-        </a> -->
+        </div>
     </div>
 </nav>
