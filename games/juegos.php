@@ -347,6 +347,21 @@ if (!isset($_SESSION['usuario'])) {
                         </div>
                     </div>
 
+                    <!-- Web Checkout - Rainbow Six Siege Mobile (Pago Mixto) -->
+                    <div class="col-md-4 mb-4" data-servicio="web">
+                        <div class="card h-100">
+                            <img src="https://cdn.donatov.net/cover/pack-14533-1771960014.webp" class="card-img-top"
+                                alt="Rainbow Six Siege Mobile">
+                            <div class="pagob">Pago Mixto</div>
+                            <div class="card-body">
+                                <div class="servicio1">Web Checkout</div>
+                                <h5 class="card-title">Rainbow Six Siege Mobile</h5>
+                                <p class="card-text">Compra Platinum y pases de batalla</p>
+                                <a href="../games/rainbowsix.php" class="btn btn-productos">Productos</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>

@@ -515,6 +515,8 @@ if (isset($_SESSION['user_id'])) {
                 { key: 'perfil', label: 'Mi Perfil', href: 'profile/index.php', icon: 'bi bi-person-badge' },
                 { key: 'juegos', label: 'Juegos', href: 'games/juegos.php', icon: 'bi bi-controller' },
                 { key: 'plataformas', label: 'Plataformas', href: 'plataformas/suscripciones.php', icon: 'bi bi-tv' },
+                { key: 'dispersiones', label: 'Dispersiones', href: 'dispersiones/dispersion.php', icon: 'bi bi-airplane-fill' },
+                { key: 'reservaciones', label: 'Reservaciones', href: 'reservasiones/reservas.php', icon: 'bi bi-building-fill' },
             ];
 
             function norm(s) { return (s || '').toLowerCase().trim(); }

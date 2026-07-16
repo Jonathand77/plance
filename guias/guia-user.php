@@ -326,6 +326,63 @@
       padding: 16px;
     }
 
+    /* Contenedores que si tienen una captura dentro: sin padding, la imagen llena todo */
+    .image-placeholder:has(img) {
+      padding: 0;
+      overflow: hidden;
+      border-style: solid;
+      border-color: var(--line);
+      background: #0d0d0d;
+      aspect-ratio: 16 / 10;
+    }
+    .image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.35s ease, filter 0.2s ease;
+    }
+    .image-placeholder:has(img):hover img {
+      transform: scale(1.04);
+      filter: brightness(1.05);
+    }
+
+    /* LIGHTBOX (vista previa ampliada de capturas) */
+    .img-lightbox {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(6,6,8,0.78);
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px; cursor: zoom-out;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .img-lightbox.active { opacity: 1; visibility: visible; }
+    .img-lightbox img {
+      max-width: min(92vw, 1100px); max-height: 88vh;
+      width: auto; height: auto;
+      border-radius: 12px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,108,12,0.15);
+      border: 1px solid var(--line);
+      transform: scale(0.94);
+      transition: transform 0.28s ease;
+      cursor: default;
+    }
+    .img-lightbox.active img { transform: scale(1); }
+    .lightbox-close {
+      position: absolute; top: 22px; right: 28px;
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,108,12,0.25); transform: rotate(90deg); }
+    body.lightbox-open { overflow: hidden; }
+
     /* SECTIONS */
     .section {
       border: 1px solid var(--line);
@@ -599,7 +656,9 @@
               Aquí te explicamos paso a paso cómo usarla, sin complicaciones. 😊
             </p>
           </div>
-          <div class="image-placeholder">📱 Captura de la pantalla principal de Plance</div>
+          <div class="image-placeholder">
+            <img src="../assets/images/plance2.jpg" alt="Pantalla principal de Plance" class="img-fluid">
+          </div>
         </section>
 
         <!-- CÓMO FUNCIONA -->
@@ -1135,6 +1194,11 @@
     </main>
   </div>
 
+  <div class="img-lightbox" id="imgLightbox">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
   <script>
     // Desplegables del sidebar (Guía / Seguridad)
     document.querySelectorAll('.nav-title').forEach(function (btn) {
@@ -1165,6 +1229,38 @@
         sec.style.opacity = (!q || text.includes(q)) ? '1' : '0.25';
       });
     });
+
+    (function () {
+      const lightbox = document.getElementById('imgLightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const closeBtn = document.getElementById('lightboxClose');
+
+      function openLightbox(src, alt) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        lightbox.classList.add('active');
+        document.body.classList.add('lightbox-open');
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.classList.remove('lightbox-open');
+      }
+
+      document.querySelectorAll('.image-placeholder img').forEach(function (img) {
+        img.addEventListener('click', function () {
+          openLightbox(img.currentSrc || img.src, img.alt);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeLightbox();
+      });
+    })();
   </script>
 </body>
 

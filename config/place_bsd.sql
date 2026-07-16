@@ -27,6 +27,25 @@ SET
 --
 -- --------------------------------------------------------
 --
+-- Estructura de tabla para la tabla `dispersiones`
+--
+CREATE TABLE
+  `dispersiones` (
+    `id` int (11) NOT NULL,
+    `request_id` varchar(100) NOT NULL DEFAULT '',
+    `destino` varchar(150) NOT NULL,
+    `descripcion` varchar(255) NOT NULL,
+    `precio_total` decimal(10, 2) NOT NULL,
+    `precio_base` decimal(10, 2) NOT NULL,
+    `impuesto` decimal(10, 2) NOT NULL,
+    `moneda` varchar(10) NOT NULL DEFAULT 'COP',
+    `usuario_id` varchar(100) NOT NULL,
+    `estado` varchar(20) NOT NULL DEFAULT 'pendiente',
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `gateway_ordenes`
 --
 CREATE TABLE
@@ -1158,6 +1177,7 @@ CREATE TABLE
     `precio` decimal(10, 2) NOT NULL,
     `jugador_id` varchar(100) NOT NULL,
     `estado` varchar(50) NOT NULL,
+    `monto_pagado` decimal(10, 2) DEFAULT NULL,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
@@ -1881,6 +1901,23 @@ VALUES
     '2026-06-10 19:53:39',
     '2027-06-10'
   );
+
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `reservaciones`
+--
+CREATE TABLE
+  `reservaciones` (
+    `id` int (11) NOT NULL,
+    `request_id` varchar(100) NOT NULL DEFAULT '',
+    `habitacion` varchar(150) NOT NULL,
+    `descripcion` varchar(255) NOT NULL,
+    `precio` decimal(10, 2) NOT NULL,
+    `moneda` varchar(10) NOT NULL DEFAULT 'COP',
+    `usuario_id` varchar(100) NOT NULL,
+    `estado` varchar(20) NOT NULL DEFAULT 'pendiente',
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 --
@@ -2666,6 +2703,11 @@ VALUES
 -- Índices para tablas volcadas
 --
 --
+-- Indices de la tabla `dispersiones`
+--
+ALTER TABLE `dispersiones` ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `gateway_ordenes`
 --
 ALTER TABLE `gateway_ordenes` ADD PRIMARY KEY (`id`);
@@ -2696,6 +2738,11 @@ ALTER TABLE `payment_link` ADD PRIMARY KEY (`id`);
 ALTER TABLE `recurrencias` ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `reservaciones`
+--
+ALTER TABLE `reservaciones` ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `suscripciones`
 --
 ALTER TABLE `suscripciones` ADD PRIMARY KEY (`id`);
@@ -2718,6 +2765,12 @@ ALTER TABLE `users` ADD PRIMARY KEY (`id`);
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+--
+-- AUTO_INCREMENT de la tabla `dispersiones`
+--
+ALTER TABLE `dispersiones` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 1;
+
 --
 -- AUTO_INCREMENT de la tabla `gateway_ordenes`
 --
@@ -2753,6 +2806,12 @@ AUTO_INCREMENT = 2;
 --
 ALTER TABLE `recurrencias` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
 AUTO_INCREMENT = 45;
+
+--
+-- AUTO_INCREMENT de la tabla `reservaciones`
+--
+ALTER TABLE `reservaciones` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 1;
 
 --
 -- AUTO_INCREMENT de la tabla `suscripciones`

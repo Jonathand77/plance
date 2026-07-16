@@ -192,6 +192,20 @@ if (!isset($_SESSION['usuario'])) {
             <span class="speed-dial-label">Ropa</span>
         </a>
 
+        <a href="dispersiones/dispersion.php" class="speed-dial-item" title="Tiquetes de Avión">
+            <div class="speed-dial-icon">
+                <i class="fa-solid fa-plane fs-3" style="color: var(--color-primary);"></i>
+            </div>
+            <span class="speed-dial-label">Tiquetes de Avión</span>
+        </a>
+
+        <a href="reservasiones/reservas.php" class="speed-dial-item" title="Hospedaje">
+            <div class="speed-dial-icon">
+                <i class="fa-solid fa-hotel fs-3" style="color: var(--color-primary);"></i>
+            </div>
+            <span class="speed-dial-label">Hospedaje</span>
+        </a>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

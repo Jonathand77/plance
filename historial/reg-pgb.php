@@ -17,8 +17,11 @@ $modo = $_GET['modo'] ?? 'wc';
 
 if ($modo === 'gateway') {
     $resultado = mysqli_query($conexion, "SELECT * FROM gateway_ordenes ORDER BY created_at DESC");
+} elseif ($modo === 'mixto') {
+    // Mixtos: registros de ordenes con pago parcial (monto_pagado) o productos múltiples
+    $resultado = mysqli_query($conexion, "SELECT * FROM ordenes WHERE monto_pagado IS NOT NULL OR producto LIKE '%+%' ORDER BY created_at DESC");
 } else {
-    $resultado = mysqli_query($conexion, "SELECT * FROM ordenes ORDER BY created_at DESC");
+    $resultado = mysqli_query($conexion, "SELECT * FROM ordenes WHERE monto_pagado IS NULL AND producto NOT LIKE '%+%' ORDER BY created_at DESC");
 }
 ?>
 <!DOCTYPE html>
@@ -205,6 +208,37 @@ if ($modo === 'gateway') {
         color: var(--color-secondary-3);
     }
 
+    .modo-tab.active-mixto {
+        border-color: var(--color-secondary-3);
+        background: rgba(0, 98, 168, 0.10);
+        color: var(--color-secondary-3);
+    }
+
+    .btn-continuar {
+        background: rgba(0, 98, 168, 0.12);
+        border: 1px solid rgba(0, 98, 168, 0.35);
+        color: var(--color-secondary-3);
+        border-radius: 6px;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: all 0.2s;
+        white-space: nowrap;
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .btn-continuar:hover {
+        background: rgba(0, 98, 168, 0.25);
+        color: var(--color-secondary-3);
+        text-decoration: none;
+        border-color: var(--color-secondary-3);
+    }
+
     .btn-verificar {
         background: rgba(255, 108, 12, 0.12);
         border: 1px solid rgba(255, 108, 12, 0.25);
@@ -313,6 +347,9 @@ if ($modo === 'gateway') {
             <a href="reg-pgb.php?modo=gateway" class="modo-tab <?= $modo === 'gateway' ? 'active-gw' : '' ?>">
                 <i class="bi bi-code-slash"></i> API Gateway
             </a>
+            <a href="reg-pgb.php?modo=mixto" class="modo-tab <?= $modo === 'mixto' ? 'active-mixto' : '' ?>">
+                <i class="bi bi-shuffle"></i> Pago Mixto
+            </a>
         </div>
 
         <?php
@@ -333,6 +370,18 @@ if ($modo === 'gateway') {
                                 <th>Nombre</th>
                                 <th>Correo</th>
                                 <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acción</th>
+                            </tr>
+                        <?php elseif ($modo === 'mixto'): ?>
+                            <tr>
+                                <th>#ID</th>
+                                <th>Productos</th>
+                                <th>ID Jugador</th>
+                                <th>Total pedido</th>
+                                <th>Monto pagado</th>
+                                <th>Saldo restante</th>
                                 <th>Estado</th>
                                 <th>Fecha</th>
                                 <th>Acción</th>
@@ -369,6 +418,45 @@ if ($modo === 'gateway') {
                                             <a href="../php/verificar_pago.php?tabla=gateway_ordenes&id=<?= $row['id'] ?>&request_id=<?= urlencode($row['request_id']) ?>&redirect=../historial/reg-pgb.php?modo=gateway"
                                                 class="btn-verificar">
                                                 <i class="bi bi-arrow-repeat"></i> Verificar
+                                            </a>
+                                        <?php else: ?>
+                                            <span style="color:var(--color-secondary-2); font-size:0.75rem;">—</span>
+                                        <?php endif; ?>
+                                    </td>
+                                <?php elseif ($modo === 'mixto'): ?>
+                                    <?php
+                                        $total_ord    = (float) $row['precio'];
+                                        $monto_pagado = isset($row['monto_pagado']) && $row['monto_pagado'] !== null ? (float) $row['monto_pagado'] : $total_ord;
+                                        $saldo_rest   = $total_ord - $monto_pagado;
+                                        $es_parcial   = $row['monto_pagado'] !== null && $monto_pagado < $total_ord;
+                                    ?>
+                                    <td><span class="codigo-id">#<?= htmlspecialchars($row['id']) ?></span></td>
+                                    <td style="font-size:0.82rem;max-width:200px;"><?= htmlspecialchars($row['producto']) ?></td>
+                                    <td><code class="codigo-jugador"><?= htmlspecialchars($row['jugador_id']) ?></code></td>
+                                    <td style="color:var(--text-main);font-weight:700;">$<?= number_format($total_ord, 0, ',', '.') ?> COP</td>
+                                    <td style="color:var(--color-secondary-1);font-weight:700;">$<?= number_format($monto_pagado, 0, ',', '.') ?> COP</td>
+                                    <td>
+                                        <?php if ($es_parcial): ?>
+                                            <span style="color:var(--color-primary);font-weight:700;">$<?= number_format($saldo_rest, 0, ',', '.') ?> COP</span>
+                                        <?php else: ?>
+                                            <span style="color:var(--color-secondary-2); font-size:0.75rem;">— Completo</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <span class="estado-pill badge-<?= strtolower($row['estado']) ?>">
+                                            <?= strtoupper($row['estado']) ?>
+                                        </span>
+                                    </td>
+                                    <td class="fecha-creacion"><?= htmlspecialchars($row['created_at']) ?></td>
+                                    <td>
+                                        <?php if (strtolower($row['estado']) === 'pendiente' && !empty($row['request_id'])): ?>
+                                            <a href="../php/verificar_pago.php?tabla=ordenes&id=<?= $row['id'] ?>&request_id=<?= urlencode($row['request_id']) ?>&redirect=../historial/reg-pgb.php?modo=mixto"
+                                                class="btn-verificar">
+                                                <i class="bi bi-arrow-repeat"></i> Verificar
+                                            </a>
+                                        <?php elseif (strtolower($row['estado']) === 'aprobada' && $es_parcial && $saldo_rest > 0): ?>
+                                            <a href="../php/continuar_pago.php?id=<?= $row['id'] ?>" class="btn-continuar">
+                                                <i class="bi bi-play-circle-fill"></i> Continuar pago
                                             </a>
                                         <?php else: ?>
                                             <span style="color:var(--color-secondary-2); font-size:0.75rem;">—</span>

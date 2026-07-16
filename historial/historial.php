@@ -35,6 +35,8 @@ $total_subs = safeCount($conexion, "SELECT COUNT(*) as total FROM suscripciones 
 $total_recs = safeCount($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo_sesion'");
 
 $total_links = safeCount($conexion, "SELECT COUNT(*) as total FROM payment_link");
+$total_disp = safeCount($conexion, "SELECT COUNT(*) as total FROM dispersiones WHERE usuario_id = '$correo_sesion'");
+$total_prea = safeCount($conexion, "SELECT COUNT(*) as total FROM reservaciones WHERE usuario_id = '$correo_sesion'");
 
 $total_pagos = $total_ordenes + $total_subs + $total_recs;
 $total_pagos = number_format($total_pagos, 0, ',', '.');
@@ -312,6 +314,42 @@ $total_pagos = number_format($total_pagos, 0, ',', '.');
             </div>
             <div style="display:flex; align-items:center; gap:0.5rem;">
                 <span class="card-badge"><?= $total_links ?> Registros</span>
+                <i class="bi bi-chevron-right card-arrow"></i>
+            </div>
+        </a>
+
+        <!-- Dispersiones -->
+        <a href="reg-disp.php" class="historial-card"
+            style="--card-color: var(--color-secondary-1); --card-bg: rgba(0,207,180,0.12);">
+            <div class="card-left">
+                <div class="card-icon">
+                    <i class="fa-solid fa-plane" style="color: var(--color-secondary-1);"></i>
+                </div>
+                <div>
+                    <div class="card-name">Dispersiones</div>
+                    <div class="card-desc">Tiquetes de avión — pago dividido entre aerolínea e impuestos</div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="card-badge"><?= $total_disp ?> Registros</span>
+                <i class="bi bi-chevron-right card-arrow"></i>
+            </div>
+        </a>
+
+        <!-- Preautorizaciones -->
+        <a href="reg-prea.php" class="historial-card"
+            style="--card-color: var(--color-secondary-3); --card-bg: rgba(0,98,168,0.12);">
+            <div class="card-left">
+                <div class="card-icon">
+                    <i class="bi bi-building-fill" style="color: var(--color-secondary-3);"></i>
+                </div>
+                <div>
+                    <div class="card-name">Preautorizaciones</div>
+                    <div class="card-desc">Reservas de hotel — monto reservado sin cobrar hasta el check-out</div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="card-badge"><?= $total_prea ?> Registros</span>
                 <i class="bi bi-chevron-right card-arrow"></i>
             </div>
         </a>

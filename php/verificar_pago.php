@@ -24,7 +24,7 @@ $request_id = $_GET['request_id'] ?? '';
 $redirect = $_GET['redirect'] ?? '../historial/historial.php';
 
 // Validar tabla permitida (seguridad)
-$tablas_permitidas = ['ordenes', 'suscripciones', 'recurrencias', 'suscription_rec', 'suscription', 'gateway_suscripciones', 'gateway_suscription', 'gateway_ordenes'];
+$tablas_permitidas = ['ordenes', 'suscripciones', 'recurrencias', 'suscription_rec', 'suscription', 'gateway_suscripciones', 'gateway_suscription', 'gateway_ordenes', 'dispersiones', 'reservaciones'];
 if (!in_array($tabla, $tablas_permitidas) || !$id || !$request_id) {
     header("Location: $redirect");
     exit();
@@ -32,9 +32,18 @@ if (!in_array($tabla, $tablas_permitidas) || !$id || !$request_id) {
 
 // ══════════════════════════════════════════
 // Consultar estado a PlaceToPay
+// Dispersiones y Preautorizaciones usan credenciales propias
 // ══════════════════════════════════════════
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
+if ($tabla === 'dispersiones') {
+    $login = "8ddd7ab3d5a270608832d033849a1a8d";
+    $secretKey = "U7rCf9me0vqk7755";
+} elseif ($tabla === 'reservaciones') {
+    $login = "62f3eeeb7655485cbf65b306b4585dfd";
+    $secretKey = "K8zGmmoark19y2ey";
+} else {
+    $login = "2d9eaf1e662518756a3d78806543af5b";
+    $secretKey = "3YC5brb5eAR4xBGQ";
+}
 $url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
 
 $seed = date('c');
