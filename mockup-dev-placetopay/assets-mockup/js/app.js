@@ -38,7 +38,9 @@ function boot() {
     onToggleSidebar: () => sidebarApi.toggleSidebar?.(),
   });
 
-  initResponse(state);
+  initResponse(state, {
+    updateSendAvailability: () => requestApi.updateSendAvailability?.(),
+  });
   initPopup();
   initWelcome(state, { nav });
 

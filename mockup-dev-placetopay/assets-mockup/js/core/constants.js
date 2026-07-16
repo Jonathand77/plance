@@ -46,10 +46,6 @@ export const OPTION_INFO = {
     title: "Recurrencia",
     text: "Configura pagos periódicos automáticos. Ideal para planes mensuales o cobros recurrentes.",
   },
-  mixto: {
-    title: "Pago mixto",
-    text: "Permite pagos parciales y mayor flexibilidad en la forma de cobrar al cliente.",
-  },
 
   auto: {
     title: "Automático",

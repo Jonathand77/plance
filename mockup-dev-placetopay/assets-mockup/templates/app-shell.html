@@ -164,17 +164,6 @@
                 </button>
               </div>
               <div class="checkbox-option">
-                <input type="checkbox" name="paymentType" value="mixto" /><span
-                  >Pago mixto</span
-                ><button
-                  type="button"
-                  class="info-action"
-                  data-info-key="mixto"
-                >
-                  <i class="bi bi-info-circle"></i>
-                </button>
-              </div>
-              <div class="checkbox-option">
                 <input type="checkbox" name="paymentType" value="token" /><span
                   >Suscripción + Token (tokenización)</span
                 ><button
@@ -568,6 +557,10 @@
           <i class="bi bi-pencil-fill"></i> Modo edición: los cambios del
           sidebar no sobrescriben tu JSON.
         </div>
+        <div class="json-error-banner" id="jsonErrorBanner" style="display: none">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span id="jsonErrorText"></span>
+        </div>
         <div class="json-view" id="jsonPreview"></div>
         <pre class="json-raw" id="jsonRaw"></pre>
         <div class="editor-container" id="editorContainer">
@@ -592,7 +585,12 @@
           Envía un request para ver la respuesta
         </div>
       </div>
+      <div class="json-tabs" id="respTabs" style="display: none">
+        <div class="json-tab active" data-resp-tab="preview">Preview</div>
+        <div class="json-tab" data-resp-tab="raw">Raw JSON</div>
+      </div>
       <div class="resp-body" id="respBody"></div>
+      <pre class="resp-raw" id="respRaw"></pre>
       <div class="resp-meta" id="respMeta">
         <span class="rcode" id="rcode"></span><span id="rtime"></span
         ><span id="rgw"></span>

@@ -12,6 +12,26 @@ export function safeJsonParse(text, fallback = null) {
   }
 }
 
+// Valida JSON y ubica el error (línea/columna) cuando el motor lo reporta
+// (V8 incluye "position N" en el mensaje; otros motores no, y se degrada
+// mostrando solo el mensaje sin resaltar línea).
+export function parseJsonDetailed(text) {
+  try {
+    return { valid: true, value: JSON.parse(text) };
+  } catch (err) {
+    const posMatch = /position (\d+)/.exec(err.message);
+    let line = null;
+    let column = null;
+    if (posMatch) {
+      const before = text.slice(0, Number(posMatch[1]));
+      const lines = before.split("\n");
+      line = lines.length;
+      column = lines[lines.length - 1].length + 1;
+    }
+    return { valid: false, message: err.message, line, column };
+  }
+}
+
 // Opción seleccionada por name (radio/checkbox tipo single-select)
 export function getSelectedOptionValue(name) {
   const selected = document.querySelector(`input[name="${name}"]:checked`);

@@ -3,7 +3,7 @@ import {
   $$,
   colorize,
   getSelectedOptionValue,
-  safeJsonParse,
+  parseJsonDetailed,
   copyToClipboard,
 } from "../../core/utils.js";
 import { URLS } from "../../core/constants.js";
@@ -23,6 +23,7 @@ export function initRequest(state) {
     resetBody: () => resetBody(state),
     beautify: () => beautify(state),
     copyJson: (event) => copyJson(state, event),
+    updateSendAvailability: () => updateSendAvailability(state),
   };
 }
 
@@ -48,15 +49,77 @@ export function initEditor(state) {
     lineWrapping: true,
     indentUnit: 2,
     tabSize: 2,
+    gutters: ["CodeMirror-linenumbers", "cm-error-gutter"],
   });
 
-  state.cmEditor.on("change", () => {
-    const parsed = safeJsonParse(state.cmEditor.getValue(), null);
-    if (!parsed) return;
-    state.lastBody = parsed;
+  state.cmEditor.on("change", () => validateEditor(state));
+}
+
+function validateEditor(state) {
+  const cm = state.cmEditor;
+  if (!cm) return;
+
+  clearEditorError(state);
+  const result = parseJsonDetailed(cm.getValue());
+
+  if (result.valid) {
+    state.editorValid = true;
+    state.lastBody = result.value;
     if (state.currentTab === "preview")
       $("#jsonPreview").innerHTML = colorize(state.lastBody);
-  });
+    hideEditorError();
+  } else {
+    state.editorValid = false;
+    showEditorError(result);
+    if (result.line) markEditorErrorLine(state, result.line - 1);
+  }
+
+  updateSendAvailability(state);
+}
+
+function clearEditorError(state) {
+  const cm = state.cmEditor;
+  if (!cm) return;
+  cm.clearGutter("cm-error-gutter");
+  if (state.editorErrorLine != null) {
+    cm.removeLineClass(state.editorErrorLine, "background", "cm-error-line");
+    state.editorErrorLine = null;
+  }
+}
+
+function markEditorErrorLine(state, lineIndex) {
+  const cm = state.cmEditor;
+  if (!cm || lineIndex < 0 || lineIndex >= cm.lineCount()) return;
+  const marker = document.createElement("div");
+  marker.className = "cm-error-marker";
+  marker.title = "Error de sintaxis JSON";
+  cm.setGutterMarker(lineIndex, "cm-error-gutter", marker);
+  cm.addLineClass(lineIndex, "background", "cm-error-line");
+  state.editorErrorLine = lineIndex;
+}
+
+function showEditorError(result) {
+  const banner = $("#jsonErrorBanner");
+  if (!banner) return;
+  const where =
+    result.line != null ? ` (línea ${result.line}, columna ${result.column})` : "";
+  $("#jsonErrorText").textContent = `JSON inválido${where}: ${result.message}`;
+  banner.style.display = "flex";
+}
+
+function hideEditorError() {
+  const banner = $("#jsonErrorBanner");
+  if (banner) banner.style.display = "none";
+}
+
+function updateSendAvailability(state) {
+  const btn = $("#btnSend");
+  if (!btn) return;
+  const blocking = state.currentTab === "edit" && state.editorValid === false;
+  btn.disabled = blocking;
+  btn.title = blocking
+    ? "Corrige el JSON del Request Body antes de enviar"
+    : "";
 }
 
 export function genAuth() {
@@ -174,6 +237,13 @@ export function setTab(state, tab, el) {
       setTimeout(() => state.cmEditor?.refresh?.(), 80);
     }
   }
+
+  if (tab !== "edit") {
+    state.editorValid = true;
+    clearEditorError(state);
+    hideEditorError();
+  }
+  updateSendAvailability(state);
 }
 
 export async function copyJson(state, event) {
