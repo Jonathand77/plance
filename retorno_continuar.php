@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
-
 require_once 'php/conexion_be.php';
 require_once __DIR__ . '/php/http_client.php';
 if (!isset($conexion)) {
@@ -19,14 +14,14 @@ $orden_id = (int) ($_GET['orden_id'] ?? ($data['orden_id'] ?? 0));
 unset($_SESSION['continuar_result']);
 
 if (!$orden_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
 // Traer orden actualizada
 $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM ordenes WHERE id = $orden_id"));
 if (!$row) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -432,7 +427,7 @@ if ($nuevo_estado === 'aprobada') {
             </div>
         </div>
 
-        <a href="home.php" class="btn-home">← Inicio</a>
+        <a href="index.php" class="btn-home">← Inicio</a>
         <a href="historial/reg-pgb.php?modo=mixto" class="btn-volver">Ver historial</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

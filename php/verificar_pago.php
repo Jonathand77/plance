@@ -6,7 +6,7 @@ if (file_exists($autoloadPath)) {
 }
 require_once __DIR__ . '/http_client.php';
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 

@@ -5,10 +5,6 @@ if (file_exists($autoloadPath)) {
     require_once $autoloadPath;
 }
 require_once __DIR__ . '/http_client.php';
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
-    exit();
-}
 
 require_once 'conexion_be.php';
 if (!isset($conexion)) {
@@ -19,7 +15,7 @@ if (!isset($conexion)) {
 
 $sub_id = intval($_GET['sub'] ?? 0);
 if (!$sub_id) {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -28,7 +24,7 @@ $sub_id_safe = mysqli_real_escape_string($conexion, $sub_id);
 $subs = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM suscripciones WHERE id = '$sub_id_safe'"));
 
 if (!$subs) {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     exit();
 }
 

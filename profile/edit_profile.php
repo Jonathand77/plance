@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -17,7 +17,7 @@ $user_id = intval($_SESSION['user_id'] ?? 0);
 $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
 
 if (!$row) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -321,7 +321,7 @@ unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
 <body>
 
     <nav class="navbar navbar-dark navbar-expand-lg px-3 py-2">
-        <a class="navbar-brand fw-bold" href="../home.php" style="color: var(--accent);">
+        <a class="navbar-brand fw-bold" href="../index.php" style="color: var(--accent);">
             <img src="../assets/icons/iconoy.png" alt="Logo" style="width: 30px;">
         </a>
         <a href="index.php" class="btn-back-nav"><i class="bi bi-backspace-fill"></i> Volver al perfil</a>

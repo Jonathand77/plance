@@ -16,63 +16,63 @@ $nombre = trim($nombre);
 
 // Validar campos
 if ($id === "" || $nombre === "" || $correo === "" || $usuario === "" || $contrasena === "") {
-    echo "<script>alert('Por favor rellena todos los campos'); window.location='../index.php';</script>";
+    echo "<script>alert('Por favor rellena todos los campos'); window.location='../login.php';</script>";
     exit();
 }
 
 // Validaciones
 if (!preg_match('/^[0-9()+]{1,20}$/', $id)) {
-    echo "<script>alert('La identificación solo puede contener números y paréntesis, entre 1 y 20 caracteres'); window.location='../index.php';</script>";
+    echo "<script>alert('La identificación solo puede contener números y paréntesis, entre 1 y 20 caracteres'); window.location='../login.php';</script>";
     exit();
 }
 
 if (strlen($nombre) < 5) {
-    echo "<script>alert('El nombre debe tener al menos 5 caracteres'); window.location='../index.php';</script>";
+    echo "<script>alert('El nombre debe tener al menos 5 caracteres'); window.location='../login.php';</script>";
     exit();
 }
 
 if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/', $nombre)) {
-    echo "<script>alert('El nombre solo puede contener letras y espacios'); window.location='../index.php';</script>";
+    echo "<script>alert('El nombre solo puede contener letras y espacios'); window.location='../login.php';</script>";
     exit();
 }
 
 if (str_word_count($nombre) < 2) {
-    echo "<script>alert('Debes ingresar nombre y apellido'); window.location='../index.php';</script>";
+    echo "<script>alert('Debes ingresar nombre y apellido'); window.location='../login.php';</script>";
     exit();
 }
 
 if (strlen($contrasena) < 8) {
-    echo "<script>alert('La contraseña debe tener mínimo 8 caracteres'); window.location='../index.php';</script>";
+    echo "<script>alert('La contraseña debe tener mínimo 8 caracteres'); window.location='../login.php';</script>";
     exit();
 }
 if (!preg_match('/[A-Z]/', $contrasena)) {
-    echo "<script>alert('La contraseña debe tener al menos una letra mayúscula'); window.location='../index.php';</script>";
+    echo "<script>alert('La contraseña debe tener al menos una letra mayúscula'); window.location='../login.php';</script>";
     exit();
 }
 if (!preg_match('/[a-z]/', $contrasena)) {
-    echo "<script>alert('La contraseña debe tener al menos una letra minúscula'); window.location='../index.php';</script>";
+    echo "<script>alert('La contraseña debe tener al menos una letra minúscula'); window.location='../login.php';</script>";
     exit();
 }
 if (!preg_match('/[0-9]/', $contrasena)) {
-    echo "<script>alert('La contraseña debe tener al menos un número'); window.location='../index.php';</script>";
+    echo "<script>alert('La contraseña debe tener al menos un número'); window.location='../login.php';</script>";
     exit();
 }
 if (!preg_match('/[\W_]/', $contrasena)) {
-    echo "<script>alert('La contraseña debe tener al menos un carácter especial'); window.location='../index.php';</script>";
+    echo "<script>alert('La contraseña debe tener al menos un carácter especial'); window.location='../login.php';</script>";
     exit();
 }
 
 // Verificar correo
 $verificar_correo = mysqli_query($conexion, "SELECT 1 FROM users WHERE correo = '$correo' LIMIT 1");
 if (mysqli_num_rows($verificar_correo) > 0) {
-    echo "<script>alert('Este correo ya está registrado'); window.location='../index.php';</script>";
+    echo "<script>alert('Este correo ya está registrado'); window.location='../login.php';</script>";
     exit();
 }
 
 // Verificar usuario
 $verificar_usuario = mysqli_query($conexion, "SELECT 1 FROM users WHERE usuario = '$usuario' LIMIT 1");
 if (mysqli_num_rows($verificar_usuario) > 0) {
-    echo "<script>alert('Este usuario ya está registrado'); window.location='../index.php';</script>";
+    echo "<script>alert('Este usuario ya está registrado'); window.location='../login.php';</script>";
     exit();
 }
 
@@ -86,9 +86,9 @@ VALUES ('$id', '$nombre', '$correo', '$usuario', '$contrasena_hash', 'assets/img
 $ejecutar = mysqli_query($conexion, $query);
 
 if ($ejecutar) {
-    echo "<script>alert('Usuario registrado exitosamente'); window.location='../index.php';</script>";
+    echo "<script>alert('Usuario registrado exitosamente'); window.location='../login.php';</script>";
 } else {
-    echo "<script>alert('Error al registrar usuario'); window.location='../index.php';</script>";
+    echo "<script>alert('Error al registrar usuario'); window.location='../login.php';</script>";
 }
 
 mysqli_close($conexion);

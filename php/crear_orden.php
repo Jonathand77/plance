@@ -2,7 +2,7 @@
 session_start();
 // Solo acepta POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../home.php");
+    header("Location: ../index.php");
     exit();
 }
 
@@ -79,7 +79,7 @@ $data = [
     "returnUrl" => "http://localhost/plance/retorno.php?order=" . $order_id,
     //este notifyUrl es el que se llama desde PlaceToPay para informar del resultado del pago, es importante que sea accesible públicamente (ngrok o hosting)
     "notifyUrl" => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
-    // digamos que notifyURL es solo una URL de notificación, no una página de retorno, por eso no redirigimos a una página de resultado sino al home, el resultado se muestra en home.php leyendo el estado actualizado en BD
+    // digamos que notifyURL es solo una URL de notificación, no una página de retorno, por eso no redirigimos a una página de resultado sino al home, el resultado se muestra en index.php leyendo el estado actualizado en BD
 
 
     "ipAddress" => $_SERVER['REMOTE_ADDR'],
@@ -112,6 +112,6 @@ if (isset($result['processUrl'])) {
     echo "<pre style='background:#1e2128;color:#f0f1f3;padding:1rem;border-radius:8px;font-size:0.85rem;'>";
     print_r($result);
     echo "</pre>";
-    echo "<a href='../home.php' style='color:#FF6C0C;font-family:sans-serif;'>← Volver al inicio</a>";
+    echo "<a href='../index.php' style='color:#FF6C0C;font-family:sans-serif;'>← Volver al inicio</a>";
 }
 ?>

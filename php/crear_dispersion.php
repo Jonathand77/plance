@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: ../dispersiones/tickets.php");
     exit();

@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -235,7 +235,7 @@ $total_pagos = number_format($total_pagos, 0, ',', '.');
 
 <body>
     <?php
-    $nav_back_url = "../home.php";
+    $nav_back_url = "../index.php";
     $nav_back_text = "Atrás";
     $nav_base = "../";
     require_once '../php/navbar.php';

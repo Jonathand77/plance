@@ -2,10 +2,6 @@
 session_start();
 require_once __DIR__ . '/php/http_client.php';
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
 
 require_once 'php/conexion_be.php';
 if (!isset($conexion)) {
@@ -18,7 +14,7 @@ $sub_id = intval($_GET['sub'] ?? $_SESSION['token_sub_id'] ?? 0);
 $request_id = $_SESSION['token_requestId'] ?? '';
 
 if (!$sub_id || !$request_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -262,7 +258,7 @@ unset($_SESSION['token_requestId'], $_SESSION['token_sub_id']);
         <div class="result-title"><?= $titulo ?></div>
         <p class="result-message"><?= $mensaje ?></p>
 
-        <a href="home.php" class="btn-home">← Inicio</a>
+        <a href="index.php" class="btn-home">← Inicio</a>
         <a href="plataformas/streaming.php" class="btn-volver">Ver planes</a>
     </div>
 

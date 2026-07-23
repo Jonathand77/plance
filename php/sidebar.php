@@ -293,7 +293,7 @@
         <!-- Navegación -->
         <ul class="sidebar-nav">
             <li>
-                <a href="home.php" class="active">
+                <a href="index.php" class="active">
                     <i class="bi bi-house-fill"></i>
                     Inicio
                 </a>

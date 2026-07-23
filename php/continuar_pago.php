@@ -1,11 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
-    exit();
-}
-
 require_once 'conexion_be.php';
 require_once __DIR__ . '/http_client.php';
 if (!isset($conexion)) {

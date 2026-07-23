@@ -2,10 +2,6 @@
 session_start();
 require_once __DIR__ . '/php/http_client.php';
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
 
 // ══════════════════════════════════════════
 // Conexión a BD
@@ -25,7 +21,7 @@ $order_id = intval($_GET['order'] ?? 0);
 $request_id = $_SESSION['p2p_requestId'] ?? '';
 
 if (!$order_id || !$request_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 

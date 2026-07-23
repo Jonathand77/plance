@@ -1,10 +1,6 @@
 ﻿<?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
 
 require_once 'php/conexion_be.php';
 require_once __DIR__ . '/php/http_client.php';
@@ -16,7 +12,7 @@ if (!isset($conexion)) {
 
 $sub_id = intval($_GET['sub'] ?? 0);
 if (!$sub_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -25,7 +21,7 @@ $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM suscription WHE
 $request_id = $row['request_id'] ?? '';
 
 if (!$request_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 

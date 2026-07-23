@@ -636,7 +636,7 @@
     <!-- MAIN -->
     <main class="content">
       <header class="topbar">
-        <a href="../home.php"><i class="icon-colors bi bi-backspace-fill" style="font-size: 1.5rem;"></i></a>
+        <a href="../index.php"><i class="icon-colors bi bi-backspace-fill" style="font-size: 1.5rem;"></i></a>
         <h2>Centro de Ayuda — Usuarios</h2>
         <input class="search" type="text" placeholder="🔍 Buscar en la guía...">
       </header>

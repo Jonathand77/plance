@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -18,7 +18,7 @@ $user_id = intval($_SESSION['user_id'] ?? 0);
 $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
 
 if (!$row) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -594,7 +594,7 @@ $initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
                 <p class="topbar-subtitle">Administra tu cuenta y la configuración principal del perfil.</p>
             </div>
 
-            <a href="../home.php" class="back-link">
+            <a href="../index.php" class="back-link">
                 <i class="bi bi-arrow-left"></i>
                 volver
             </a>

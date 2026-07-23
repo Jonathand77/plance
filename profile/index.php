@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -17,7 +17,7 @@ $user_id = intval($_SESSION['user_id'] ?? 0);
 $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
 
 if (!$row) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -61,7 +61,7 @@ $msg_type = $_SESSION['profile_msg_type'] ?? '';
 unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
 
 // Valores por defecto
-$nav_back_url = $nav_back_url ?? 'home.php';
+$nav_back_url = $nav_back_url ?? 'index.php';
 $nav_back_text = $nav_back_text ?? 'volver';
 $nav_base = $nav_base ?? '../';
 
@@ -240,7 +240,7 @@ if (isset($_SESSION['user_id'])) {
         color: var(--color-danger) !important;
     }
 
-    .dropdown:hover .dropdown-content {
+    .dropdown.open .dropdown-content {
         display: block;
     }
 
@@ -610,10 +610,10 @@ if (isset($_SESSION['user_id'])) {
 <body>
 
     <nav class="navbar navbar-dark navbar-expand-lg px-3 py-2">
-        <a class="navbar-brand fw-bold" href="../home.php" style="color: var(--accent);">
+        <a class="navbar-brand fw-bold" href="../index.php" style="color: var(--accent);">
             <img src="../assets/icons/iconoy.png" alt="Logo" style="width: 30px;">
         </a>
-        <a href="../home.php" class="btn-back-nav"><i class="fa-solid fa-circle-arrow-left"></i> Atrás</a>
+        <a href="../index.php" class="btn-back-nav"><i class="fa-solid fa-circle-arrow-left"></i> Atrás</a>
         <div class="ms-auto d-flex align-items-center gap-2">
             <span
                 style="background-color: rgba(30,33,44,0.84); padding: 5px 12px; border-radius: 8px; font-weight: 600; color: var(--text-main);">
@@ -633,6 +633,24 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
     </nav>
+
+    <script>
+        (function () {
+            document.querySelectorAll('.navbar .dropdown').forEach(function (dd) {
+                var btn = dd.querySelector('.dropbtn');
+                if (!btn) return;
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var wasOpen = dd.classList.contains('open');
+                    document.querySelectorAll('.dropdown.open').forEach(function (o) { o.classList.remove('open'); });
+                    if (!wasOpen) dd.classList.add('open');
+                });
+            });
+            document.addEventListener('click', function () {
+                document.querySelectorAll('.dropdown.open').forEach(function (o) { o.classList.remove('open'); });
+            });
+        })();
+    </script>
 
     <div class="profile-layout">
 

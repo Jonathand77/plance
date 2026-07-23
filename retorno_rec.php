@@ -2,10 +2,6 @@
 session_start();
 require_once __DIR__ . '/php/http_client.php';
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
 
 // ══════════════════════════════════════════
 // Conexión a BD
@@ -23,7 +19,7 @@ if (!isset($conexion)) {
 $rec_id = intval($_GET['rec'] ?? 0);
 
 if (!$rec_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -33,7 +29,7 @@ $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM recurrencias WH
 $request_id = $row['request_id'] ?? '';
 
 if (!$request_id) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -406,7 +402,7 @@ $rec = $row;
 
         <?php endif; ?>
 
-        <a href="home.php" class="btn-home">← Inicio</a>
+        <a href="index.php" class="btn-home">← Inicio</a>
         <a href="plataformas/redes.php" class="btn-volver">Ver planes</a>
 
     </div>

@@ -16,7 +16,7 @@ if ($correo === '' || $contrasena === '') {
     echo "
         <script>
             alert('Rellene todos los campos');
-            window.location = '../index.php';
+            window.location = '../login.php';
         </script>
     ";
     exit();
@@ -32,13 +32,13 @@ if ($row = mysqli_fetch_assoc($resultado)) {
         $_SESSION['usuario'] = $row['usuario'];
         $_SESSION['correo'] = $row['correo'];
 
-        header("Location: ../home.php");
+        header("Location: ../index.php");
         exit();
     } else {
         echo "
             <script>
                 alert('Contraseña incorrecta');
-                window.location = '../index.php';
+                window.location = '../login.php';
             </script>
         ";
         exit();
@@ -47,7 +47,7 @@ if ($row = mysqli_fetch_assoc($resultado)) {
     echo "
         <script>
             alert('Usuario no encontrado');
-            window.location = '../index.php';
+            window.location = '../login.php';
         </script>
     ";
     exit();

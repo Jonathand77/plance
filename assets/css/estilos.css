@@ -184,41 +184,6 @@ main {
   width: auto;
 }
 
-.welcome {
-  margin: 150px;
-  background-image: url(../images/bg13.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 100vh;
-  text-align: center;
-  color: white;
-  opacity: 0;
-  animation: fadeIn 1.5s ease-in-out forwards;
-}
-
-.navbar-welcome {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-.welcome-content {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: rgba(0, 0, 0, 0.5);
-  padding-top: 100px;
-}
-
-.navbar-welcome.scrolled {
-  background-color: var(--color-surface) !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
-
 .img-logo {
   margin-bottom: 20px;
   align-self: center;
@@ -364,11 +329,6 @@ button:focus {
 
 .glow-btn:hover {
   box-shadow: 0 0 25px var(--color-primary);
-}
-
-.welcome-card {
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 /* Texto secundario */

@@ -1,16 +1,12 @@
 ﻿<?php
 session_start();
 
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit();
-}
 
 $data = $_SESSION['link_result'] ?? null;
 unset($_SESSION['link_result']);
 
 if (!$data) {
-    header("Location: home.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -405,7 +401,7 @@ if ($exito) {
             </div>
         </div>
 
-        <a href="home.php" class="btn-home">← Inicio</a>
+        <a href="index.php" class="btn-home">← Inicio</a>
         <a href="textil/pl.php" class="btn-volver">Ver tienda</a>
     </div>
 
