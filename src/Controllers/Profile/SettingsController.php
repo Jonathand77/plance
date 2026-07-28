@@ -49,7 +49,8 @@ class SettingsController
         $correo = $row['correo'];
 
         $avatar = '';
-        if (!empty($row['profile_image']) && file_exists(dirname(__DIR__, 3) . '/uploads/' . $row['profile_image'])) {
+        $uploadPath = dirname(__DIR__, 3) . '/public/uploads/' . $row['profile_image'];
+        if (!empty($row['profile_image']) && file_exists($uploadPath)) {
             $avatar = '../uploads/' . htmlspecialchars($row['profile_image']);
         }
 

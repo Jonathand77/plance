@@ -12,7 +12,7 @@ class PlaceToPayClient
     {
         $this->baseUrl = $baseUrl ?? Env::get('P2P_BASE_URL', 'https://checkout-test.placetopay.com');
 
-        require_once __DIR__ . '/../../../php/http_client.php';
+        require_once __DIR__ . '/../../../public/php/http_client.php';
     }
 
     /**

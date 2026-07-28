@@ -11,7 +11,7 @@ class ProfileService
 
     public function __construct(private UserRepositoryInterface $users, ?string $uploadsDir = null)
     {
-        $this->uploadsDir = $uploadsDir ?? dirname(__DIR__, 3) . '/uploads/';
+        $this->uploadsDir = $uploadsDir ?? dirname(__DIR__, 3) . '/public/uploads/';
     }
 
     public function actualizarFoto(int $userId, array $foto): string
