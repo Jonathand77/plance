@@ -1,0 +1,490 @@
+:root {
+
+        /* Variables específicas del componente */
+        --bg-base: #0d0e10;
+        --bg-surface: #1E212C;
+        --bg-card: #1E2128;
+        --bg-card-hover: #252830;
+        --bg-selected: #0a1520;
+        --border: #4C5F71;
+        --border-active: #FF6C0C;
+        --accent: #0062A8;
+        --accent-glow: rgba(0, 98, 168, 0.25);
+        --accent-dark: #004d85;
+        --accent-soft: rgba(0, 98, 168, 0.1);
+        --text-primary: #f0f1f3;
+        --text-secondary: #7D868C;
+        --text-muted: #4C5F71;
+        --font-display: 'Barlow', sans-serif;
+        --font-body: 'Barlow', sans-serif;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 14px;
+        --transition: 0.2s ease;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: var(--bg-base);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .navbar {
+        background-color: rgba(30, 33, 44, 0.85) !important;
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .game-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 2rem;
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border);
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .game-banner__tag {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+    }
+
+    .wc-badge {
+        background: rgba(0, 98, 168, 0.12);
+        color: var(--accent);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        font-family: var(--font-display);
+    }
+
+    .pre-badge {
+        background: rgba(0, 98, 168, 0.12);
+        color: #6bb6e8;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        font-family: var(--font-display);
+    }
+
+    .shop-layout {
+        display: grid;
+        grid-template-columns: 1fr 370px;
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 1.5rem auto;
+        padding: 0 1.5rem 3rem;
+        align-items: start;
+    }
+
+    .section-label {
+        font-family: var(--font-display);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+    }
+
+    /* INFO PREAUTORIZACION */
+    .preauth-info {
+        background: rgba(0, 98, 168, 0.07);
+        border: 1px solid rgba(0, 98, 168, 0.2);
+        border-left: 3px solid var(--accent);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 0.8rem 1rem;
+        margin-bottom: 1.2rem;
+        font-size: 0.82rem;
+        color: #6bb6e8;
+        line-height: 1.6;
+    }
+
+    .preauth-info strong {
+        color: var(--accent);
+    }
+
+    /* GRID HABITACIONES */
+    .rooms-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .room-card {
+        position: relative;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.2rem;
+        cursor: pointer;
+        transition: all var(--transition);
+        overflow: hidden;
+    }
+
+    .room-card:hover {
+        background: var(--bg-card-hover);
+        border-color: rgba(0, 98, 168, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .room-card.selected {
+        background: var(--bg-selected);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent), 0 4px 24px var(--accent-glow);
+    }
+
+    .room-card.selected::after {
+        content: '✔';
+        position: absolute;
+        top: 0.7rem;
+        right: 0.7rem;
+        width: 20px;
+        height: 20px;
+        background: var(--accent);
+        border-radius: 50%;
+        color: #fff;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    .room-badge {
+        display: inline-block;
+        background: rgba(0, 98, 168, 0.12);
+        color: var(--accent);
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.5rem;
+        font-family: var(--font-display);
+        letter-spacing: 0.05em;
+    }
+
+    .room-badge.premium {
+        background: rgba(255, 108, 12, 0.12);
+        color: var(--color-primary);
+    }
+
+    .room-badge.suite {
+        background: rgba(0, 207, 180, 0.12);
+        color: var(--color-secondary-1);
+    }
+
+    .room-icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .room-name {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin-bottom: 0.3rem;
+        letter-spacing: 0.02em;
+    }
+
+    .room-desc {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-bottom: 0.6rem;
+    }
+
+    .room-amenities {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.6rem;
+    }
+
+    .amenity {
+        font-size: 0.68rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        padding: 0.15rem 0.4rem;
+        border-radius: var(--radius-sm);
+        color: var(--text-secondary);
+    }
+
+    .room-price {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--accent);
+    }
+
+    .room-price-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-left: 0.2rem;
+    }
+
+    /* CHECKOUT */
+    .checkout-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: sticky;
+        top: 16px;
+    }
+
+    .checkout-box {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.3rem;
+    }
+
+    .checkout-room-name {
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin-bottom: 0.3rem;
+    }
+
+    .checkout-price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+    }
+
+    .checkout-price {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+
+    .checkout-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0.7rem 0;
+    }
+
+    .section-label-sm {
+        font-family: var(--font-display);
+        font-size: 0.73rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .field-group {
+        margin-bottom: 0.65rem;
+    }
+
+    .field-label {
+        font-size: 0.73rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 0.25rem;
+        display: block;
+    }
+
+    .field-input {
+        width: 100%;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        font-size: 0.83rem;
+        padding: 0.4rem 0.7rem;
+        outline: none;
+        transition: border-color var(--transition);
+    }
+
+    .field-input:focus {
+        border-color: var(--color-secondary-3);
+        box-shadow: 0 0 0 3px rgba(0, 98, 168, 0.15);
+    }
+
+    .field-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    /* Fechas */
+    .dates-info {
+        background: rgba(0, 98, 168, 0.07);
+        border: 1px solid rgba(0, 98, 168, 0.25);
+        border-radius: var(--radius-sm);
+        padding: 0.65rem 0.9rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.8rem;
+        color: #6bb6e8;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .btn-reservar {
+        width: 100%;
+        margin-top: 0.8rem;
+        padding: 0.85rem;
+        background: var(--color-primary);
+        border: none;
+        border-radius: var(--radius-md);
+        color: #0d0e10;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-reservar::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
+    }
+
+    .btn-reservar:hover {
+        background: var(--color-secondary-3);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(255, 108, 12, 0.3);
+        color: #fff;
+    }
+
+    .btn-reservar:hover::before {
+        transform: translateX(100%);
+    }
+
+    .security-note {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.73rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        justify-content: center;
+    }
+
+    /* Preauth notice en checkout */
+    .preauth-notice {
+        background: rgba(0, 98, 168, 0.08);
+        border: 1px solid rgba(0, 98, 168, 0.2);
+        border-radius: var(--radius-sm);
+        padding: 0.65rem 0.9rem;
+        margin-top: 0.6rem;
+        font-size: 0.78rem;
+        color: #6bb6e8;
+        line-height: 1.5;
+    }
+
+    #totalNochesRow {
+        background: rgba(0, 98, 168, 0.07);
+        border-radius: var(--radius-sm);
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    #totalNochesText {
+        color: #6bb6e8;
+    }
+
+    #totalFinalText {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--accent);
+    }
+
+    @keyframes fadeSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .products-panel {
+        animation: fadeSlideIn 0.4s ease both;
+    }
+
+    .checkout-panel {
+        animation: fadeSlideIn 0.4s 0.1s ease both;
+    }
+
+    @media(max-width:900px) {
+        .shop-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .checkout-panel {
+            position: static;
+        }
+
+        .rooms-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .field-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media(max-width:600px) {
+        .game-banner {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .room-card {
+            padding: 0.9rem;
+        }
+    }

@@ -1,0 +1,215 @@
+:root {
+
+            /* Variables específicas del componente */
+            --bg-base: #0d0e10;
+            --bg-surface: #16181c;
+            --bg-card: #1E2128;
+            --border: #4C5F71;
+            --text-primary: #f0f1f3;
+            --text-secondary: #7D868C;
+            --font-display: 'Barlow', sans-serif;
+            --font-body: 'Barlow', sans-serif;
+            --color-success: #00CFB4;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .result-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            background: <?= $bg_icon ?>;
+        }
+
+        .result-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: <?= $color ?>;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .result-message {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .order-details {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-row span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .order-row span:last-child {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .estado-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+            letter-spacing: 0.05em;
+            background: <?= $bg_icon ?>;
+            color: <?= $color ?>;
+        }
+
+        .gw-badge {
+            background: rgba(255, 108, 12, 0.08);
+            border: 1px solid rgba(255, 108, 12, 0.2);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-home {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: <?= $color ?>;
+            color: #0d0e10;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+        }
+
+        .btn-home:hover {
+            opacity: 0.85;
+            color: #0d0e10;
+            text-decoration: none;
+            background: <?= $color ?>;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-volver:hover {
+            border-color: <?= $color ?>;
+            color: <?= $color ?>;
+            text-decoration: none;
+        }
+
+        .token-guardado {
+            background: rgba(0, 207, 180, 0.08);
+            border: 1px solid rgba(0, 207, 180, 0.2);
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.8rem;
+            color: var(--color-secondary-1);
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .token-guardado i {
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .tarjeta-estado {
+            font-weight: 600;
+        }
+
+        .tarjeta-guardada {
+            color: var(--color-secondary-1);
+        }
+
+        .tarjeta-no-guardada {
+            color: var(--text-secondary);
+        }
