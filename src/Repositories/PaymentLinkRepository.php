@@ -39,6 +39,12 @@ class PaymentLinkRepository implements PaymentLinkRepositoryInterface
         return (int) $this->pdo->lastInsertId();
     }
 
+    public function updateEstado(int $id, string $estado): void
+    {
+        $stmt = $this->pdo->prepare('UPDATE payment_link SET estado = :estado WHERE id = :id');
+        $stmt->execute(['estado' => $estado, 'id' => $id]);
+    }
+
     public function findAllByCorreo(string $correo): array
     {
         $stmt = $this->pdo->prepare(
@@ -47,5 +53,14 @@ class PaymentLinkRepository implements PaymentLinkRepositoryInterface
         $stmt->execute(['correo' => $correo]);
 
         return $stmt->fetchAll();
+    }
+
+    public function findByReferencia(string $referencia): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM payment_link WHERE referencia = :referencia LIMIT 1');
+        $stmt->execute(['referencia' => $referencia]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
     }
 }

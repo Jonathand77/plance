@@ -1,77 +1,23 @@
 <?php
+
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+use Plance\Controllers\Ordenes\PagoMixtoController;
 
-$data = $_SESSION['continuar_result'] ?? null;
-$orden_id = (int) ($_GET['orden_id'] ?? ($data['orden_id'] ?? 0));
-unset($_SESSION['continuar_result']);
+$fallbackOrdenId = isset($_GET['orden_id']) ? (int) $_GET['orden_id'] : null;
 
-if (!$orden_id) {
-    header("Location: index.php");
-    exit();
-}
+$__view = (new PagoMixtoController())->handleContinuarReturn($_SESSION, $fallbackOrdenId);
 
-// Traer orden actualizada
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM ordenes WHERE id = $orden_id"));
-if (!$row) {
-    header("Location: index.php");
-    exit();
-}
+$orden_id = $__view['ordenId'];
+$row = $__view['row'];
+$total = $__view['total'];
+$monto_previo = $__view['montoPrevio'];
+$saldo_final = $__view['saldoFinal'];
+$monto_ahora = $__view['montoAhora'];
+$nuevo_estado = $__view['nuevoEstado'];
 
-$total = (float) $row['precio'];
-$monto_previo = (float) $row['monto_pagado'];
-$saldo_rest = $total - $monto_previo;
-$requestId = $data['requestId'] ?? null;
-
-// Consultar estado en PlacetoPay
-$nuevo_estado = 'pendiente';
-$monto_ahora = 0;
-
-if ($requestId) {
-    $rdata = (new \Plance\Services\Payments\PlaceToPayClient())->querySession($requestId, 'estandar');
-    $gw_status = $rdata['status']['status'] ?? 'PENDING';
-
-    if (!empty($rdata['payment'])) {
-        $pago = $rdata['payment'][0] ?? [];
-        $monto_ahora = (float) ($pago['amount']['from']['total'] ?? $saldo_rest);
-        $gw_status = $pago['status']['status'] ?? $gw_status;
-    } else {
-        $monto_ahora = $saldo_rest;
-    }
-
-    $nuevo_estado = match ($gw_status) {
-        'APPROVED' => 'aprobada',
-        'PENDING' => 'pendiente',
-        default => 'rechazada'
-    };
-
-    // Actualizar BD — sumar el nuevo monto al previo
-    if ($nuevo_estado === 'aprobada') {
-        $nuevo_monto = $monto_previo + $monto_ahora;
-        $saldo_final = $total - $nuevo_monto;
-        // Solo marcamos la orden como "aprobada" cuando ya no queda saldo;
-        // si aún queda saldo, sigue "pendiente" de completar el pago.
-        $estado_orden = $saldo_final <= 0 ? 'aprobada' : 'pendiente';
-        $estado_safe = mysqli_real_escape_string($conexion, $estado_orden);
-        mysqli_query($conexion, "UPDATE ordenes SET estado='$estado_safe', monto_pagado = " . (float) $nuevo_monto . " WHERE id = $orden_id");
-    } else {
-        $nuevo_monto = $monto_previo;
-        $saldo_final = $saldo_rest;
-    }
-} else {
-    $nuevo_monto = $monto_previo;
-    $saldo_final = $saldo_rest;
-    $monto_ahora = $saldo_rest;
-}
-
-// Colores usando la nueva paleta estandarizada
+// Colores usando la paleta estandarizada
 if ($nuevo_estado === 'aprobada') {
     $icono = $saldo_final <= 0 ? '🎉' : '✅';
     $titulo = $saldo_final <= 0 ? '¡Pago completado!' : '¡Abono registrado!';
@@ -96,4 +42,5 @@ if ($nuevo_estado === 'aprobada') {
     $bg_icon = 'rgba(220,53,69,0.15)';
     $bg_estado = 'rgba(220,53,69,0.12)';
 }
+
 require __DIR__ . '/../views/retorno_continuar.php';

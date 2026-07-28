@@ -12,7 +12,6 @@
         href="https://fonts.googleapis.com/css?family=Barlow:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/estilos.?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/estilos.css">
 </head>
 <link rel="stylesheet" href="../assets/css/pages/plataformas/ia.css">

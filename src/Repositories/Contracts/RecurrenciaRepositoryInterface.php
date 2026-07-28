@@ -12,6 +12,8 @@ interface RecurrenciaRepositoryInterface
 
     public function findById(int $id): ?array;
 
+    public function findByRequestId(string $requestId): ?array;
+
     public function findAllByUsuarioId(string $usuarioId): array;
 
     public function findAprobadasByUsuarioId(string $usuarioId): array;

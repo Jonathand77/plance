@@ -112,6 +112,15 @@ class OrdenRepository implements OrdenRepositoryInterface, ActualizaEstadoInterf
         return $row === false ? null : $row;
     }
 
+    public function findByRequestId(int $requestId): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM ordenes WHERE request_id = :request_id LIMIT 1');
+        $stmt->execute(['request_id' => $requestId]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
+    }
+
     public function countByCorreo(string $correo): int
     {
         $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM ordenes WHERE correo = :correo');

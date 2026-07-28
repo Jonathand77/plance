@@ -12,5 +12,7 @@ interface SuscriptionRecRepositoryInterface
 
     public function findById(int $id): ?array;
 
+    public function findByRequestId(string $requestId): ?array;
+
     public function findAllByUsuarioId(string $usuarioId): array;
 }

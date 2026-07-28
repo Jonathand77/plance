@@ -49,6 +49,15 @@ class GatewaySuscripcionRepository implements GatewaySuscripcionRepositoryInterf
         $stmt->execute(['estado' => $estado, 'id' => $id]);
     }
 
+    public function findByRequestId(string $requestId): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM gateway_suscripciones WHERE request_id = :request_id LIMIT 1');
+        $stmt->execute(['request_id' => $requestId]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
+    }
+
     public function findAllByCorreo(string $correo): array
     {
         $stmt = $this->pdo->prepare(

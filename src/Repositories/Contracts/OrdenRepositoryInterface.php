@@ -14,6 +14,8 @@ interface OrdenRepositoryInterface
 
     public function findById(int $id): ?array;
 
+    public function findByRequestId(int $requestId): ?array;
+
     public function findWcByCorreo(string $correo): array;
 
     public function findMixtoByCorreo(string $correo): array;

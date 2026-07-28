@@ -75,6 +75,15 @@ class RecurrenciaRepository implements RecurrenciaRepositoryInterface, Actualiza
         return $row === false ? null : $row;
     }
 
+    public function findByRequestId(string $requestId): ?array
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM recurrencias WHERE request_id = :request_id LIMIT 1');
+        $stmt->execute(['request_id' => $requestId]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
+    }
+
     public function findAllByUsuarioId(string $usuarioId): array
     {
         $stmt = $this->pdo->prepare(

@@ -42,7 +42,7 @@ class SuscripcionService
             'locale' => 'es_CO',
             'buyer' => ['email' => $usuarioId],
             'payment' => [
-                'reference' => 'SUB-' . $subId,
+                'reference' => 'SUSC-' . $subId,
                 'description' => $descripcion,
                 'amount' => [
                     'currency' => 'COP',
