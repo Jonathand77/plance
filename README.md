@@ -10,15 +10,8 @@
 ![PHPUnit](https://img.shields.io/badge/PHPUnit-Tests-3C9CD7?logo=php&logoColor=white)
 ![PlaceToPay](https://img.shields.io/badge/PlaceToPay-Web%20Checkout%20%2F%20Gateway%20%2F%20Links-FF6C0C)
 ![Architecture](https://img.shields.io/badge/Architecture-Layered%20(Repository%20%2F%20Service%20%2F%20Controller)-blue)
-![GitHub repo size](https://img.shields.io/github/repo-size/Jonathand77/plance)
-![GitHub last commit](https://img.shields.io/github/last-commit/Jonathand77/plance)
 ![Languages](https://img.shields.io/github/languages/count/Jonathand77/plance)
 
-## 👤 Autor
-
-| 👨‍💻 Nombre | 📧 Correo | 🏫 Link directo al repositorio | 🐙 Usuario GitHub |
-|---|---|---|---|
-| **Jonathan David Fernandez Vargas** | jonathanfdez62@gmail.com | [LinkRepositorio](https://github.com/Jonathand77/plance) | [jonathand77](https://github.com/jonathand77) |
 
 **Aplicación PHP de e-commerce/pagos que integra las tres APIs de PlaceToPay (Web Checkout, API Gateway y Payment Links) para vender productos digitales, gestionar suscripciones/recurrencias, dispersar pagos y reservar servicios.**
 
