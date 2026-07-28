@@ -1,62 +1,23 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\ReversosController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new ReversosController())->handleDetalle($_GET);
 
-$id = intval($_GET['id'] ?? 0);
-$tipo = $_GET['tipo'] ?? '';
-
-$tipos_permitidos = ['orden', 'suscripcion', 'recurrencia'];
-if (!$id || !in_array($tipo, $tipos_permitidos)) {
-    header("Location: reversos.php");
-    exit();
-}
-
-$id_safe = mysqli_real_escape_string($conexion, $id);
-$correo = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
-
-// Obtener la transacción según el tipo
-if ($tipo === 'orden') {
-    $trx = mysqli_fetch_assoc(mysqli_query(
-        $conexion,
-        "SELECT *, 'orden' as tipo FROM ordenes WHERE id = '$id_safe' AND estado = 'aprobada'"
-    ));
-    $nombre = $trx['producto'] ?? '';
-    $usuario = $trx['jugador_id'] ?? '';
-} elseif ($tipo === 'suscripcion') {
-    $trx = mysqli_fetch_assoc(mysqli_query(
-        $conexion,
-        "SELECT *, 'suscripcion' as tipo FROM suscripciones WHERE id = '$id_safe' AND estado = 'aprobada' AND usuario_id = '$correo'"
-    ));
-    $nombre = ($trx['plataforma'] ?? '') . ' — ' . ($trx['plan'] ?? '');
-    $usuario = $trx['usuario_id'] ?? '';
-} else {
-    $trx = mysqli_fetch_assoc(mysqli_query(
-        $conexion,
-        "SELECT *, 'recurrencia' as tipo FROM recurrencias WHERE id = '$id_safe' AND estado = 'aprobada' AND usuario_id = '$correo'"
-    ));
-    $nombre = ($trx['servicio'] ?? '') . ' — ' . ($trx['plan'] ?? '');
-    $usuario = $trx['usuario_id'] ?? '';
-}
-
-if (!$trx) {
-    header("Location: reversos.php");
-    exit();
-}
-
-$msg = $_SESSION['reverso_msg'] ?? '';
-$msg_type = $_SESSION['reverso_msg_type'] ?? '';
-unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
+$id = $__view['id'];
+$tipo = $__view['tipo'];
+$trx = $__view['trx'];
+$nombre = $__view['nombre'];
+$usuario = $__view['usuario'];
+$msg = $__view['msg'];
+$msg_type = $__view['msgType'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

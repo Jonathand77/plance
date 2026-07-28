@@ -1,20 +1,16 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\HistorialLinksController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
-
-// Links de pago generados (API Link de pagos — PlacetoPay)
-$resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY created_at DESC");
+$__view = (new HistorialLinksController())->handleList();
+$registros = $__view['registros'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -253,7 +249,7 @@ $resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY create
             Historial de Links de Pago
         </div>
 
-        <?php if ($resultado && mysqli_num_rows($resultado) > 0): ?>
+        <?php if (count($registros) > 0): ?>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -271,7 +267,7 @@ $resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY create
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($resultado)):
+                        <?php foreach ($registros as $row):
                             $estado = strtolower($row['estado']);
                             $expirado = !empty($row['expiracion']) && strtotime($row['expiracion']) < time();
                             if ($estado === 'activo' && $expirado)
@@ -314,7 +310,7 @@ $resultado = mysqli_query($conexion, "SELECT * FROM payment_link ORDER BY create
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

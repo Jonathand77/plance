@@ -1,55 +1,15 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Suscripciones\SuscriptionController;
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new SuscriptionController())->handleReturn($_GET);
 
-$sub_id = intval($_GET['sub'] ?? 0);
-if (!$sub_id) {
-    header("Location: index.php");
-    exit();
-}
-
-$sub_id_safe = mysqli_real_escape_string($conexion, $sub_id);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM suscription WHERE id = '$sub_id_safe'"));
-$request_id = $row['request_id'] ?? '';
-
-if (!$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// Consultar estado a PlaceToPay
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-[$response] = p2p_json_post($url, ["auth" => ["login" => $login, "tranKey" => $tranKey, "nonce" => $nonceB64, "seed" => $seed]]);
-
-$result = json_decode($response, true);
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
-
-// Extraer token
-$token = '';
-if (isset($result['subscription']['instrument']) && is_array($result['subscription']['instrument'])) {
-    foreach ($result['subscription']['instrument'] as $item) {
-        if (($item['keyword'] ?? '') === 'token') {
-            $token = $item['value'] ?? '';
-            break;
-        }
-    }
-}
+$sub_id = $__view['subId'];
+$token = $__view['token'];
+$subs = $__view['subs'];
+$status_p2p = $__view['statusP2p'];
 
 // Determinar estado y mensajes - usando nueva paleta
 if ($status_p2p === 'APPROVED') {
@@ -88,12 +48,7 @@ if ($status_p2p === 'APPROVED') {
     $bg_icon = 'rgba(125,134,140,0.15)';
 }
 
-// Actualizar BD
-$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-$token_safe = mysqli_real_escape_string($conexion, $token);
-mysqli_query($conexion, "UPDATE suscription SET estado = '$estado_safe', token = '$token_safe' WHERE id = '$sub_id_safe'");
-
-$subs = $row;
+// (Estado y token ya actualizados en BD por SuscriptionController::handleReturn())
 ?>
 <!DOCTYPE html>
 <html lang="es">

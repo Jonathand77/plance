@@ -1,88 +1,23 @@
 <?php
 session_start();
+require_once __DIR__ . '/src/bootstrap.php';
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+use Plance\Controllers\Reservaciones\PreauthorizationController;
 
-$pre = $_SESSION['pre_result'] ?? null;
-unset($_SESSION['pre_result']);
+$__view = (new PreauthorizationController())->handleReturn($_GET, $_SESSION);
 
-// Leer reserva_id desde GET (viene del returnUrl) o desde sesión
-$reserva_id = (int) ($_GET['reserva_id'] ?? ($pre['reserva_id'] ?? 0));
-
-if (!$reserva_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// Traer datos desde BD
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM reservaciones WHERE id = $reserva_id"));
-if (!$row) {
-    header("Location: index.php");
-    exit();
-}
-
-$habitacion = $row['habitacion'];
-$total = (float) $row['precio'];
-$correo = $row['usuario_id'];
-$requestId = $row['request_id'];
-
-// Extraer checkin/checkout de la descripcion
-$descripcion = $row['descripcion'];
-preg_match('/checkin: (.+) al (.+)\)/', $descripcion, $matches);
-$checkin = $matches[1] ?? '';
-$checkout = $matches[2] ?? '';
-$noches = $checkin && $checkout ? (int) ((strtotime($checkout) - strtotime($checkin)) / 86400) : 1;
-$nombre = $pre['nombre'] ?? '';
-
-// Consultar estado real en PlacetoPay
-$nuevo_estado = 'pendiente';
-$gw_status = 'PENDING';
-$gw_reason = '';
-
-if ($requestId) {
-    $login = "62f3eeeb7655485cbf65b306b4585dfd";
-    $secretKey = "K8zGmmoark19y2ey";
-    $seed = date('c');
-    $nonce = bin2hex(random_bytes(16));
-    $tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-    $nonceB64 = base64_encode($nonce);
-
-    $auth = [
-        "auth" => [
-            "login" => $login,
-            "tranKey" => $tranKey,
-            "nonce" => $nonceB64,
-            "seed" => $seed
-        ]
-    ];
-
-    [$resp] = p2p_json_post("https://checkout-test.placetopay.com/api/session/{$requestId}", $auth);
-
-    $data = json_decode($resp ?: '{}', true);
-    $gw_status = $data['status']['status'] ?? 'PENDING';
-    $gw_reason = $data['status']['reason'] ?? '';
-
-    if (!empty($data['payment'])) {
-        $gw_status = $data['payment'][0]['status']['status'] ?? $gw_status;
-        $gw_reason = $data['payment'][0]['status']['reason'] ?? $gw_reason;
-    }
-
-    $nuevo_estado = match ($gw_status) {
-        'APPROVED' => 'aprobada',
-        'PENDING' => 'pendiente',
-        default => 'rechazada'
-    };
-
-    // Actualizar BD
-    $est_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-    mysqli_query($conexion, "UPDATE reservaciones SET estado='$est_safe' WHERE id=$reserva_id");
-}
+$reserva_id = $__view['reservaId'];
+$habitacion = $__view['habitacion'];
+$total = $__view['total'];
+$correo = $__view['correo'];
+$requestId = $__view['requestId'];
+$checkin = $__view['checkin'];
+$checkout = $__view['checkout'];
+$noches = $__view['noches'];
+$nombre = $__view['nombre'];
+$gw_status = $__view['gwStatus'];
+$gw_reason = $__view['gwReason'];
+$nuevo_estado = $__view['nuevoEstado'];
 
 // Colores usando la nueva paleta estandarizada
 if ($gw_status === 'APPROVED') {

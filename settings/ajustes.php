@@ -1,67 +1,25 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Profile\SettingsController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) {
-        die("Error de conexión: " . mysqli_connect_error());
-    }
-}
+$__view = (new SettingsController())->handle($_POST, $_SERVER['REQUEST_METHOD']);
 
-$user_id = intval($_SESSION['user_id'] ?? 0);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
-
-if (!$row) {
-    header("Location: ../login.php");
-    exit();
-}
-
-$alerta = '';
-$alerta_tipo = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bio = trim($_POST['bio'] ?? '');
-    $location = trim($_POST['location'] ?? '');
-
-    $bio = mysqli_real_escape_string($conexion, $bio);
-    $location = mysqli_real_escape_string($conexion, $location);
-
-    $update = mysqli_query($conexion, "
-        UPDATE users 
-        SET bio = '$bio', location = '$location'
-        WHERE id = '$user_id'
-    ");
-
-    if ($update) {
-        $alerta = 'Configuración actualizada correctamente.';
-        $alerta_tipo = 'success';
-
-        $row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
-    } else {
-        $alerta = 'No se pudo actualizar la configuración.';
-        $alerta_tipo = 'error';
-    }
-}
-
-$correo = mysqli_real_escape_string($conexion, $row['correo']);
-
-$total_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes"))['total'] ?? 0;
-$total_aprobadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'aprobada'"))['total'] ?? 0;
-$total_rechazadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'rechazada'"))['total'] ?? 0;
-$total_pendientes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'pendiente'"))['total'] ?? 0;
-
-$avatar = '';
-if (!empty($row['profile_image']) && file_exists('../uploads/' . $row['profile_image'])) {
-    $avatar = '../uploads/' . htmlspecialchars($row['profile_image']);
-}
-
-$initial = strtoupper(substr($row['usuario'] ?? 'U', 0, 1));
+$row = $__view['row'];
+$alerta = $__view['alerta'];
+$alerta_tipo = $__view['alertaTipo'];
+$total_ordenes = $__view['totalOrdenes'];
+$total_aprobadas = $__view['totalAprobadas'];
+$total_rechazadas = $__view['totalRechazadas'];
+$total_pendientes = $__view['totalPendientes'];
+$avatar = $__view['avatar'];
+$initial = $__view['initial'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

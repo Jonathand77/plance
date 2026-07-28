@@ -1,75 +1,20 @@
 <?php
 session_start();
+require_once __DIR__ . '/src/bootstrap.php';
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+use Plance\Controllers\Ordenes\PagoMixtoController;
 
-$mix = $_SESSION['mix_result'] ?? null;
-unset($_SESSION['mix_result']);
+$__view = (new PagoMixtoController())->handleReturn($_SESSION);
 
-if (!$mix) {
-    header("Location: index.php");
-    exit();
-}
-
-$orden_id = $mix['orden_id'] ?? 0;
-$productos = $mix['productos'] ?? '';
-$total = $mix['total'] ?? 0;
-$monto_parcial = $mix['monto_parcial'] ?? $total;
-$allow_partial = $mix['allow_partial'] ?? false;
-$reference = $mix['reference'] ?? '';
-$requestId = $mix['requestId'] ?? null;
-
-// Si venimos del checkout de PlacetoPay, consultamos el estado real
-$nuevo_estado = 'pendiente';
-$estado_final = 'PENDING';
-$monto_pagado = null;
-
-if ($requestId) {
-    $login = "2d9eaf1e662518756a3d78806543af5b";
-    $secretKey = "3YC5brb5eAR4xBGQ";
-    $seed = date('c');
-    $nonce = bin2hex(random_bytes(16));
-    $tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-    $nonceB64 = base64_encode($nonce);
-
-    $auth = [
-        "auth" => [
-            "login" => $login,
-            "tranKey" => $tranKey,
-            "nonce" => $nonceB64,
-            "seed" => $seed
-        ]
-    ];
-
-    [$resp] = p2p_json_post("https://checkout-test.placetopay.com/api/session/{$requestId}", $auth);
-
-    $data = json_decode($resp ?: '{}', true);
-    $estado_final = $data['status']['status'] ?? 'PENDING';
-
-    // Si tiene transacciones, tomamos el monto pagado real
-    if (!empty($data['payment'])) {
-        $pago = $data['payment'][0] ?? [];
-        $monto_pagado = $pago['amount']['from']['total'] ?? $monto_parcial;
-        $estado_final = $pago['status']['status'] ?? $estado_final;
-    }
-
-    $nuevo_estado = match ($estado_final) {
-        'APPROVED' => 'aprobada',
-        'PENDING' => 'pendiente',
-        default => 'rechazada'
-    };
-
-    // Actualizar BD
-    $est_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-    $monto_safe = $monto_pagado ? (float) $monto_pagado : 'NULL';
-    mysqli_query($conexion, "UPDATE ordenes SET estado='$est_safe', monto_pagado=$monto_safe WHERE id=$orden_id");
-}
+$orden_id = $__view['ordenId'];
+$productos = $__view['productos'];
+$total = $__view['total'];
+$monto_parcial = $__view['montoParcial'];
+$allow_partial = $__view['allowPartial'];
+$reference = $__view['reference'];
+$nuevo_estado = $__view['nuevoEstado'];
+$estado_final = $__view['estadoFinal'];
+$monto_pagado = $__view['montoPagado'];
 
 // Colores usando la nueva paleta estandarizada
 if ($estado_final === 'APPROVED') {

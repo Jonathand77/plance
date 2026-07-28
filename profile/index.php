@@ -1,90 +1,31 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Profile\ProfileIndexController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new ProfileIndexController())->handle();
 
-$user_id = intval($_SESSION['user_id'] ?? 0);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
+$row = $__view['row'];
+$total_ordenes_pago = $__view['totalOrdenesPago'];
+$total_aprobadas = $__view['totalAprobadas'];
+$total_ordenes_rechazadas = $__view['totalOrdenesRechazadas'];
+$total_ordenes = $__view['totalOrdenes'];
+$total_subs = $__view['totalSubs'];
+$total_recurrencias = $__view['totalRecurrencias'];
+$total_gw_ordenes = $__view['totalGwOrdenes'];
+$total_gw_subs = $__view['totalGwSubs'];
+$total_gw_suscription = $__view['totalGwSuscription'];
+$actividad_json = $__view['actividadJson'];
+$msg = $__view['msg'];
+$msg_type = $__view['msgType'];
 
-if (!$row) {
-    header("Location: ../login.php");
-    exit();
-}
-
-$correo = mysqli_real_escape_string($conexion, $row['correo']);
-$total_ordenes_pago = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias "))['total'];
-
-$total_aprobadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias WHERE ordenes.estado = 'aprobada'"))['total'];
-
-$total_ordenes_rechazadas = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes, suscripciones, recurrencias WHERE ordenes.estado = 'rechazada'"))['total'];
-
-$total_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes "))['total'];
-
-$total_subs = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo'"))['total'];
-
-$total_recurrencias = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo' "))['total'];
-
-$total_pendientes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM ordenes WHERE estado = 'pendiente'"))['total'];
-
-// ── Gateway ──
-$total_gw_ordenes = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_ordenes WHERE correo = '$correo'"))['total'] ?? 0;
-$total_gw_subs = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_suscripciones WHERE correo = '$correo'"))['total'] ?? 0;
-$total_gw_suscription = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT COUNT(*) as total FROM gateway_suscription WHERE correo = '$correo'"))['total'] ?? 0;
-
-// ── Datos para el calendario (últimos 365 días) ──
-$actividad_dias = [];
-
-$res_ord = mysqli_query($conexion, "SELECT DATE(created_at) as dia, COUNT(*) as cnt FROM ordenes WHERE created_at >= DATE_SUB(NOW(), INTERVAL 365 DAY) GROUP BY dia");
-while ($r = mysqli_fetch_assoc($res_ord)) {
-    $actividad_dias[$r['dia']] = ($actividad_dias[$r['dia']] ?? 0) + intval($r['cnt']);
-}
-
-$res_sub = mysqli_query($conexion, "SELECT DATE(created_at) as dia, COUNT(*) as cnt FROM suscripciones WHERE usuario_id = '$correo' AND created_at >= DATE_SUB(NOW(), INTERVAL 365 DAY) GROUP BY dia");
-while ($r = mysqli_fetch_assoc($res_sub)) {
-    $actividad_dias[$r['dia']] = ($actividad_dias[$r['dia']] ?? 0) + intval($r['cnt']);
-}
-
-$actividad_json = json_encode($actividad_dias);
-
-$msg = $_SESSION['profile_msg'] ?? '';
-$msg_type = $_SESSION['profile_msg_type'] ?? '';
-unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
-
-// Valores por defecto
-$nav_back_url = $nav_back_url ?? 'index.php';
-$nav_back_text = $nav_back_text ?? 'volver';
 $nav_base = $nav_base ?? '../';
-
-// Traer foto de perfil del usuario en sesión
-$nav_avatar = '';
-$nav_initials = '';
-
-if (isset($_SESSION['user_id'])) {
-    if (!isset($conexion)) {
-        $conexion = mysqli_connect('localhost', 'root', '', 'place_bsd');
-    }
-    if ($conexion) {
-        $nav_uid = intval($_SESSION['user_id']);
-        $nav_row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT profile_image, usuario FROM users WHERE id = '$nav_uid'"));
-        if ($nav_row) {
-            $nav_initials = strtoupper(substr($nav_row['usuario'] ?? 'U', 0, 1));
-            $img_path = $nav_base . 'uploads/' . ($nav_row['profile_image'] ?? '');
-            if (!empty($nav_row['profile_image']) && file_exists($nav_base . 'uploads/' . $nav_row['profile_image'])) {
-                $nav_avatar = $nav_base . 'uploads/' . htmlspecialchars($nav_row['profile_image']);
-            }
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">

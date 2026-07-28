@@ -1,127 +1,13 @@
-﻿<?php
+<?php
+
 session_start();
-$autoloadPath = __DIR__ . '/../vendor/autoload.php';
-if (file_exists($autoloadPath)) {
-    require_once $autoloadPath;
-}
-require_once __DIR__ . '/http_client.php';
-// Solo acepta POST
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Suscripciones\SuscripcionController;
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../plataformas/streaming.php");
+    header('Location: ../plataformas/streaming.php');
     exit();
 }
 
-// Conexión
-require_once 'conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) {
-        die("Error de conexión: " . mysqli_connect_error());
-    }
-}
-
-// Recibir y limpiar datos
-$plataforma = trim($_POST['plataforma'] ?? '');
-$plan = trim($_POST['plan'] ?? '');
-$precio = trim($_POST['precio'] ?? '');
-$usuario_id = trim($_POST['usuario_id'] ?? '');
-
-// Validación básica
-if (empty($plataforma) || empty($plan) || empty($precio) || empty($usuario_id)) {
-    die("❌ Faltan datos. Por favor vuelve y completa todos los campos.");
-}
-
-// Sanitizar
-$plataforma = mysqli_real_escape_string($conexion, $plataforma);
-$plan = mysqli_real_escape_string($conexion, $plan);
-$precio = mysqli_real_escape_string($conexion, $precio);
-$usuario_id = mysqli_real_escape_string($conexion, $usuario_id);
-
-// Insertar en tabla suscripciones
-$estado = "pendiente";
-$query = "INSERT INTO suscripciones (request_id, token, plataforma, plan, precio, usuario_id, estado) 
-           VALUES ('', '', '$plataforma', '$plan', '$precio', '$usuario_id', '$estado')";
-
-$resultado = mysqli_query($conexion, $query);
-
-if (!$resultado) {
-    die("❌ Error al guardar la suscripción: " . mysqli_error($conexion));
-}
-
-$sub_id = mysqli_insert_id($conexion);
-
-
-// 🔥 WEB CHECKOUT — PlaceToPay
-// Opción 2: payment + subscribe:true
-// Cobra el primer mes Y tokeniza la tarjeta
-
-
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session";
-
-// Auth
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-// Descripción limpia
-$descripcion = substr(preg_replace('/[^a-zA-Z0-9 ]/u', '', $plataforma . ' ' . $plan), 0, 80);
-
-// Request con subscribe: true
-$data = [
-    "locale" => "es_CO",
-    "auth" => [
-        "login" => $login,
-        "tranKey" => $tranKey,
-        "nonce" => $nonceB64,
-        "seed" => $seed
-    ],
-    // buyer pre-diligenncia el correo en el WC
-    // así PlaceToPay no vuelve a pedírselo al usuario
-    "buyer" => [
-        "email" => $usuario_id
-    ],
-    "payment" => [
-        "reference" => "SUB-" . (string) $sub_id,
-        "description" => $descripcion,
-        "amount" => [
-            "currency" => "COP",
-            "total" => (float) $precio
-        ],
-        // ← CLAVE: cobra el primer mes Y tokeniza la tarjeta
-        "subscribe" => true
-    ],
-    "expiration" => date('c', strtotime('+1 hour')),
-    "returnUrl" => "http://localhost/plance/retorno_subs.php?sub=" . $sub_id,
-    "notifyUrl" => "https://doorman-situated-delivery.ngrok-free.dev/plance/php/notify.php",
-    "ipAddress" => $_SERVER['REMOTE_ADDR'],
-    "userAgent" => $_SERVER['HTTP_USER_AGENT']
-];
-
-// Llamada a PlaceToPay
-[$response, $curlError] = p2p_json_post($url, $data);
-
-if (!$response) {
-    die("❌ Error de conexión con PlaceToPay: " . $curlError);
-}
-
-$result = json_decode($response, true);
-
-if (isset($result['processUrl'])) {
-    // Guardar requestId en BD antes de redirigir
-    $request_id = mysqli_real_escape_string($conexion, $result['requestId'] ?? '');
-    mysqli_query($conexion, "UPDATE suscripciones SET request_id = '$request_id' WHERE id = '$sub_id'");
-
-    header("Location: " . $result['processUrl']);
-    exit();
-} else {
-    echo "<h3 style='font-family:sans-serif;color:#e05252;'>❌ Error al crear sesión de pago</h3>";
-    echo "<p style='font-family:sans-serif;color:#f0f1f3;'>Suscripción <strong>#$sub_id</strong> guardada en BD pero el pago no pudo iniciarse.</p>";
-    echo "<pre style='background:#1e2128;color:#f0f1f3;padding:1rem;border-radius:8px;font-size:0.85rem;'>";
-    print_r($result);
-    echo "</pre>";
-    echo "<a href='../plataformas/streaming.php' style='color:#0062A8;font-family:sans-serif;'>← Volver</a>";
-}
-?>
+(new SuscripcionController())->handleCreate($_POST);

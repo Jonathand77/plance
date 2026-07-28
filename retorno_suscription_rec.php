@@ -1,44 +1,14 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Suscripciones\SuscriptionRecController;
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new SuscriptionRecController())->handleReturn($_GET);
 
-$rec_id = intval($_GET['rec'] ?? 0);
-if (!$rec_id) {
-    header("Location: index.php");
-    exit();
-}
-
-$rec_id_safe = mysqli_real_escape_string($conexion, $rec_id);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM suscription_rec WHERE id = '$rec_id_safe'"));
-$request_id = $row['request_id'] ?? '';
-
-if (!$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// Consultar estado a PlaceToPay
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-[$response] = p2p_json_post($url, ["auth" => ["login" => $login, "tranKey" => $tranKey, "nonce" => $nonceB64, "seed" => $seed]]);
-
-$result = json_decode($response, true);
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
+$rec_id = $__view['recId'];
+$rec = $__view['rec'];
+$status_p2p = $__view['statusP2p'];
 
 // Definir visual según estado - usando nueva paleta
 if ($status_p2p === 'APPROVED') {
@@ -71,16 +41,7 @@ if ($status_p2p === 'APPROVED') {
     $bg_icon = 'rgba(125,134,140,0.15)';
 }
 
-// Actualizar BD
-$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-if ($nuevo_estado === 'aprobada') {
-    $fecha_fin_safe = date('Y-m-d', $row['periodicidad'] === 'Y' ? strtotime('+1 year') : strtotime('+12 months'));
-    mysqli_query($conexion, "UPDATE suscription_rec SET estado = '$estado_safe', fecha_fin = '$fecha_fin_safe' WHERE id = '$rec_id_safe'");
-} else {
-    mysqli_query($conexion, "UPDATE suscription_rec SET estado = '$estado_safe' WHERE id = '$rec_id_safe'");
-}
-
-$rec = $row;
+// (Estado y fecha_fin ya actualizados en BD por SuscriptionRecController::handleReturn())
 ?>
 <!DOCTYPE html>
 <html lang="es">

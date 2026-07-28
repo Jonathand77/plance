@@ -1,28 +1,19 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\HistorialPagosBasicosController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
-}
-
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
 }
 
 $modo = $_GET['modo'] ?? 'wc';
 
-if ($modo === 'gateway') {
-    $resultado = mysqli_query($conexion, "SELECT * FROM gateway_ordenes ORDER BY created_at DESC");
-} elseif ($modo === 'mixto') {
-    // Mixtos: registros de ordenes con pago parcial (monto_pagado) o productos múltiples
-    $resultado = mysqli_query($conexion, "SELECT * FROM ordenes WHERE monto_pagado IS NOT NULL OR producto LIKE '%+%' ORDER BY created_at DESC");
-} else {
-    $resultado = mysqli_query($conexion, "SELECT * FROM ordenes WHERE monto_pagado IS NULL AND producto NOT LIKE '%+%' ORDER BY created_at DESC");
-}
+$__view = (new HistorialPagosBasicosController())->handleList($modo);
+$registros = $__view['registros'];
+$verify_msg = $__view['verifyMsg'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -352,14 +343,11 @@ if ($modo === 'gateway') {
             </a>
         </div>
 
-        <?php
-        if (!empty($_SESSION['verify_msg'])) {
-            echo '<div class="alert-verify">' . htmlspecialchars($_SESSION['verify_msg']) . '</div>';
-            unset($_SESSION['verify_msg']);
-        }
-        ?>
+        <?php if (!empty($verify_msg)): ?>
+            <div class="alert-verify"><?= htmlspecialchars($verify_msg) ?></div>
+        <?php endif; ?>
 
-        <?php if (mysqli_num_rows($resultado) > 0): ?>
+        <?php if (count($registros) > 0): ?>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -399,7 +387,7 @@ if ($modo === 'gateway') {
                         <?php endif; ?>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($resultado)): ?>
+                        <?php foreach ($registros as $row): ?>
                             <tr>
                                 <?php if ($modo === 'gateway'): ?>
                                     <td><span class="codigo-id">#<?= htmlspecialchars($row['id']) ?></span></td>
@@ -485,7 +473,7 @@ if ($modo === 'gateway') {
                                     </td>
                                 <?php endif; ?>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

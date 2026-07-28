@@ -1,73 +1,16 @@
 ﻿<?php
 session_start();
-require_once __DIR__ . '/php/http_client.php';
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Suscripciones\SuscripcionController;
 
-require_once 'php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new SuscripcionController())->handleReturnTokenizacion($_GET, $_SESSION);
 
-$sub_id = intval($_GET['sub'] ?? $_SESSION['token_sub_id'] ?? 0);
-$request_id = $_SESSION['token_requestId'] ?? '';
-
-if (!$sub_id || !$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// ══════════════════════════════════════════
-// Consultar resultado de tokenización
-// ══════════════════════════════════════════
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-$auth = [
-    "auth" => [
-        "login" => $login,
-        "tranKey" => $tranKey,
-        "nonce" => $nonceB64,
-        "seed" => $seed
-    ]
-];
-
-[$response] = p2p_json_post($url, $auth);
-
-$result = json_decode($response ?: '{}', true);
-
-// ══════════════════════════════════════════
-// Extraer token
-// ══════════════════════════════════════════
-$token = '';
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
-
-if (isset($result['subscription']['instrument']) && is_array($result['subscription']['instrument'])) {
-    foreach ($result['subscription']['instrument'] as $item) {
-        if (($item['keyword'] ?? '') === 'token') {
-            $token = $item['value'] ?? '';
-            break;
-        }
-    }
-}
-
-// ══════════════════════════════════════════
-// Guardar token en BD y actualizar estado
-// ══════════════════════════════════════════
-$sub_id_safe = mysqli_real_escape_string($conexion, $sub_id);
-$token_safe = mysqli_real_escape_string($conexion, $token);
+$sub_id = $__view['subId'];
+$token = $__view['token'];
 
 // Definir visual según resultado - usando nueva paleta
 if (!empty($token)) {
-    // Tiene token → suscripción completamente activada
-    mysqli_query($conexion, "UPDATE suscripciones SET token = '$token_safe', estado = 'aprobada' WHERE id = '$sub_id_safe'");
     $exito = true;
     $titulo = '🔐 ¡Tarjeta guardada!';
     $mensaje = 'Tu tarjeta fue tokenizada exitosamente. Tu suscripción está completamente activada.';
@@ -83,8 +26,6 @@ if (!empty($token)) {
     $icono = '❌';
 }
 
-// Limpiar sesión
-unset($_SESSION['token_requestId'], $_SESSION['token_sub_id']);
 ?>
 <!DOCTYPE html>
 <html lang="es">

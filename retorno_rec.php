@@ -1,67 +1,18 @@
 ﻿<?php
 session_start();
-require_once __DIR__ . '/php/http_client.php';
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Suscripciones\RecurrenciaController;
 
-// ══════════════════════════════════════════
-// Conexión a BD
-// ══════════════════════════════════════════
-require_once 'php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new RecurrenciaController())->handleReturn($_GET);
 
-// ══════════════════════════════════════════
-// Recibir rec_id desde la URL
-// ══════════════════════════════════════════
-$rec_id = intval($_GET['rec'] ?? 0);
-
-if (!$rec_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// Obtener request_id desde la BD
-$rec_id_safe = mysqli_real_escape_string($conexion, $rec_id);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM recurrencias WHERE id = '$rec_id_safe'"));
-$request_id = $row['request_id'] ?? '';
-
-if (!$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// ══════════════════════════════════════════
-// Consultar estado a PlaceToPay
-// ══════════════════════════════════════════
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-$auth = [
-    "auth" => [
-        "login" => $login,
-        "tranKey" => $tranKey,
-        "nonce" => $nonceB64,
-        "seed" => $seed
-    ]
-];
-
-[$response] = p2p_json_post($url, $auth);
-
-$result = json_decode($response ?: '{}', true);
+$rec_id = $__view['recId'];
+$rec = $__view['rec'];
 
 // ══════════════════════════════════════════
 // Determinar estado del pago - usando nueva paleta
 // ══════════════════════════════════════════
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
+$status_p2p = $__view['statusP2p'];
 
 if ($status_p2p === 'APPROVED') {
     $nuevo_estado = 'aprobada';
@@ -93,20 +44,7 @@ if ($status_p2p === 'APPROVED') {
     $bg_icon = 'rgba(125, 134, 140, 0.15)';
 }
 
-// ══════════════════════════════════════════
-// Actualizar estado en BD
-// ══════════════════════════════════════════
-$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-
-// Si fue aprobada, guardar también fecha_fin
-if ($nuevo_estado === 'aprobada') {
-    $fecha_fin_safe = date('Y-m-d', strtotime('+12 months'));
-    mysqli_query($conexion, "UPDATE recurrencias SET estado = '$estado_safe', fecha_fin = '$fecha_fin_safe' WHERE id = '$rec_id_safe'");
-} else {
-    mysqli_query($conexion, "UPDATE recurrencias SET estado = '$estado_safe' WHERE id = '$rec_id_safe'");
-}
-
-$rec = $row;
+// (Estado y fecha_fin ya actualizados en BD por RecurrenciaController::handleReturn())
 ?>
 <!DOCTYPE html>
 <html lang="es">

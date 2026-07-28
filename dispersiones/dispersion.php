@@ -1,13 +1,5 @@
 <?php
 session_start();
-
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -35,25 +35,7 @@ $nuevo_estado = 'pendiente';
 $monto_ahora = 0;
 
 if ($requestId) {
-    $login = "2d9eaf1e662518756a3d78806543af5b";
-    $secretKey = "3YC5brb5eAR4xBGQ";
-    $seed = date('c');
-    $nonce = bin2hex(random_bytes(16));
-    $tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-    $nonceB64 = base64_encode($nonce);
-
-    $auth = [
-        "auth" => [
-            "login" => $login,
-            "tranKey" => $tranKey,
-            "nonce" => $nonceB64,
-            "seed" => $seed
-        ]
-    ];
-
-    [$resp] = p2p_json_post("https://checkout-test.placetopay.com/api/session/{$requestId}", $auth);
-
-    $rdata = json_decode($resp ?: '{}', true);
+    $rdata = (new \Plance\Services\Payments\PlaceToPayClient())->querySession($requestId, 'estandar');
     $gw_status = $rdata['status']['status'] ?? 'PENDING';
 
     if (!empty($rdata['payment'])) {

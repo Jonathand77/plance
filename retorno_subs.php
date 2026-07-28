@@ -1,68 +1,19 @@
 ﻿<?php
 session_start();
-require_once __DIR__ . '/php/http_client.php';
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Suscripciones\SuscripcionController;
 
-// ══════════════════════════════════════════
-// Conexión a BD
-// ══════════════════════════════════════════
-require_once 'php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) {
-        die("Error de conexión: " . mysqli_connect_error());
-    }
-}
+$__view = (new SuscripcionController())->handleReturn($_GET);
 
-// ══════════════════════════════════════════
-// Recibir sub_id desde la URL
-// ══════════════════════════════════════════
-$sub_id = intval($_GET['sub'] ?? 0);
-
-if (!$sub_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// Obtener request_id desde la BD
-$sub_id_safe = mysqli_real_escape_string($conexion, $sub_id);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM suscripciones WHERE id = '$sub_id_safe'"));
-$request_id = $row['request_id'] ?? '';
-
-if (!$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// ══════════════════════════════════════════
-// Consultar estado a PlaceToPay
-// ══════════════════════════════════════════
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-$auth = [
-    "auth" => [
-        "login" => $login,
-        "tranKey" => $tranKey,
-        "nonce" => $nonceB64,
-        "seed" => $seed
-    ]
-];
-
-[$response] = p2p_json_post($url, $auth);
-
-$result = json_decode($response ?: '{}', true);
+$sub_id = $__view['subId'];
+$token = $__view['token'];
+$subs = $__view['subs'];
 
 // ══════════════════════════════════════════
 // Determinar estado del pago - usando nueva paleta
 // ══════════════════════════════════════════
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
+$status_p2p = $__view['statusP2p'];
 
 if ($status_p2p === 'APPROVED') {
     $nuevo_estado = 'aprobada';
@@ -92,50 +43,7 @@ if ($status_p2p === 'APPROVED') {
     $bg_icon = 'rgba(125, 134, 140, 0.15)';
 }
 
-// ══════════════════════════════════════════
-// Actualizar estado en BD
-// ══════════════════════════════════════════
-$sub_id_safe = mysqli_real_escape_string($conexion, $sub_id);
-$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-
-// ══════════════════════════════════════════
-// Extraer token de la respuesta de PlaceToPay
-// ══════════════════════════════════════════
-$token = '';
-
-// Caso 1 — Tarjeta nueva: token en subscription.instrument
-if (isset($result['subscription']['instrument']) && is_array($result['subscription']['instrument'])) {
-    foreach ($result['subscription']['instrument'] as $item) {
-        if (($item['keyword'] ?? '') === 'token') {
-            $token = $item['value'] ?? '';
-            break;
-        }
-    }
-}
-
-// Caso 2 — Tarjeta guardada: token en payment[0].subscription
-if (empty($token) && isset($result['payment'][0]['subscription']) && is_array($result['payment'][0]['subscription'])) {
-    foreach ($result['payment'][0]['subscription'] as $item) {
-        if (($item['keyword'] ?? '') === 'token') {
-            $token = $item['value'] ?? '';
-            break;
-        }
-    }
-}
-
-// Caso 3 — Buscar en processorFields de payment[0] por si acaso
-if (empty($token) && isset($result['payment'][0]['processorFields']) && is_array($result['payment'][0]['processorFields'])) {
-    foreach ($result['payment'][0]['processorFields'] as $item) {
-        if (($item['keyword'] ?? '') === 'token') {
-            $token = $item['value'] ?? '';
-            break;
-        }
-    }
-}
-
-// Actualizar estado y token en BD
-$token_safe = mysqli_real_escape_string($conexion, $token);
-mysqli_query($conexion, "UPDATE suscripciones SET estado = '$estado_safe', token = '$token_safe' WHERE id = '$sub_id_safe'");
+// (Estado y token ya actualizados en BD por SuscripcionController::handleReturn())
 
 // ── Definir título y mensaje según si hay token ──
 if ($status_p2p === 'APPROVED') {
@@ -148,8 +56,6 @@ if ($status_p2p === 'APPROVED') {
     }
 }
 
-// Obtener info de la suscripción (ya la tenemos en $row)
-$subs = $row;
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -1,45 +1,19 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\ReversosController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+$__view = (new ReversosController())->handleList();
 
-$correo = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
-
-// Traer ordenes aprobadas
-$ordenes = mysqli_query($conexion, "SELECT id, producto as nombre, precio, jugador_id as usuario, created_at, estado, 'orden' as tipo FROM ordenes WHERE estado = 'aprobada' ORDER BY created_at DESC");
-
-// Traer suscripciones aprobadas del usuario
-$suscripciones = mysqli_query($conexion, "SELECT id, CONCAT(plataforma, ' — ', plan) as nombre, precio, usuario_id as usuario, created_at, estado, 'suscripcion' as tipo FROM suscripciones WHERE estado = 'aprobada' AND usuario_id = '$correo' ORDER BY created_at DESC");
-
-// Traer recurrencias aprobadas del usuario
-$recurrencias = mysqli_query($conexion, "SELECT id, CONCAT(servicio, ' — ', plan) as nombre, precio, usuario_id as usuario, created_at, estado, 'recurrencia' as tipo FROM recurrencias WHERE estado = 'aprobada' AND usuario_id = '$correo' ORDER BY created_at DESC");
-
-// Unir en un array
-$transacciones = [];
-while ($row = mysqli_fetch_assoc($ordenes))
-    $transacciones[] = $row;
-while ($row = mysqli_fetch_assoc($suscripciones))
-    $transacciones[] = $row;
-while ($row = mysqli_fetch_assoc($recurrencias))
-    $transacciones[] = $row;
-
-// Ordenar por fecha desc
-usort($transacciones, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['created_at']));
-
-// Mensaje
-$msg = $_SESSION['reverso_msg'] ?? '';
-$msg_type = $_SESSION['reverso_msg_type'] ?? '';
-unset($_SESSION['reverso_msg'], $_SESSION['reverso_msg_type']);
+$transacciones = $__view['transacciones'];
+$msg = $__view['msg'];
+$msg_type = $__view['msgType'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

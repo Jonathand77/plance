@@ -1,0 +1,16 @@
+<?php
+
+namespace Plance\Repositories\Contracts;
+
+interface ReservacionRepositoryInterface
+{
+    public function create(array $data): int;
+
+    public function updateRequestId(int $id, string $requestId): void;
+
+    public function updateEstado(int $id, string $estado): void;
+
+    public function findById(int $id): ?array;
+
+    public function findAllByUsuarioId(string $usuarioId): array;
+}

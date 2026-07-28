@@ -1,59 +1,18 @@
 ﻿<?php
 session_start();
-require_once __DIR__ . '/php/http_client.php';
+require_once __DIR__ . '/src/bootstrap.php';
 
+use Plance\Controllers\Ordenes\OrdenController;
 
-// ══════════════════════════════════════════
-// Conexión a BD
-// ══════════════════════════════════════════
-require_once 'php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion) {
-        die("Error de conexión: " . mysqli_connect_error());
-    }
-}
+$__view = (new OrdenController())->handleReturn($_GET, $_SESSION);
 
-// ══════════════════════════════════════════
-// Recibir order_id desde la URL
-// ══════════════════════════════════════════
-$order_id = intval($_GET['order'] ?? 0);
-$request_id = $_SESSION['p2p_requestId'] ?? '';
-
-if (!$order_id || !$request_id) {
-    header("Location: index.php");
-    exit();
-}
-
-// ══════════════════════════════════════════
-// Consultar estado a PlaceToPay
-// ══════════════════════════════════════════
-$login = "2d9eaf1e662518756a3d78806543af5b";
-$secretKey = "3YC5brb5eAR4xBGQ";
-$url = "https://checkout-test.placetopay.com/api/session/" . $request_id;
-
-$seed = date('c');
-$nonce = bin2hex(random_bytes(16));
-$tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-$nonceB64 = base64_encode($nonce);
-
-$auth = [
-    "auth" => [
-        "login" => $login,
-        "tranKey" => $tranKey,
-        "nonce" => $nonceB64,
-        "seed" => $seed
-    ]
-];
-
-[$response] = p2p_json_post($url, $auth);
-
-$result = json_decode($response ?: '{}', true);
+$order_id = $__view['orderId'];
+$orden = $__view['orden'];
 
 // ══════════════════════════════════════════
 // Determinar estado del pago - usando nueva paleta
 // ══════════════════════════════════════════
-$status_p2p = $result['status']['status'] ?? 'UNKNOWN';
+$status_p2p = $__view['statusP2p'];
 
 // Mapear estado de PlaceToPay a nuestro estado en BD
 if ($status_p2p === 'APPROVED') {
@@ -88,18 +47,7 @@ if ($status_p2p === 'APPROVED') {
 }
 
 // ══════════════════════════════════════════
-// Actualizar estado en BD
-// ══════════════════════════════════════════
-$order_id_safe = mysqli_real_escape_string($conexion, $order_id);
-$estado_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-
-mysqli_query($conexion, "UPDATE ordenes SET estado = '$estado_safe' WHERE id = '$order_id_safe'");
-
-// Obtener info de la orden para mostrarla
-$orden = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM ordenes WHERE id = '$order_id_safe'"));
-
-// Limpiar sesión de P2P
-unset($_SESSION['p2p_requestId'], $_SESSION['p2p_order_id']);
+// (Estado ya actualizado en BD por OrdenController::handleReturn())
 ?>
 <!DOCTYPE html>
 <html lang="es">

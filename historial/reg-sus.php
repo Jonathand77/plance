@@ -1,41 +1,19 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\HistorialSuscripcionesController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
-
-// Traer solo las suscripciones del usuario en sesión (por correo)
-$correo_sesion = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
-
-// Determinar modo
 $modo = $_GET['modo'] ?? 'wc-sub';
 
-switch ($modo) {
-    case 'wc-rec':
-        $resultado = mysqli_query($conexion, "SELECT *, 'wc-rec' as modo FROM suscription_rec WHERE usuario_id = '$correo_sesion' ORDER BY created_at DESC");
-        break;
-    case 'wc-pura':
-        $resultado = mysqli_query($conexion, "SELECT *, 'wc-pura' as modo FROM suscription WHERE usuario_id = '$correo_sesion' ORDER BY created_at DESC");
-        break;
-    case 'gw-sub':
-        $resultado = mysqli_query($conexion, "SELECT *, 'gw-sub' as modo FROM gateway_suscripciones WHERE correo = '$correo_sesion' ORDER BY created_at DESC");
-        break;
-    case 'gw-pura':
-        $resultado = mysqli_query($conexion, "SELECT *, 'gw-pura' as modo FROM gateway_suscription WHERE correo = '$correo_sesion' ORDER BY created_at DESC");
-        break;
-    default: // wc-sub
-        $resultado = mysqli_query($conexion, "SELECT *, 'wc-sub' as modo FROM suscripciones WHERE usuario_id = '$correo_sesion' ORDER BY created_at DESC");
-        break;
-}
+$__view = (new HistorialSuscripcionesController())->handleList($modo);
+$registros = $__view['registros'];
+$verify_msg = $__view['verifyMsg'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -396,14 +374,11 @@ switch ($modo) {
             </div>
         </div>
 
-        <?php
-        if (!empty($_SESSION['verify_msg'])) {
-            echo '<div class="alert-verify">' . htmlspecialchars($_SESSION['verify_msg']) . '</div>';
-            unset($_SESSION['verify_msg']);
-        }
-        ?>
+        <?php if (!empty($verify_msg)): ?>
+            <div class="alert-verify"><?= htmlspecialchars($verify_msg) ?></div>
+        <?php endif; ?>
 
-        <?php if (mysqli_num_rows($resultado) > 0): ?>
+        <?php if (count($registros) > 0): ?>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -474,7 +449,7 @@ switch ($modo) {
                         <?php endif; ?>
                     </thead>
                     <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($resultado)): ?>
+                        <?php foreach ($registros as $row): ?>
                             <tr>
                                 <td><span class="codigo-id">#<?= htmlspecialchars($row['id']) ?></span></td>
 
@@ -581,7 +556,7 @@ switch ($modo) {
                                     </td>
                                 <?php endif; ?>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

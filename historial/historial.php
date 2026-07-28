@@ -1,45 +1,22 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Historial\HistorialDashboardController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
-
-// Contar registros del usuario actual
-$correo_sesion = mysqli_real_escape_string($conexion, $_SESSION['correo'] ?? '');
-
-function safeCount(mysqli $conexion, string $sql): int
-{
-    try {
-        $result = mysqli_query($conexion, $sql);
-        if (!$result) {
-            return 0;
-        }
-        $row = mysqli_fetch_assoc($result);
-        return (int) ($row['total'] ?? 0);
-    } catch (mysqli_sql_exception $e) {
-        return 0;
-    }
-}
-
-$total_ordenes = safeCount($conexion, "SELECT COUNT(*) as total FROM ordenes");
-$total_subs = safeCount($conexion, "SELECT COUNT(*) as total FROM suscripciones WHERE usuario_id = '$correo_sesion'");
-$total_recs = safeCount($conexion, "SELECT COUNT(*) as total FROM recurrencias WHERE usuario_id = '$correo_sesion'");
-
-$total_links = safeCount($conexion, "SELECT COUNT(*) as total FROM payment_link");
-$total_disp = safeCount($conexion, "SELECT COUNT(*) as total FROM dispersiones WHERE usuario_id = '$correo_sesion'");
-$total_prea = safeCount($conexion, "SELECT COUNT(*) as total FROM reservaciones WHERE usuario_id = '$correo_sesion'");
-
-$total_pagos = $total_ordenes + $total_subs + $total_recs;
-$total_pagos = number_format($total_pagos, 0, ',', '.');
+$__view = (new HistorialDashboardController())->handleList();
+$total_ordenes = $__view['totalOrdenes'];
+$total_subs = $__view['totalSubs'];
+$total_recs = $__view['totalRecs'];
+$total_links = $__view['totalLinks'];
+$total_disp = $__view['totalDisp'];
+$total_prea = $__view['totalPrea'];
+$total_pagos = $__view['totalPagos'];
 ?>
 <!DOCTYPE html>
 <html lang="es">

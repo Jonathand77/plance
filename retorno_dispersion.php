@@ -1,72 +1,19 @@
 <?php
 session_start();
+require_once __DIR__ . '/src/bootstrap.php';
 
-require_once 'php/conexion_be.php';
-require_once __DIR__ . '/php/http_client.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
+use Plance\Controllers\Dispersiones\DispersionController;
 
-$disp_id = (int) ($_GET['disp_id'] ?? 0);
-if (!$disp_id) {
-    header("Location: index.php");
-    exit();
-}
+$__view = (new DispersionController())->handleReturn($_GET);
 
-// Traer datos desde BD
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM dispersiones WHERE id = $disp_id"));
-if (!$row) {
-    header("Location: index.php");
-    exit();
-}
-
-$destino = $row['destino'];
-$total = (float) $row['precio_total'];
-$base = (float) $row['precio_base'];
-$impuesto = (float) $row['impuesto'];
-$requestId = $row['request_id'];
-
-// Consultar estado real en PlacetoPay
-$nuevo_estado = 'pendiente';
-$gw_status = 'PENDING';
-
-if ($requestId) {
-    $login = "8ddd7ab3d5a270608832d033849a1a8d";
-    $secretKey = "U7rCf9me0vqk7755";
-    $seed = date('c');
-    $nonce = bin2hex(random_bytes(16));
-    $tranKey = base64_encode(hash('sha256', $nonce . $seed . $secretKey, true));
-    $nonceB64 = base64_encode($nonce);
-
-    $auth = [
-        "auth" => [
-            "login" => $login,
-            "tranKey" => $tranKey,
-            "nonce" => $nonceB64,
-            "seed" => $seed
-        ]
-    ];
-
-    [$resp] = p2p_json_post("https://checkout-test.placetopay.com/api/session/{$requestId}", $auth);
-
-    $data = json_decode($resp ?: '{}', true);
-    $gw_status = $data['status']['status'] ?? 'PENDING';
-
-    if (!empty($data['payment'])) {
-        $gw_status = $data['payment'][0]['status']['status'] ?? $gw_status;
-    }
-
-    $nuevo_estado = match ($gw_status) {
-        'APPROVED' => 'aprobada',
-        'PENDING' => 'pendiente',
-        default => 'rechazada'
-    };
-
-    $est_safe = mysqli_real_escape_string($conexion, $nuevo_estado);
-    mysqli_query($conexion, "UPDATE dispersiones SET estado='$est_safe' WHERE id=$disp_id");
-}
+$disp_id = $__view['dispersionId'];
+$destino = $__view['destino'];
+$total = $__view['total'];
+$base = $__view['base'];
+$impuesto = $__view['impuesto'];
+$requestId = $__view['requestId'];
+$gw_status = $__view['gwStatus'];
+$nuevo_estado = $__view['nuevoEstado'];
 
 // Colores usando la nueva paleta estandarizada
 if ($gw_status === 'APPROVED') {
@@ -411,7 +358,7 @@ if ($gw_status === 'APPROVED') {
                     style="color:var(--title-color);font-size:1.05rem;">$<?= number_format($total, 0, ',', '.') ?>
                     COP</span></div>
             <div class="order-row"><span>Referencia</span><span
-                    style="font-size:0.78rem;color:var(--text-secondary);"><?= htmlspecialchars($row['request_id']) ?></span>
+                    style="font-size:0.78rem;color:var(--text-secondary);"><?= htmlspecialchars($requestId) ?></span>
             </div>
             <div class="order-row">
                 <span>Estado</span>

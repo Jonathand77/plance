@@ -1,29 +1,18 @@
 ﻿<?php
 session_start();
+require_once __DIR__ . '/../src/bootstrap.php';
+
+use Plance\Controllers\Profile\ProfileEditController;
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
+    header('Location: ../login.php');
     exit();
 }
 
-require_once '../php/conexion_be.php';
-if (!isset($conexion)) {
-    $conexion = mysqli_connect('localhost', 'root', 'root', 'place_bsd');
-    if (!$conexion)
-        die("Error de conexión: " . mysqli_connect_error());
-}
-
-$user_id = intval($_SESSION['user_id'] ?? 0);
-$row = mysqli_fetch_assoc(mysqli_query($conexion, "SELECT * FROM users WHERE id = '$user_id'"));
-
-if (!$row) {
-    header("Location: ../login.php");
-    exit();
-}
-
-$msg = $_SESSION['profile_msg'] ?? '';
-$msg_type = $_SESSION['profile_msg_type'] ?? '';
-unset($_SESSION['profile_msg'], $_SESSION['profile_msg_type']);
+$__view = (new ProfileEditController())->handle();
+$row = $__view['row'];
+$msg = $__view['msg'];
+$msg_type = $__view['msgType'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
