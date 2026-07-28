@@ -102,20 +102,7 @@
         <?php endif; ?>
     </div>
 
-    <script>
-        function copyLink(btn) {
-            const link = btn.getAttribute('data-link');
-            navigator.clipboard.writeText(link).then(function () {
-                const original = btn.innerHTML;
-                btn.classList.add('copied');
-                btn.innerHTML = '<i class="bi bi-check2"></i> Copiado';
-                setTimeout(function () {
-                    btn.classList.remove('copied');
-                    btn.innerHTML = original;
-                }, 2000);
-            });
-        }
-    </script>
+    <script src="../assets/js/pages/historial/reg-link.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

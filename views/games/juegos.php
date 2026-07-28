@@ -166,30 +166,7 @@
         </section>
     </div>
 
-    <script>
-        (function () {
-            const buttons = Array.from(document.querySelectorAll('.servicio-btn'));
-            const cards = Array.from(document.querySelectorAll('[data-servicio]'));
-
-            function applyFilter(filter) {
-                cards.forEach(card => {
-                    const svc = card.getAttribute('data-servicio');
-                    card.style.display = (svc === filter) ? '' : 'none';
-                });
-            }
-
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    applyFilter(btn.getAttribute('data-filter'));
-                });
-            });
-
-            // Default: Web Checkout
-            applyFilter('web');
-        })();
-    </script>
+    <script src="../assets/js/pages/games/juegos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/validaciones.js"></script>
 </body>
