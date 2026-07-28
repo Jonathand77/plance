@@ -17,17 +17,10 @@ session_start();
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="assets/css/estilos.?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../assets/css/estilos.css">
 </head>
 <style>
     :root {
-        /* Nueva paleta estandarizada */
-        --color-primary: #FF6C0C;
-        --color-secondary-1: #00CFB4;
-        --color-secondary-2: #4C5F71;
-        --color-secondary-3: #0062A8;
-        --color-secondary-4: #1E212C;
-        --color-secondary-5: #7D868C;
-        --text-main: #f1f5f9;
 
         /* Variables específicas del componente */
         --bg-base: #0d0e10;
