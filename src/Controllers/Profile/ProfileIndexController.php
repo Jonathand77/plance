@@ -9,6 +9,7 @@ use Plance\Repositories\OrdenRepository;
 use Plance\Repositories\RecurrenciaRepository;
 use Plance\Repositories\SuscripcionRepository;
 use Plance\Repositories\UserRepository;
+use Plance\Support\Auth;
 
 class ProfileIndexController
 {
@@ -26,11 +27,30 @@ class ProfileIndexController
     public function handle(): array
     {
         $userId = (int) ($_SESSION['user_id'] ?? 0);
-        $row = $this->users->findById($userId);
+        $esInvitado = Auth::esInvitado();
+        $row = $userId > 0 ? $this->users->findById($userId) : null;
 
-        if ($row === null) {
+        if ($row === null && !$esInvitado) {
             header('Location: ../login.php');
             exit();
+        }
+
+        if ($row === null) {
+            return [
+                'row' => ['id' => '-', 'usuario' => 'Invitado', 'correo' => '', 'bio' => '', 'location' => '', 'profile_image' => null, 'created_at' => null],
+                'totalOrdenesPago' => 0,
+                'totalAprobadas' => 0,
+                'totalOrdenesRechazadas' => 0,
+                'totalOrdenes' => 0,
+                'totalSubs' => 0,
+                'totalRecurrencias' => 0,
+                'totalGwOrdenes' => 0,
+                'totalGwSubs' => 0,
+                'totalGwSuscription' => 0,
+                'actividadJson' => json_encode([]),
+                'msg' => '',
+                'msgType' => '',
+            ];
         }
 
         $correo = $row['correo'];

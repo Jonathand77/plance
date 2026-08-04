@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="es">
+<?php require_once '../php/theme_attr.php'; ?>
+<html lang="es"<?= $data_theme_attr ?? '' ?>>
 
 <head>
   <meta charset="utf-8">

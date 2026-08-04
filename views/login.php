@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<?php require_once 'php/theme_attr.php'; ?>
+<html lang="es"<?= $data_theme_attr ?? '' ?>>
 
 <head>
     <meta charset="UTF-8">
@@ -53,6 +54,17 @@
                         <i id="toggleIconLogin" class="bi bi-eye toggle-icon"></i>
                     </div>
                     <button>Entrar</button>
+
+                    <div class="login-divider">
+                        <span></span>
+                        <small>o</small>
+                        <span></span>
+                    </div>
+
+                    <a href="php/entrar_invitado.php" class="btn-invitado">
+                        <i class="bi bi-person"></i> Continuar como invitado
+                    </a>
+
                     <a href="index.php" class="btn-volver">
                         <i class="bi bi-backspace-fill"></i> Volver a la aplicación
                     </a>

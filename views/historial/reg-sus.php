@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<?php require_once '../php/theme_attr.php'; ?>
+<html lang="es"<?= $data_theme_attr ?? '' ?>>
 
 <head>
     <meta charset="UTF-8">
@@ -53,6 +54,10 @@
 
         <?php if (!empty($verify_msg)): ?>
             <div class="alert-verify"><?= htmlspecialchars($verify_msg) ?></div>
+        <?php endif; ?>
+
+        <?php if (!empty($cancel_msg)): ?>
+            <div class="alert-cancel"><?= htmlspecialchars($cancel_msg) ?></div>
         <?php endif; ?>
 
         <?php if (count($registros) > 0): ?>
@@ -169,6 +174,11 @@
                                         <?php if (strtolower($row['estado']) === 'pendiente' && !empty($row['request_id'])): ?>
                                             <a href="../php/verificar_pago.php?tabla=suscription_rec&id=<?= $row['id'] ?>&request_id=<?= urlencode($row['request_id']) ?>&redirect=../historial/reg-sus.php?modo=wc-rec"
                                                 class="btn-verificar"><i class="bi bi-arrow-repeat"></i> Verificar</a>
+                                        <?php elseif (strtolower($row['estado']) === 'aprobada'): ?>
+                                            <a href="../php/cancelar_rec.php?tabla=suscription_rec&id=<?= $row['id'] ?>"
+                                                class="btn-cancelar"
+                                                onclick="return confirm('⚠️ ¿Estás seguro de cancelar este servicio? Esta acción no se puede deshacer.')">
+                                                <i class="bi bi-x-circle-fill"></i> Cancelar</a>
                                         <?php else: ?><span
                                                 style="color:var(--color-secondary-2);font-size:0.75rem;">—</span><?php endif; ?>
                                     </td>

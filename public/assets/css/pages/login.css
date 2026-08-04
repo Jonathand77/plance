@@ -133,6 +133,46 @@
         display: none;
     }
 
+    .login-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .login-divider span {
+        flex: 1;
+        height: 1px;
+        background: var(--color-secondary-2);
+    }
+
+    .login-divider small {
+        color: var(--color-secondary-5);
+        font-size: 0.8rem;
+    }
+
+    .btn-invitado {
+        background: transparent !important;
+        color: var(--color-primary) !important;
+        border: 1.5px solid var(--color-primary) !important;
+        height: 40px;
+        width: 100%;
+        margin-top: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 300ms;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-invitado:hover {
+        background: var(--color-primary) !important;
+        color: #0d0e10 !important;
+    }
+
     .btn-volver {
         background: var(--color-primary) !important;
         color: #0d0e10 !important;

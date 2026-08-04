@@ -32,11 +32,13 @@ class HistorialSuscripcionesController
         };
 
         $verifyMsg = $_SESSION['verify_msg'] ?? '';
-        unset($_SESSION['verify_msg']);
+        $cancelMsg = $_SESSION['cancel_msg'] ?? '';
+        unset($_SESSION['verify_msg'], $_SESSION['cancel_msg']);
 
         return [
             'registros' => $registros,
             'verifyMsg' => $verifyMsg,
+            'cancelMsg' => $cancelMsg,
         ];
     }
 }

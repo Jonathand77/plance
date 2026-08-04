@@ -93,4 +93,15 @@ class SuscriptionRecRepository implements SuscriptionRecRepositoryInterface, Act
 
         return $stmt->fetchAll();
     }
+
+    public function findByIdYUsuarioId(int $id, string $usuarioId): ?array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM suscription_rec WHERE id = :id AND usuario_id = :usuario_id LIMIT 1'
+        );
+        $stmt->execute(['id' => $id, 'usuario_id' => $usuarioId]);
+        $row = $stmt->fetch();
+
+        return $row === false ? null : $row;
+    }
 }

@@ -5,6 +5,7 @@ namespace Plance\Controllers\Auth;
 use Plance\Repositories\UserRepository;
 use Plance\Services\Auth\AuthService;
 use Plance\Services\Auth\Exceptions\AuthException;
+use Plance\Services\Profile\ThemeService;
 
 class LoginController
 {
@@ -30,6 +31,9 @@ class LoginController
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['usuario'] = $user['usuario'];
         $_SESSION['correo'] = $user['correo'];
+
+        $tema = (new ThemeService())->obtener($user['correo'], false);
+        setcookie('tema', $tema, time() + 60 * 60 * 24 * 365, '/');
 
         header('Location: ../index.php');
         exit();

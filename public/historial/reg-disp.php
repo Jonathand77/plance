@@ -3,8 +3,9 @@ session_start();
 require_once __DIR__ . '/../../src/bootstrap.php';
 
 use Plance\Controllers\Historial\HistorialDispersionesController;
+use Plance\Support\Auth;
 
-if (!isset($_SESSION['usuario'])) {
+if (!Auth::puedeAcceder()) {
     header('Location: ../login.php');
     exit();
 }

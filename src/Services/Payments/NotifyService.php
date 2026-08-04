@@ -53,16 +53,53 @@ class NotifyService
     ) {
     }
 
+    /**
+     * Prueba la firma contra los 3 juegos de credenciales configurados (estandar,
+     * dispersion, reservaciones): cada flujo de pago firma con las suyas, así que
+     * validar sólo contra "estandar" rechaza notificaciones legítimas de los otros.
+     */
     public function validarFirma(string $signature, array $data): bool
     {
-        $login = PlaceToPayCredentials::login('estandar');
-        $secretKey = PlaceToPayCredentials::secretKey('estandar');
-
         $nonce = $data['status']['date'] ?? date('c');
-        $tranKey = base64_encode(sha1($nonce . $secretKey, true));
-        $expectedSignature = base64_encode(sha1($login . $nonce . $tranKey, true));
 
-        return $signature === $expectedSignature;
+        foreach (['estandar', 'dispersion', 'reservaciones'] as $tipo) {
+            $login = PlaceToPayCredentials::login($tipo);
+            $secretKey = PlaceToPayCredentials::secretKey($tipo);
+
+            if ($secretKey === '') {
+                continue;
+            }
+
+            $tranKey = base64_encode(sha1($nonce . $secretKey, true));
+            $expectedSignature = base64_encode(sha1($login . $nonce . $tranKey, true));
+
+            if (hash_equals($expectedSignature, $signature)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Valida un evento chargeback.created: HMAC-SHA256 sobre el body crudo,
+     * probado contra cada secretKey configurada.
+     */
+    public function validarFirmaChargeback(string $signature, string $rawBody): bool
+    {
+        foreach (['estandar', 'dispersion', 'reservaciones'] as $tipo) {
+            $secretKey = PlaceToPayCredentials::secretKey($tipo);
+
+            if ($secretKey === '') {
+                continue;
+            }
+
+            if (hash_equals(hash_hmac('sha256', $rawBody, $secretKey), $signature)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function procesar(array $data): void

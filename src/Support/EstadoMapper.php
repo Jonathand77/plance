@@ -13,7 +13,7 @@ class EstadoMapper
     public static function fromCheckout(string $status): string
     {
         return match ($status) {
-            'APPROVED' => 'aprobada',
+            'APPROVED', 'APPROVED_PARTIAL' => 'aprobada',
             'REJECTED' => 'rechazada',
             'PENDING' => 'pendiente',
             default => 'cancelada',
@@ -23,7 +23,7 @@ class EstadoMapper
     public static function fromGateway(string $status): string
     {
         return match ($status) {
-            'APPROVED' => 'aprobada',
+            'APPROVED', 'APPROVED_PARTIAL' => 'aprobada',
             'PENDING' => 'pendiente',
             default => 'rechazada',
         };

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<?php require_once '../php/theme_attr.php'; ?>
+<html lang="es"<?= $data_theme_attr ?? '' ?>>
 
 <head>
     <meta charset="UTF-8">
@@ -37,35 +38,35 @@
             <div class="products-grid">
 
                 <div class="product-card" data-id="1" data-producto="Kit Liverpool FC" data-precio="50000">
-                    <div class="product-card__img">🔴</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/liv.png" alt="Kit Liverpool FC">
                     <div class="product-card__name">Liverpool FC</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>
                 </div>
 
                 <div class="product-card" data-id="2" data-producto="Kit Manchester City" data-precio="50000">
-                    <div class="product-card__img">🔵</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/mcity.png" alt="Kit Manchester City">
                     <div class="product-card__name">Manchester City</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>
                 </div>
 
                 <div class="product-card" data-id="3" data-producto="Kit Manchester United" data-precio="50000">
-                    <div class="product-card__img">🔴</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/mufc.png" alt="Kit Manchester United">
                     <div class="product-card__name">Manchester United</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>
                 </div>
 
                 <div class="product-card" data-id="4" data-producto="Kit Chelsea FC" data-precio="50000">
-                    <div class="product-card__img">🔵</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/chelsea.png" alt="Kit Chelsea FC">
                     <div class="product-card__name">Chelsea FC</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>
                 </div>
 
                 <div class="product-card" data-id="5" data-producto="Kit Arsenal FC" data-precio="50000">
-                    <div class="product-card__img">🔴</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/arsenal.png" alt="Kit Arsenal FC">
                     <div class="product-card__name">Arsenal FC</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>
@@ -79,7 +80,7 @@
                 </div>
 
                 <div class="product-card" data-id="7" data-producto="Kit Tottenham Hotspur" data-precio="50000">
-                    <div class="product-card__img">⚪</div>
+                    <img class="product-card__img product-card__img--photo" src="../assets/kits/premier-league/tot.png" alt="Kit Tottenham Hotspur">
                     <div class="product-card__name">Tottenham Hotspur</div>
                     <div class="product-card__label">Kit completo · Temporada 24/25</div>
                     <div class="product-card__price">50.000 COP</div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<?php require_once '../php/theme_attr.php'; ?>
+<html lang="es"<?= $data_theme_attr ?? '' ?>>
 
 <head>
     <meta charset="UTF-8">
@@ -134,6 +135,44 @@
                                     <div class="activity-label">Rechazado</div>
                                 </div>
                             </div>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="configuracion" class="overview-grid" style="margin-top: 20px;">
+                    <article class="card-panel">
+                        <div class="card-header">
+                            <h2 class="card-title">Configuración</h2>
+                        </div>
+
+                        <div class="profile-card-body">
+                            <?php if ($alerta): ?>
+                                <div class="config-alert config-alert--<?= htmlspecialchars($alerta_tipo) ?>">
+                                    <?= htmlspecialchars($alerta) ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <form method="POST" class="theme-form">
+                                <div class="info-row" style="grid-template-columns: 1fr auto;">
+                                    <div>
+                                        <div class="info-label">Tema de la aplicación</div>
+                                        <div class="info-value" style="font-weight: 400; color: var(--text-soft); font-size: .85rem;">
+                                            Elige cómo se ve Plance para ti<?= $es_invitado ? ' (como invitado, se guarda solo en esta sesión)' : '' ?>.
+                                        </div>
+                                    </div>
+
+                                    <div class="theme-toggle-group">
+                                        <button type="submit" name="tema" value="oscuro"
+                                            class="theme-option <?= $tema === 'oscuro' ? 'active' : '' ?>">
+                                            <i class="bi bi-moon-stars-fill"></i> Oscuro
+                                        </button>
+                                        <button type="submit" name="tema" value="claro"
+                                            class="theme-option <?= $tema === 'claro' ? 'active' : '' ?>">
+                                            <i class="bi bi-sun-fill"></i> Claro
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </article>
                 </section>

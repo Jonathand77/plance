@@ -3,8 +3,9 @@ session_start();
 require_once __DIR__ . '/../../src/bootstrap.php';
 
 use Plance\Controllers\Profile\SettingsController;
+use Plance\Support\Auth;
 
-if (!isset($_SESSION['usuario'])) {
+if (!Auth::puedeAcceder()) {
     header('Location: ../login.php');
     exit();
 }
@@ -20,4 +21,6 @@ $total_rechazadas = $__view['totalRechazadas'];
 $total_pendientes = $__view['totalPendientes'];
 $avatar = $__view['avatar'];
 $initial = $__view['initial'];
+$tema = $__view['tema'];
+$es_invitado = $__view['esInvitado'];
 require __DIR__ . '/../../views/settings/ajustes.php';
